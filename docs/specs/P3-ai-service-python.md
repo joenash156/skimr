@@ -2,7 +2,7 @@
 
 **Spec version:** 1.1 (19 Nov 2026) · **Owner:** [P3 name]
 
-> **How to use this file:** Give your AI coding agent two files: this brief and `00-MASTER-SPEC.md`. Work **one batch at a time**, and one task at a time within a batch. A batch is done when every acceptance check passes and the PR is merged into `develop`.
+> **How to use this file:** Give your AI coding agent two files: this brief and `00-MASTER-SPEC.md`. Work **one batch at a time**, and one task at a time within a batch. A batch is done when every acceptance check passes and the PR is merged into `dev`.
 
 ---
 
@@ -98,6 +98,22 @@ ai-service/
 
 **Id rule:** at extraction, chunks have no database ids yet, so results use `chunk_ordinal` within the source. For later jobs (synthesize, gaps, chat), PHP sends real `chunk_id`s, and the results must use those.
 
+## 3a. Notes from P1: repo setup you need to know
+
+- **Python version:** use **3.11** exactly (`py -3.11 -m venv .venv`), as CI and the Docker image do. Newer versions (3.12+) may not have wheels for fastembed/onnxruntime yet.
+- **CI starts running your job as soon as `ai-service/requirements.txt` exists.** It runs, from inside `ai-service/`:
+    1. `pip install -r requirements.txt`, then `pip install -r requirements-dev.txt` if that file exists
+    2. `ruff check .`
+    3. `mypy app`
+    4. `pytest`
+    5. `pip-audit -r requirements.txt`
+
+    So: put runtime packages (pinned with `==`) in `requirements.txt`, and **dev tools (ruff, mypy, pytest, pip-audit, type stubs) in `requirements-dev.txt`**. Tesseract with eng/fra/spa is installed on the CI runner, so OCR tests can run there.
+- **Secrets:** your `.env` lives at `ai-service/.env` (git-ignored). Commit an `ai-service/.env.example` with placeholder values only. The variable list is in spec 17.4 (the "ai-service/.env only" block of the root `.env.example`).
+- **HMAC contract:** P2's PHP client signs `X-Signature = hex(HMAC-SHA256(AI_SERVICE_SECRET, X-Timestamp + "." + raw_body))` as lowercase hex, with `X-Timestamp` as Unix seconds. Write this exact format into `docs/api/ai-service.md` so both sides match.
+- **Folders:** the empty folders in `ai-service/` (`app/routers`, `app/jobs/handlers`, `app/pipeline/intake`, `app/llm`, `app/prompts`, `app/schemas`, `app/tools`, `tests/fixtures/{pdfs,images,web}`) are already created, matching section 2 above. Delete each `.gitkeep` once the folder has real files.
+- **Integration branch is `dev`.** Branch from it; open PRs into it.
+
 ---
 
 ## B0 — Foundations (week 1)
@@ -107,8 +123,9 @@ ai-service/
 1. **Skeleton:**
     - `main.py`
     - `config.py` (environment variables read into a Pydantic model)
-    - pinned `requirements.txt`
+    - pinned `requirements.txt` (runtime) and `requirements-dev.txt` (ruff, mypy, pytest, pip-audit); see 3a for what CI runs
     - `ruff.toml`, `mypy.ini`, pytest config
+    - `ai-service/.env.example` with placeholders only
 2. **`security.py`:** a FastAPI dependency that checks `X-Timestamp` (within 300 seconds) and `X-Signature` = HMAC-SHA256(`timestamp + "." + raw_body`), compared with `hmac.compare_digest`. `/health` is the only open route.
 3. **Job runner:**
     - `JobStore` (a dictionary + lock) and a `ThreadPoolExecutor(max_workers=2)`

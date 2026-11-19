@@ -2,7 +2,7 @@
 
 **Spec version:** 1.1 (19 Nov 2026) · **Owner:** [P5 name]
 
-> **How to use this file:** Give your AI coding agent two files: this brief and `00-MASTER-SPEC.md`. Work **one batch at a time**, and one task at a time within a batch. A batch is done when every acceptance check passes and the PR is merged into `develop`.
+> **How to use this file:** Give your AI coding agent two files: this brief and `00-MASTER-SPEC.md`. Work **one batch at a time**, and one task at a time within a batch. A batch is done when every acceptance check passes and the PR is merged into `dev`.
 
 ---
 
@@ -78,6 +78,28 @@ The AI turns them into themes, method comparisons, gap reports and an evidence-b
 | Super-admin API | P2 | Start of B4 |
 | Publish endpoint + public synthesis data | P2 | B5 |
 
+## 3a. Notes from P1: what the backend skeleton already gives you
+
+P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1's).
+
+- **Your routes:** create `backend/config/routes/public.php`, returning `function (Slim\App $app): void { ... }`. It's loaded automatically. You own `/`, `/{lang}/...`, `/robots.txt` and `/sitemap*.xml`. P1 already has `/api/v1/health` and `/app[/...]` (the React shell); don't register those.
+- **Your services:** create `backend/config/container/public.php`, returning an array of PHP-DI definitions. Set up Twig there (`slim/twig-view`, templates in `backend/templates/public/`) and add the Twig middleware to your route group, not globally.
+- **Translations:** your catalogue is `backend/translations/public/{en,fr,es}.json`. Create a **separate** `App\Shared\Translator` for it, e.g. `new Translator($settings['paths']['translations_public'])` (the key `'settings'` holds `config/settings.php`). The default `Translator` in the container reads the API catalogue (`translations/api/`), not yours. Wrap your instance in `TransExtension`.
+- **CSP nonce, required for the no-flash theme script (spec 11.3, 14.4).** The Content-Security-Policy blocks inline scripts unless they carry the per-request nonce. `SecurityHeadersMiddleware` puts it on the request attribute `App\Shared\Http\RequestAttributes::CSP_NONCE` (`'csp_nonce'`). Expose it to Twig as a global (e.g. in a small middleware on your route group) and write the theme script as:
+
+    ```twig
+    <script nonce="{{ csp_nonce }}">/* read localStorage.theme, set class="dark" */</script>
+    ```
+
+    That's the only inline script allowed. Alpine.js and everything else load as files with `defer`. Check the browser console for CSP errors on every page.
+- **Your HTML 404/500 pages:** by default, errors are JSON. To render your Twig error pages for public URLs, define the container key `'error.html_renderer'` in `config/container/public.php` as a `\Closure(ServerRequestInterface $request, int $status): ?ResponseInterface`. Return `null` to fall back to JSON. P1's `ErrorHandler` calls it for every non-`/api/` path, and the security headers are still added. Unpublished syntheses (410) can use the same renderer.
+- **Locale:** in `LocaleMiddleware`, set the request attribute `RequestAttributes::LOCALE` (`'locale'`) to the URL's language. The error handler then answers in that language too.
+- **Indexing rules are already handled.** `SecurityHeadersMiddleware` sends `X-Robots-Tag: noindex, nofollow` on `/app*` and `/api*`, and on **every** page when `APP_ENV` isn't `production`. Don't add your own. Your `robots.txt` still needs the spec 12.5 content.
+- **Contact form (B2):** throw the exceptions in `App\Shared\Exception\` (e.g. `ValidationException(['email' => 'contact.email.invalid'])`) and return JSON with `App\Shared\Http\JsonResponder`. Your only migration (`contact_messages`) must have a timestamp later than P1's `Version20261119230000`. Generate it with `vendor/bin/doctrine-migrations generate` in `backend/`.
+- **Admin UI:** you need `recharts` from P4's `frontend/package.json` (P4 adds it in B0); don't edit their `package.json`. `shared/design-tokens.css` is P4's, and you're the required second reviewer.
+- **Local checks before every PR** (in `backend/`): `composer test`, `composer stan`, `composer cs`.
+- **Integration branch is `dev`.** Branch from it; open PRs into it.
+
 ---
 
 ## B0 — Foundations (week 1)
@@ -86,7 +108,7 @@ The AI turns them into themes, method comparisons, gap reports and an evidence-b
     - blocks for `title`, `description`, `canonical`, `alternates`, `og`, `jsonld`, `content`
     - `<html lang="{{ locale }}">`
     - a "Skip to content" link
-    - the inline **no-flash theme script** (same logic as the app: `localStorage.theme` = light / dark / system)
+    - the inline **no-flash theme script** (same logic as the app: `localStorage.theme` = light / dark / system), written as `<script nonce="{{ csp_nonce }}">` (see 3a)
     - preloaded Inter WOFF2
     - `meta theme-color` for light and dark
     - favicon set + `manifest.webmanifest`
@@ -96,11 +118,11 @@ The AI turns them into themes, method comparisons, gap reports and an evidence-b
     - mobile menu (Alpine.js)
 3. **Tailwind CLI build** of `public/assets/site.css` from `shared/design-tokens.css`: add `npm run build:public` in `backend/package.json`, purged to under 30 KB gzipped.
 4. **Locale and URLs:**
-    - `src/Public/Twig/TransExtension` (wraps P1's `Translator`)
-    - `LocaleMiddleware`: `/{lang}` accepts only en, fr and es; anything else is a 404
+    - `src/Public/Twig/TransExtension` (wraps a `Translator` pointed at `translations/public/`; see 3a)
+    - `LocaleMiddleware`: `/{lang}` accepts only en, fr and es; anything else is a 404. It sets the `locale` request attribute.
     - `/` → 301 → `/en/`
     - trailing slashes → 301 to the version without
-    - a real `404` page
+    - a real `404` page, served through the `error.html_renderer` hook (see 3a)
 
 **Acceptance:** an empty home page renders in both themes with no flash, and passes the W3C HTML validator. PHPUnit covers the redirects.
 

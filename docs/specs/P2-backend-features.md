@@ -2,7 +2,7 @@
 
 **Spec version:** 1.1 (19 Nov 2026) · **Owner:** [P2 name]
 
-> **How to use this file:** Give your AI coding agent two files: this brief and `00-MASTER-SPEC.md`. Work **one batch at a time**, and one task at a time within a batch. A batch is done when every acceptance check passes and the PR is merged into `develop`.
+> **How to use this file:** Give your AI coding agent two files: this brief and `00-MASTER-SPEC.md`. Work **one batch at a time**, and one task at a time within a batch. A batch is done when every acceptance check passes and the PR is merged into `dev`.
 
 ---
 
@@ -70,6 +70,26 @@ The Python AI service extracts and analyses them. PHP is the hub: it owns MySQL,
 | `AuthMiddleware`, `RoleGuard`, `Policy`, `AuditLogger`, `UserTokenService` | P1 | Middle of B1 |
 | `docs/api/ai-service.md`: payload and result JSON for every job type (frozen) | P3 (co-written with you) | End of B0 |
 
+## 3a. Notes from P1: what the backend skeleton already gives you
+
+P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1's).
+
+- **Your routes:** create `backend/config/routes/{projects,sources,research,admin}.php`. Each file returns `function (Slim\App $app): void { ... }` and is loaded automatically by `config/bootstrap.php`. Use full paths (`/api/v1/projects`). Never register a path another module already has: Slim throws on duplicates.
+- **Your services:** create `backend/config/container/{projects,sources,research,admin}.php`. Each returns an array of PHP-DI definitions. Autowiring is on, so most classes need no definition at all.
+- **Settings:** inject the container key `'settings'` (built in `config/settings.php`). Never call `getenv()` or read `$_ENV`. If you need a new `.env` variable, ask P1 to add it to `settings.php` and `.env.example`.
+- **Database:** inject `Doctrine\DBAL\Connection`. It's already configured with utf8mb4 and `time_zone = '+00:00'`, so every `DATETIME(3)` is UTC. Prepared statements or the query builder only, and only inside repositories.
+- **Errors:** throw the exceptions in `App\Shared\Exception\`: `NotFoundException`, `ForbiddenException`, `ValidationException(['field' => 'translation.key'])`, `ConflictException`, `QuotaExceededException($retryAfterSeconds)`, `PayloadTooLargeException`, `BadRequestException`. `ErrorHandler` turns them into the spec 10.1 envelope with the right status, a `request_id` and the translated message. Don't catch-and-format errors in controllers.
+- **Responses:** inject `App\Shared\Http\JsonResponder` and use `success()`, `created()`, `paginated()` and `noContent()`. Never `json_encode` in a controller.
+- **Messages:** put your API strings in `backend/translations/api/{module}.{en,fr,es}.json` (nested JSON becomes dotted keys). Inject `App\Shared\Translator`. Add machine-drafted FR/ES strings to `docs/i18n-review.md`.
+- **Time:** inject `App\Shared\Clock\Clock` instead of `new DateTimeImmutable()`. Use `FrozenClock` in tests.
+- **Auth until B1:** `AuthMiddleware` and `RoleGuard` exist but are fail-closed stubs: they reject every request until P1 finishes B1. Attach them to your routes now. They start working without any change on your side. The authenticated user will be on the request attribute `App\Shared\Http\RequestAttributes::USER`.
+- **Migrations:** P1's first migration is `Version20261119230000` (users, user_tokens, login_events, rate_limits, audit_logs, settings). Yours must have a **later timestamp** (`vendor/bin/doctrine-migrations generate`). Write raw MySQL in `addSql()` with `ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`. Foreign keys to `users.id` are `BIGINT UNSIGNED`. Every `down()` must undo its `up()`: CI runs migrations up, down to the first version, then up again, on a real MySQL 8.
+- **CLI commands** (e.g. `app:seed-demo` in B6): register them in your container file with `'console.commands' => \DI\add([YourCommand::class])`. Don't edit `bin/console`.
+- **`/me` endpoints you own** (`/me/avatar`, `/me/usage`, `/me/export`): put them in your own routes file. P1 owns `GET/PATCH/DELETE /me`.
+- **`GET /me` returns `features`** (`upload_images`, `add_link`, `paste_text`, `discover`, `chat`). P4 hides menu items from it. In B4, when you build `/admin/settings`, store the flags in the `settings` table; P1 reads them for `/me`.
+- **Local checks before every PR** (in `backend/`): `composer test`, `composer stan`, `composer cs`. CI runs the same, plus `composer audit`.
+- **Integration branch is `dev`.** Branch from it; open PRs into it.
+
 ---
 
 ## B0 — Foundations (week 1)
@@ -109,7 +129,7 @@ The Python AI service extracts and analyses them. PHP is the hub: it owns MySQL,
     - has an `optional` flag that skips the email once 80 have been sent that day (spec 15.3)
 4. **`Ai/AiServiceClient`:**
     - methods: `health()`, `submitJob(type, payload)`, `getJob(remoteId)`, `embed(texts)`
-    - headers: `X-Timestamp`, `X-Signature` = HMAC-SHA256(`timestamp + "." + body`, `AI_SERVICE_SECRET`)
+    - headers: `X-Timestamp`, `X-Signature` = HMAC-SHA256(`timestamp + "." + body`, `AI_SERVICE_SECRET`). Exact format, agreed with P3: `X-Timestamp` is Unix seconds, and `X-Signature` is lowercase hex (`hash_hmac('sha256', $ts . '.' . $body, $secret)`), signed over the exact bytes you send as the body.
     - Guzzle with a 20-second timeout and 1 retry on connection errors
 5. With P3, **write and freeze `docs/api/ai-service.md`**: job `extract_source`, with every `input.kind` (pdf, images, url, text, discovered), plus `cluster_project`, `compare_methods`, `synthesize`, `citation_analysis`, `gap_report`, `suggest_queries` and `chat_answer`.
 

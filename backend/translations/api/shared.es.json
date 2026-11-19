@@ -1,0 +1,15 @@
+{
+  "errors": {
+    "bad_request": "No se pudo entender la solicitud.",
+    "unauthenticated": "Inicia sesión para continuar.",
+    "forbidden": "No tienes permiso para hacer eso.",
+    "not_found": "No encontramos lo que buscabas.",
+    "method_not_allowed": "Esa acción no está disponible aquí.",
+    "conflict": "Esto entra en conflicto con algo que ya existe.",
+    "payload_too_large": "El archivo es demasiado grande.",
+    "validation": "Revisa los campos marcados.",
+    "quota_exceeded": "Has alcanzado tu límite. Inténtalo de nuevo más tarde.",
+    "rate_limited": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
+    "server": "Algo salió mal por nuestra parte. Inténtalo de nuevo."
+  }
+}

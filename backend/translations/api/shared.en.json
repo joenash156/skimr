@@ -1,0 +1,15 @@
+{
+  "errors": {
+    "bad_request": "The request could not be understood.",
+    "unauthenticated": "Please sign in to continue.",
+    "forbidden": "You don't have permission to do that.",
+    "not_found": "We couldn't find what you were looking for.",
+    "method_not_allowed": "That action isn't supported here.",
+    "conflict": "This conflicts with something that already exists.",
+    "payload_too_large": "The file is too large.",
+    "validation": "Please check the highlighted fields.",
+    "quota_exceeded": "You've reached your limit. Please try again later.",
+    "rate_limited": "Too many attempts. Please wait a moment and try again.",
+    "server": "Something went wrong on our side. Please try again."
+  }
+}

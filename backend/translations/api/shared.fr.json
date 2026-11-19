@@ -1,0 +1,15 @@
+{
+  "errors": {
+    "bad_request": "La requête n'a pas pu être comprise.",
+    "unauthenticated": "Veuillez vous connecter pour continuer.",
+    "forbidden": "Vous n'avez pas l'autorisation de faire cela.",
+    "not_found": "Nous n'avons pas trouvé ce que vous cherchez.",
+    "method_not_allowed": "Cette action n'est pas prise en charge ici.",
+    "conflict": "Cela entre en conflit avec un élément existant.",
+    "payload_too_large": "Le fichier est trop volumineux.",
+    "validation": "Veuillez vérifier les champs signalés.",
+    "quota_exceeded": "Vous avez atteint votre limite. Veuillez réessayer plus tard.",
+    "rate_limited": "Trop de tentatives. Veuillez patienter un instant puis réessayer.",
+    "server": "Un problème est survenu de notre côté. Veuillez réessayer."
+  }
+}

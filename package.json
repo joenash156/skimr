@@ -1,0 +1,9 @@
+{
+  "name": "skimr-workspace",
+  "private": true,
+  "description": "Repository-level dev tools only. The dashboard has its own package.json in frontend/.",
+  "scripts": {
+    "mock": "npx --yes @stoplight/prism-cli@5 mock docs/api/openapi.yaml -p 4010",
+    "api:lint": "npx --yes @redocly/cli@1 lint docs/api/openapi.yaml"
+  }
+}

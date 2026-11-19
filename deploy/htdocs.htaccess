@@ -1,0 +1,20 @@
+# Uploaded as htdocs/.htaccess on InfinityFree (deploy/deploy-staging.*).
+#
+# InfinityFree's document root is always htdocs/, and we upload the whole
+# backend/ folder into it. This file makes backend/public the effective
+# document root: EVERY request is rewritten into public/, so vendor/,
+# config/, src/, migrations/ and the .env file can never be fetched.
+# public/.htaccess then routes to index.php (its RewriteEngine On stops
+# this rule from running again, so there is no loop).
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Belt and braces if mod_rewrite were ever off: refuse everything here.
+<IfModule !mod_rewrite.c>
+    Require all denied
+</IfModule>

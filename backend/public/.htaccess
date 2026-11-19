@@ -1,0 +1,23 @@
+# Document root: backend/public (spec 17.2).
+Options -Indexes -MultiViews
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS everywhere except local development.
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+    RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:[0-9]+)?$ [NC]
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+    # Never serve dotfiles (.env, .git, ...) even if one is uploaded by mistake.
+    RewriteRule (^|/)\. - [F,L]
+
+    # Real files (CSS, JS, images, the built React assets) are served directly.
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Everything else, /app/* included, goes to Slim. Slim returns the React
+    # index.html for /app/* so it can add noindex and the CSP nonce (spec 7, 11.3).
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>

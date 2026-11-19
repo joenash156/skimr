@@ -1,0 +1,167 @@
+name: CI
+
+# Runs on every PR into dev/main and on pushes to them. Each job only runs when
+# its folder changed; a skipped job counts as passing for branch protection.
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Detect changed folders
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend == 'true' && steps.exists.outputs.frontend == 'true' }}
+      ai: ${{ steps.filter.outputs.ai == 'true' && steps.exists.outputs.ai == 'true' }}
+      api: ${{ steps.filter.outputs.api }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+              - '.github/workflows/ci.yml'
+            frontend:
+              - 'frontend/**'
+              - 'shared/**'
+              - 'docs/api/openapi.yaml'
+              - '.github/workflows/ci.yml'
+            ai:
+              - 'ai-service/**'
+              - '.github/workflows/ci.yml'
+            api:
+              - 'docs/api/**'
+      - name: Which projects exist yet
+        id: exists
+        run: |
+          echo "frontend=$([ -f frontend/package.json ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "ai=$([ -f ai-service/requirements.txt ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+  backend:
+    name: Backend (PHP)
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: skimr_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      APP_ENV: testing
+      DB_HOST: 127.0.0.1
+      DB_PORT: '3306'
+      DB_NAME: skimr_test
+      DB_USER: root
+      DB_PASS: root
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          # The lowest version we support (InfinityFree staging); matches config.platform.php.
+          php-version: '8.2'
+          extensions: mbstring, intl, gd, fileinfo, openssl, pdo_mysql, curl, sodium, zip
+          coverage: none
+          tools: composer:v2
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer
+          key: composer-${{ hashFiles('backend/composer.lock') }}
+      - run: composer validate --strict --no-check-publish
+      - run: composer install --no-interaction --no-progress --prefer-dist
+      - name: Code style (PSR-12)
+        run: composer cs
+      - name: Static analysis (PHPStan level 6)
+        run: composer stan -- --no-progress --error-format=github
+      - name: Tests
+        run: composer test
+      - name: Migrations up, down, up
+        run: |
+          composer migrate
+          vendor/bin/doctrine-migrations migrate first --no-interaction
+          composer migrate
+      - name: Dependency audit
+        run: composer audit
+
+  frontend:
+    name: Frontend (React)
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      # P4: frontend/package.json must define these scripts.
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run i18n:check
+      - run: npm test -- --run
+      - run: npm run build
+      - run: npm audit --audit-level=high
+
+  ai-service:
+    name: AI service (Python)
+    needs: changes
+    if: needs.changes.outputs.ai == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ai-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: ai-service/requirements*.txt
+      - name: Install Tesseract (OCR tests)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends tesseract-ocr tesseract-ocr-fra tesseract-ocr-spa
+      - run: pip install -r requirements.txt
+      - run: pip install -r requirements-dev.txt
+        if: hashFiles('ai-service/requirements-dev.txt') != ''
+      - run: ruff check .
+      - run: mypy app
+      - run: pytest
+      - run: pip-audit -r requirements.txt
+
+  api-contract:
+    name: OpenAPI contract
+    needs: changes
+    if: needs.changes.outputs.api == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npx --yes @redocly/cli@1 lint docs/api/openapi.yaml

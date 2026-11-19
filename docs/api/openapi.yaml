@@ -1,0 +1,741 @@
+openapi: 3.1.0
+info:
+  title: Skimr API
+  version: 0.1.0
+  summary: The contract between the PHP API and its clients (spec section 10).
+  description: |
+    **This file is the contract** (owner: P1). Endpoints are added here first, then built.
+    Frontend work against unfinished endpoints uses the mock server: `npm run mock`
+    (root of the repo) serves this file on http://localhost:4010.
+
+    Conventions (spec 10.1):
+    - Success bodies are `{"data": ..., "meta": {...}}`; lists add `meta.page`, `meta.per_page`, `meta.total`.
+    - Errors are `{"error": {"code", "message", "fields", "request_id"}}`. `message` is already
+      translated; switch on `code`.
+    - JSON is `snake_case`; paths use uuids, never numeric ids.
+    - The access token goes in `Authorization: Bearer`. The refresh token only ever travels
+      as the `__Secure-rt` HttpOnly cookie, sent by the browser to `/api/v1/auth/*` only.
+    - Cookie endpoints (`/auth/refresh`, `/auth/logout`) also require `Origin: <APP_URL>` and
+      `X-Requested-With: skimr` (spec 11.1, CSRF).
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local PHP (composer start)
+  - url: http://localhost:4010
+    description: Mock server (npm run mock)
+  - url: https://skimr.foliony.app/api/v1
+    description: Staging (browser only; InfinityFree blocks non-browser clients)
+tags:
+  - name: System
+    description: Health and service status.
+  - name: Auth
+    description: Sign-up, login, sessions, email verification, password reset, Google OAuth (P1).
+  - name: Me
+    description: The signed-in user's own profile, preferences and account (P1).
+security:
+  - bearerAuth: []
+
+paths:
+  /health:
+    get:
+      tags: [System]
+      summary: Liveness check
+      operationId: getHealth
+      security: []
+      responses:
+        '200':
+          description: The API is up.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: object
+                    required: [status, time]
+                    properties:
+                      status: { type: string, const: ok }
+                      time: { type: string, format: date-time }
+              example:
+                data: { status: ok, time: '2026-11-20T09:30:00+00:00' }
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Sign up with email and password
+      description: |
+        Creates the account with `status=pending_verification` and emails a verification link
+        (valid 24 hours). Rate limit: 5 per hour per IP.
+      operationId: register
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterRequest' }
+      responses:
+        '201':
+          description: Account created; verification email sent.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: object
+                    required: [user]
+                    properties:
+                      user: { $ref: '#/components/schemas/User' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '403': { $ref: '#/components/responses/TurnstileFailed' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Log in with email and password
+      description: |
+        Returns an access token (15 minutes) and sets the refresh cookie (14 days).
+        Unknown email and wrong password give the same 401. After 5 failures in 15 minutes the
+        account is locked for 15 minutes (`ACCOUNT_LOCKED`). A user with
+        `status=pending_verification` still gets a token; the app then shows the verify screen.
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '200':
+          description: Logged in.
+          headers:
+            Set-Cookie: { $ref: '#/components/headers/RefreshCookie' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SessionResponse' }
+        '401': { $ref: '#/components/responses/InvalidCredentials' }
+        '403': { $ref: '#/components/responses/TurnstileFailed' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+        '429': { $ref: '#/components/responses/AccountLockedOrRateLimited' }
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Swap the refresh cookie for a new access token
+      description: |
+        Rotates the refresh token on every call. Presenting an already-rotated token is treated as
+        theft: the whole session is cleared, every access token is revoked and the user is emailed
+        (`REFRESH_REUSED`). Rate limit: 30 per minute per user.
+      operationId: refresh
+      security:
+        - refreshCookie: []
+      parameters:
+        - $ref: '#/components/parameters/XRequestedWith'
+      responses:
+        '200':
+          description: New access token; new refresh cookie set.
+          headers:
+            Set-Cookie: { $ref: '#/components/headers/RefreshCookie' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SessionResponse' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/CsrfFailed' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Log out (clears the refresh token and cookie)
+      operationId: logout
+      parameters:
+        - $ref: '#/components/parameters/XRequestedWith'
+      responses:
+        '204':
+          description: Logged out; the refresh cookie is expired.
+          headers:
+            Set-Cookie: { $ref: '#/components/headers/RefreshCookieCleared' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/CsrfFailed' }
+
+  /auth/verify-email:
+    post:
+      tags: [Auth]
+      summary: Confirm an email address with the token from the email
+      operationId: verifyEmail
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TokenRequest' }
+      responses:
+        '200':
+          description: Email verified; the user is now active.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: object
+                    required: [user]
+                    properties:
+                      user: { $ref: '#/components/schemas/User' }
+        '400': { $ref: '#/components/responses/InvalidToken' }
+
+  /auth/verify-email/resend:
+    post:
+      tags: [Auth]
+      summary: Send the verification email again
+      description: At most 3 per hour per user.
+      operationId: resendVerification
+      responses:
+        '204': { description: Sent (or already verified). }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /auth/password/forgot:
+    post:
+      tags: [Auth]
+      summary: Request a password reset link
+      description: |
+        Always answers 200, whether or not the email exists, so accounts can't be discovered.
+        The link is valid 60 minutes and works once. Rate limit: 3 per hour per email.
+      operationId: forgotPassword
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, turnstile_token]
+              properties:
+                email: { type: string, format: email, maxLength: 254 }
+                turnstile_token: { type: string }
+      responses:
+        '200':
+          description: If that email exists, a link has been sent.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MessageResponse' }
+        '403': { $ref: '#/components/responses/TurnstileFailed' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /auth/password/reset:
+    post:
+      tags: [Auth]
+      summary: Set a new password with a reset token
+      description: Signs the user out everywhere.
+      operationId: resetPassword
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SetPasswordRequest' }
+      responses:
+        '204': { description: Password changed; every session is signed out. }
+        '400': { $ref: '#/components/responses/InvalidToken' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+
+  /auth/invite/accept:
+    post:
+      tags: [Auth]
+      summary: An invited admin sets their first password
+      description: Sets `status=active` and marks the email verified. Returns a session like login.
+      operationId: acceptInvite
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SetPasswordRequest' }
+      responses:
+        '200':
+          description: Password set; logged in.
+          headers:
+            Set-Cookie: { $ref: '#/components/headers/RefreshCookie' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SessionResponse' }
+        '400': { $ref: '#/components/responses/InvalidToken' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+
+  /auth/google/redirect:
+    get:
+      tags: [Auth]
+      summary: Start Google sign-in (browser navigation, not XHR)
+      description: Stores state and the PKCE verifier in a short-lived signed cookie, then redirects to Google.
+      operationId: googleRedirect
+      security: []
+      responses:
+        '302':
+          description: Redirect to accounts.google.com.
+          headers:
+            Location: { schema: { type: string, format: uri } }
+
+  /auth/google/callback:
+    get:
+      tags: [Auth]
+      summary: Google redirects back here (browser navigation, not XHR)
+      description: |
+        Verifies state, PKCE and the id_token, and requires Google's `email_verified`.
+        Redirects to:
+        - `/app` when signed in (refresh cookie set),
+        - `/app/complete-profile` for a new account,
+        - `/app/login?link=google` when a password account already uses that email,
+        - `/app/login?error=google` on failure.
+      operationId: googleCallback
+      security: []
+      parameters:
+        - { name: code, in: query, required: false, schema: { type: string } }
+        - { name: state, in: query, required: false, schema: { type: string } }
+        - { name: error, in: query, required: false, schema: { type: string } }
+      responses:
+        '302':
+          description: Redirect into the app.
+          headers:
+            Location: { schema: { type: string } }
+
+  /auth/google/link:
+    post:
+      tags: [Auth]
+      summary: Link Google to an existing password account
+      description: The password is required, so a Google account can't take over someone else's account.
+      operationId: googleLink
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [password]
+              properties:
+                password: { type: string, writeOnly: true }
+      responses:
+        '200':
+          description: Linked and logged in.
+          headers:
+            Set-Cookie: { $ref: '#/components/headers/RefreshCookie' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SessionResponse' }
+        '400': { $ref: '#/components/responses/InvalidToken' }
+        '401': { $ref: '#/components/responses/InvalidCredentials' }
+
+  /me:
+    get:
+      tags: [Me]
+      summary: The signed-in user's profile, preferences and enabled features
+      description: Pending (unverified) users may call this.
+      operationId: getMe
+      responses:
+        '200':
+          description: The current user.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data: { $ref: '#/components/schemas/Me' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+    patch:
+      tags: [Me]
+      summary: Update profile and preferences
+      description: Send only the fields to change. Email and password have their own endpoints.
+      operationId: updateMe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateMeRequest' }
+      responses:
+        '200':
+          description: Updated user.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data: { $ref: '#/components/schemas/Me' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+    delete:
+      tags: [Me]
+      summary: Delete my account (30-day soft delete, then purge)
+      operationId: deleteMe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [password]
+              properties:
+                password: { type: string, writeOnly: true }
+      responses:
+        '204': { description: Account scheduled for deletion; signed out everywhere. }
+        '401': { $ref: '#/components/responses/InvalidCredentials' }
+
+  /me/password:
+    post:
+      tags: [Me]
+      summary: Change password (signs out everywhere)
+      operationId: changePassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [current_password, password, password_confirmation]
+              properties:
+                current_password: { type: string, writeOnly: true }
+                password: { $ref: '#/components/schemas/Password' }
+                password_confirmation: { type: string, writeOnly: true }
+      responses:
+        '204': { description: Password changed. }
+        '401': { $ref: '#/components/responses/InvalidCredentials' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+
+  /me/email:
+    post:
+      tags: [Me]
+      summary: Start an email change
+      description: Sends a verification link to the new address and a notice to the old one.
+      operationId: changeEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email, maxLength: 254 }
+                password: { type: string, writeOnly: true }
+      responses:
+        '202':
+          description: Verification sent to the new address.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MessageResponse' }
+        '401': { $ref: '#/components/responses/InvalidCredentials' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Access token from login/refresh. Lives in memory only, never in localStorage.
+    refreshCookie:
+      type: apiKey
+      in: cookie
+      name: __Secure-rt
+
+  parameters:
+    XRequestedWith:
+      name: X-Requested-With
+      in: header
+      required: true
+      description: CSRF guard for cookie endpoints (spec 11.1).
+      schema: { type: string, const: skimr }
+
+  headers:
+    RefreshCookie:
+      description: '`__Secure-rt=<jwt>; HttpOnly; Secure; SameSite=Strict; Path=/api/v1/auth; Max-Age=1209600`'
+      schema: { type: string }
+    RefreshCookieCleared:
+      description: '`__Secure-rt=; HttpOnly; Secure; SameSite=Strict; Path=/api/v1/auth; Max-Age=0`'
+      schema: { type: string }
+
+  schemas:
+    Uuid:
+      type: string
+      format: uuid
+      example: 3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              description: Stable machine-readable code. Switch on this, never on `message`.
+              examples: [VALIDATION_FAILED, NOT_FOUND, QUOTA_EXCEEDED]
+            message:
+              type: string
+              description: Already translated into the request language.
+            fields:
+              type: object
+              description: Per-field messages (422 only), keyed by request field name.
+              additionalProperties: { type: string }
+            request_id:
+              type: string
+              description: Quote this when reporting a problem; it matches the server log line.
+
+    Pagination:
+      type: object
+      required: [page, per_page, total]
+      properties:
+        page: { type: integer, minimum: 1, example: 1 }
+        per_page: { type: integer, minimum: 1, maximum: 100, example: 20 }
+        total: { type: integer, minimum: 0, example: 42 }
+
+    MessageResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [message]
+          properties:
+            message: { type: string }
+
+    Locale:
+      type: string
+      enum: [en, fr, es]
+
+    Password:
+      type: string
+      minLength: 10
+      maxLength: 72
+      writeOnly: true
+      description: 10-72 characters, at least one letter and one number, not a common password (spec 5.2).
+
+    Phone:
+      type: string
+      pattern: '^\+[1-9][0-9]{6,14}$'
+      description: E.164, e.g. +233241234567.
+      example: '+233241234567'
+
+    NotificationPrefs:
+      type: object
+      description: Email on/off per optional email type (spec 15.2). Security emails can't be turned off.
+      properties:
+        processing_done: { type: boolean, default: true }
+        report_ready: { type: boolean, default: true }
+        project_invite: { type: boolean, default: true }
+        weekly_digest: { type: boolean, default: false }
+
+    User:
+      type: object
+      required: [id, role, status, first_name, last_name, email, email_verified, locale, theme, citation_style, created_at]
+      properties:
+        id: { $ref: '#/components/schemas/Uuid' }
+        role: { type: string, enum: [user, admin, super_admin] }
+        status: { type: string, enum: [pending_verification, active, invited, suspended, deleted] }
+        first_name: { type: string, maxLength: 80, example: Ama }
+        last_name: { type: string, maxLength: 80, example: Mensah }
+        other_names: { type: [string, 'null'], maxLength: 120 }
+        email: { type: string, format: email, example: ama@example.com }
+        email_verified: { type: boolean }
+        phone: { oneOf: [{ $ref: '#/components/schemas/Phone' }, { type: 'null' }] }
+        alt_phone: { oneOf: [{ $ref: '#/components/schemas/Phone' }, { type: 'null' }] }
+        institution: { type: [string, 'null'], maxLength: 160 }
+        discipline: { type: [string, 'null'], maxLength: 160 }
+        avatar_url: { type: [string, 'null'], format: uri }
+        has_password: { type: boolean, description: False for Google-only accounts. }
+        google_linked: { type: boolean }
+        locale: { $ref: '#/components/schemas/Locale' }
+        theme: { type: string, enum: [light, dark, system] }
+        citation_style: { type: string, enum: [apa7, mla9, harvard] }
+        created_at: { type: string, format: date-time }
+
+    Me:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          required: [notification_prefs, features]
+          properties:
+            notification_prefs: { $ref: '#/components/schemas/NotificationPrefs' }
+            features:
+              type: object
+              description: |
+                Feature flags the super admin controls (spec 5.4). The dashboard shows or hides
+                options from these, e.g. the "Add source" menu items until B4/B5.
+              required: [upload_images, add_link, paste_text, discover, chat]
+              properties:
+                upload_images: { type: boolean }
+                add_link: { type: boolean }
+                paste_text: { type: boolean }
+                discover: { type: boolean }
+                chat: { type: boolean }
+      example:
+        id: 3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17
+        role: user
+        status: active
+        first_name: Ama
+        last_name: Mensah
+        other_names: null
+        email: ama@example.com
+        email_verified: true
+        phone: '+233241234567'
+        alt_phone: null
+        institution: University of Ghana
+        discipline: Business Administration
+        avatar_url: null
+        has_password: true
+        google_linked: false
+        locale: en
+        theme: system
+        citation_style: apa7
+        created_at: '2026-11-20T09:30:00+00:00'
+        notification_prefs: { processing_done: true, report_ready: true, project_invite: true, weekly_digest: false }
+        features: { upload_images: false, add_link: false, paste_text: false, discover: false, chat: false }
+
+    SessionResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [access_token, token_type, expires_in, user]
+          properties:
+            access_token: { type: string, description: 'JWT, valid 15 minutes.' }
+            token_type: { type: string, const: Bearer }
+            expires_in: { type: integer, example: 900 }
+            user: { $ref: '#/components/schemas/User' }
+
+    RegisterRequest:
+      type: object
+      required: [first_name, last_name, email, password, password_confirmation, accept_terms, turnstile_token]
+      properties:
+        first_name: { type: string, minLength: 1, maxLength: 80 }
+        last_name: { type: string, minLength: 1, maxLength: 80 }
+        other_names: { type: string, maxLength: 120 }
+        email: { type: string, format: email, maxLength: 254 }
+        phone: { $ref: '#/components/schemas/Phone' }
+        password: { $ref: '#/components/schemas/Password' }
+        password_confirmation: { type: string, writeOnly: true }
+        accept_terms: { type: boolean, const: true }
+        locale: { $ref: '#/components/schemas/Locale' }
+        turnstile_token: { type: string }
+
+    LoginRequest:
+      type: object
+      required: [email, password, turnstile_token]
+      properties:
+        email: { type: string, format: email, maxLength: 254 }
+        password: { type: string, writeOnly: true }
+        turnstile_token: { type: string }
+
+    TokenRequest:
+      type: object
+      required: [token]
+      properties:
+        token: { type: string, description: The raw token from the emailed link. }
+
+    SetPasswordRequest:
+      type: object
+      required: [token, password, password_confirmation]
+      properties:
+        token: { type: string }
+        password: { $ref: '#/components/schemas/Password' }
+        password_confirmation: { type: string, writeOnly: true }
+
+    UpdateMeRequest:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        first_name: { type: string, minLength: 1, maxLength: 80 }
+        last_name: { type: string, minLength: 1, maxLength: 80 }
+        other_names: { type: [string, 'null'], maxLength: 120 }
+        phone: { oneOf: [{ $ref: '#/components/schemas/Phone' }, { type: 'null' }] }
+        alt_phone: { oneOf: [{ $ref: '#/components/schemas/Phone' }, { type: 'null' }] }
+        institution: { type: [string, 'null'], maxLength: 160 }
+        discipline: { type: [string, 'null'], maxLength: 160 }
+        locale: { $ref: '#/components/schemas/Locale' }
+        theme: { type: string, enum: [light, dark, system] }
+        citation_style: { type: string, enum: [apa7, mla9, harvard] }
+        notification_prefs: { $ref: '#/components/schemas/NotificationPrefs' }
+
+  responses:
+    BadRequest:
+      description: Malformed request.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: { code: BAD_REQUEST, message: The request could not be understood., request_id: 48c11ea2bec4c37ed3fc05e8 } }
+    Unauthenticated:
+      description: Not signed in, or the token expired.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: { code: UNAUTHENTICATED, message: Please sign in to continue., request_id: 48c11ea2bec4c37ed3fc05e8 } }
+    InvalidCredentials:
+      description: Wrong email or password (the same answer for both, so accounts can't be discovered).
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: { code: INVALID_CREDENTIALS, message: The email or password is incorrect., request_id: 48c11ea2bec4c37ed3fc05e8 } }
+    InvalidToken:
+      description: The emailed link is invalid, expired or already used.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: { code: INVALID_TOKEN, message: This link is invalid or has expired., request_id: 48c11ea2bec4c37ed3fc05e8 } }
+    TurnstileFailed:
+      description: The bot check failed.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: { code: TURNSTILE_FAILED, message: Please complete the security check., request_id: 48c11ea2bec4c37ed3fc05e8 } }
+    CsrfFailed:
+      description: Missing or wrong Origin / X-Requested-With on a cookie endpoint.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: { code: FORBIDDEN, message: "You don't have permission to do that.", request_id: 48c11ea2bec4c37ed3fc05e8 } }
+    Conflict:
+      description: Conflicts with existing data (e.g. email already registered).
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: { code: CONFLICT, message: This conflicts with something that already exists., request_id: 48c11ea2bec4c37ed3fc05e8 } }
+    AccountLockedOrRateLimited:
+      description: "`ACCOUNT_LOCKED` after 5 failed logins (locked 15 minutes), or `RATE_LIMITED`."
+      headers:
+        Retry-After: { schema: { type: integer } }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: { code: ACCOUNT_LOCKED, message: Too many attempts. Try again in 15 minutes., request_id: 48c11ea2bec4c37ed3fc05e8 } }
+    ValidationFailed:
+      description: Validation failed; see `fields`.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example:
+            error:
+              code: VALIDATION_FAILED
+              message: Please check the highlighted fields.
+              fields: { email: This email address is not valid. }
+              request_id: 48c11ea2bec4c37ed3fc05e8
+    RateLimited:
+      description: Too many requests.
+      headers:
+        Retry-After: { schema: { type: integer }, description: Seconds to wait. }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: { code: RATE_LIMITED, message: Too many attempts. Please wait a moment and try again., request_id: 48c11ea2bec4c37ed3fc05e8 } }

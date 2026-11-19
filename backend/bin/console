@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/*
+ * Skimr CLI: php bin/console list
+ *
+ * Commands are Symfony Console commands resolved from the container. A
+ * module registers its own in config/container/{module}.php, without
+ * editing this file:
+ *
+ *     'console.commands' => \DI\add([App\Auth\Cli\CreateSuperAdminCommand::class]),
+ */
+
+use Psr\Container\ContainerInterface;
+use Slim\App;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+
+if (PHP_SAPI !== 'cli') {
+    exit(1);
+}
+
+/** @var callable(): App<ContainerInterface|null> $createApp */
+$createApp = require dirname(__DIR__) . '/config/bootstrap.php';
+$container = $createApp()->getContainer();
+if ($container === null) {
+    fwrite(STDERR, "The app has no container.\n");
+    exit(1);
+}
+
+$console = new Application('Skimr', '0.1.0');
+
+/** @var list<class-string<Command>> $commands */
+$commands = $container->has('console.commands') ? $container->get('console.commands') : [];
+foreach ($commands as $class) {
+    /** @var Command $command */
+    $command = $container->get($class);
+    $console->addCommand($command);
+}
+
+exit($console->run());

@@ -2,7 +2,7 @@
 
 **Spec version:** 1.1 (19 Nov 2026) · **Owner:** [P4 name]
 
-> **How to use this file:** Give your AI coding agent two files: this brief and `00-MASTER-SPEC.md`. Work **one batch at a time**, and one task at a time within a batch. A batch is done when every acceptance check passes and the PR is merged into `develop`.
+> **How to use this file:** Give your AI coding agent two files: this brief and `00-MASTER-SPEC.md`. Work **one batch at a time**, and one task at a time within a batch. A batch is done when every acceptance check passes and the PR is merged into `dev`.
 
 ---
 
@@ -82,6 +82,26 @@ frontend/src/
 | Projects, sources, jobs and research endpoints | P2 | Each batch (contract first) |
 | **Sidebar + theme toggle reference samples** | Nana | Before B1 |
 
+## 3a. Notes from P1: repo setup you need to know
+
+- **CSP nonce for the theme script (spec 11.3, 14.4).** The API's Content-Security-Policy blocks inline scripts unless they carry the request's nonce. PHP serves `/app/*` itself and swaps a placeholder for that nonce. So the no-flash theme script in `index.html` **must** be written exactly as:
+
+    ```html
+    <script nonce="__CSP_NONCE__">/* read localStorage.theme, set class="dark" */</script>
+    ```
+
+    This is the **only** inline script allowed. Everything else goes in bundled modules. Vite's dev server (port 5173) doesn't send the CSP, so test this against the build served by PHP: `npm run build`, then http://localhost:8080/app/.
+- **CI runs these scripts as soon as `frontend/package.json` exists** (Node 20, inside `frontend/`): `npm ci`, `npm run lint`, `npm run typecheck`, `npm run i18n:check`, `npm test -- --run`, `npm run build`, `npm audit --audit-level=high`. **Define every one of these scripts** and commit `package-lock.json`.
+- **Mock API:** `npm run mock` in the **repository root** (not `frontend/`) serves `docs/api/openapi.yaml` on http://localhost:4010. The mock's paths have no `/api/v1` prefix (`http://localhost:4010/auth/login`), so point the Vite proxy at it with a rewrite while you work against mocks.
+- **The contract has every auth and `/me` endpoint already** (OpenAPI v0). Run `npm run api:types` against it. Notable details:
+    - `GET /me` returns a `features` object (`upload_images`, `add_link`, `paste_text`, `discover`, `chat`). Use it for the "Add source" menu flags in B2.
+    - An account locked after 5 failed logins returns **429** with code `ACCOUNT_LOCKED` (plus `Retry-After`); other rate limits return 429 `RATE_LIMITED`.
+    - Error bodies include `request_id`. Show it in error toasts ("Reference: ...") so users can report it.
+    - `/auth/refresh` and `/auth/logout` need the header `X-Requested-With: skimr`.
+- **Packages P5 needs from you:** P5's admin screens use `recharts` from your `package.json`. Add it in B0 so P5 never has to edit your `package.json`.
+- **`shared/design-tokens.css` early:** P5's public site builds its CSS from the same file in B0. Open it as its **own small PR first**, so P5 isn't blocked.
+- **Integration branch is `dev`.** Branch from it; open PRs into it.
+
 ---
 
 ## B0 — Foundations (week 1)
@@ -94,8 +114,8 @@ frontend/src/
     - import `shared/design-tokens.css`: every spec 14.1 colour as a CSS variable, for light and dark
     - `@custom-variant dark (&:where(.dark, .dark *))`
     - self-hosted Inter
-3. **No-flash theme:** an inline script in `index.html` reads `localStorage.theme` (`light` / `dark` / `system`) and sets `class="dark"` before the page paints (spec 14.4).
-4. **Tooling and scripts:**
+3. **No-flash theme:** an inline script in `index.html` reads `localStorage.theme` (`light` / `dark` / `system`) and sets `class="dark"` before the page paints (spec 14.4). Write it as `<script nonce="__CSP_NONCE__">` (see 3a); without the nonce the CSP blocks it.
+4. **Tooling and scripts** (CI needs `lint`, `typecheck`, `i18n:check`, `test` and `build`; see 3a):
     - ESLint with `react/no-danger` and `@typescript-eslint/no-explicit-any` as errors
     - Prettier, Vitest
     - `npm run api:types` = `openapi-typescript ../docs/api/openapi.yaml -o src/lib/api/schema.ts`

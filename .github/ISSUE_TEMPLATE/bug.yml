@@ -1,0 +1,52 @@
+name: Bug
+description: Something doesn't work as the spec says it should.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Include the request id from the error message if there was one.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should have happened
+      description: Quote or link the spec section if you can.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Log in as ...
+        2. Open ...
+        3. Click ...
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Backend core / auth (P1)
+        - Backend features (P2)
+        - AI service (P3)
+        - Dashboard (P4)
+        - Public site / SEO / admin UI (P5)
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: Local or staging, browser, screen width, language, light or dark.
+  - type: checkboxes
+    id: security
+    attributes:
+      label: Security
+      options:
+        - label: This looks like a security problem (also add the `security` label, and don't post secrets or tokens here).

@@ -6,13 +6,13 @@ How the five of us share one repo without breaking each other's work. Summary ru
 
 | Branch | What it is | Who writes to it |
 | --- | --- | --- |
-| `main` | Released code, tagged `v0.1`, `v0.2`, ... at the end of each batch | P1 only, by merging `develop` |
-| `develop` | Finished, reviewed work from everyone | P1 only, by merging pull requests |
+| `main` | Released code, tagged `v0.1`, `v0.2`, ... at the end of each batch | P1 only, by merging `dev` |
+| `dev` | Finished, reviewed work from everyone | P1 only, by merging pull requests |
 | `feature/p<n>-F<xx>-short-name` | Your work in progress | You |
 
 Other prefixes: `fix/p4-sidebar-collapse`, `chore/p1-ci`, `docs/p5-seo`.
 
-**Never commit directly to `main` or `develop`.** Both are protected on GitHub, so the push will be refused anyway.
+**Never commit directly to `main` or `dev`.** Both are protected on GitHub, so the push will be refused anyway.
 
 ## First-time setup (once per laptop)
 
@@ -22,15 +22,15 @@ cd skimr
 git config user.name  "Your Name"
 git config user.email "the-email-on-your-github-account"
 git config pull.rebase true
-git switch develop
+git switch dev
 ```
 
 ## Daily loop
 
-### 1. Start a task: branch from the latest `develop`
+### 1. Start a task: branch from the latest `dev`
 
 ```powershell
-git switch develop
+git switch dev
 git pull
 git switch -c feature/p3-F07-pdf-extract
 ```
@@ -44,11 +44,11 @@ git commit -m "feat(ai): extract text page by page with PyMuPDF (F07)"
 
 Stage the files by path, not with `git add .`, so you don't commit stray files by accident. Run `git status` before every commit.
 
-### 3. Every morning, and before you open a PR: catch up with `develop`
+### 3. Every morning, and before you open a PR: catch up with `dev`
 
 ```powershell
 git fetch origin
-git rebase origin/develop
+git rebase origin/dev
 ```
 
 If you had already pushed this branch, the rebase rewrites its history, so push it with:
@@ -57,20 +57,20 @@ If you had already pushed this branch, the rebase rewrites its history, so push 
 git push --force-with-lease
 ```
 
-Only ever force-push **your own feature branch**. Never force-push `develop` or `main`.
+Only ever force-push **your own feature branch**. Never force-push `dev` or `main`.
 
-### 4. Push and open a pull request into `develop`
+### 4. Push and open a pull request into `dev`
 
 ```powershell
 git push -u origin feature/p3-F07-pdf-extract
 ```
 
-On GitHub, open a PR with **base: `develop`** (not `main`). Fill in the template: what, why, feature id, screenshots, checklist. Tell P1 it's ready.
+On GitHub, open a PR with **base: `dev`** (not `main`). Fill in the template: what, why, feature id, screenshots, checklist. Tell P1 it's ready.
 
 ### 5. After your PR is merged
 
 ```powershell
-git switch develop
+git switch dev
 git pull
 git branch -d feature/p3-F07-pdf-extract
 ```
@@ -81,9 +81,9 @@ Then start the next task from step 1. Don't keep working on a merged branch.
 
 - **Stay inside the folders you own** (spec §18, section 2 of your brief). This rule prevents nearly all conflicts.
 - Keep branches short: under 3 days, one task or a few small related ones.
-- Rebase on `develop` every morning (step 3).
+- Rebase on `dev` every morning (step 3).
 - **Shared files** change only in a small PR of their own, made by their owner: `composer.json`, `package.json`, the lock files, `docs/api/openapi.yaml`, `shared/design-tokens.css` and `docs/specs/*`. If you need a library or an endpoint change, ask the owner.
-- Never hand-edit `composer.lock` or `package-lock.json`. If one conflicts, take `develop`'s version, then re-run `composer install` or `npm install`.
+- Never hand-edit `composer.lock` or `package-lock.json`. If one conflicts, take `dev`'s version, then re-run `composer install` or `npm install`.
 
 ## Resolving a conflict during a rebase
 
@@ -106,13 +106,13 @@ If the conflict is in a file you don't own, stop and ask that file's owner. Don'
 - At the end of each batch:
 
 ```powershell
-git switch develop
+git switch dev
 git pull
 git switch main
 git pull
-git merge --no-ff develop -m "release: batch B<n>"
+git merge --no-ff dev -m "release: batch B<n>"
 git tag -a v0.<n> -m "Batch B<n>"
 git push origin main --tags
 ```
 
-With branch protection on, the same thing is done as a PR from `develop` into `main`, and the tag is added after it's merged.
+With branch protection on, the same thing is done as a PR from `dev` into `main`, and the tag is added after it's merged.

@@ -2,7 +2,7 @@
 
 **Spec version:** 1.1 (19 Nov 2026) · **Owner:** [P1 name]
 
-> **How to use this file:** Give your AI coding agent two files: this brief and `00-MASTER-SPEC.md`. Work **one batch at a time**, and one task at a time within a batch. A batch is done when every acceptance check passes and the PR is merged into `develop`. Only then start the next batch.
+> **How to use this file:** Give your AI coding agent two files: this brief and `00-MASTER-SPEC.md`. Work **one batch at a time**, and one task at a time within a batch. A batch is done when every acceptance check passes and the PR is merged into `dev`. Only then start the next batch.
 
 ---
 
@@ -68,7 +68,7 @@ The system extracts the text, makes it searchable by meaning, clusters it into t
 - `frontend/` (P4 and P5)
 - `templates/public`, `src/Public` (P5)
 
-**Stack:** PHP 8.2+, Slim 4, PHP-DI 7, Doctrine DBAL 4 + Migrations 3, vlucas/phpdotenv, firebase/php-jwt 6, league/oauth2-google, respect/validation, guzzle 7, monolog 3, symfony/console 7, PHPUnit 11, PHPStan level 6, php-cs-fixer (PSR-12).
+**Stack:** PHP 8.2+, Slim 4, PHP-DI 7, Doctrine DBAL 4 + Migrations 3, vlucas/phpdotenv, firebase/php-jwt 7, league/oauth2-google, respect/validation, guzzle 7, monolog 3, symfony/console 7, PHPUnit 11, PHPStan level 6, php-cs-fixer (PSR-12).
 
 ## 3. Contracts
 
@@ -92,8 +92,8 @@ The system extracts the text, makes it searchable by meaning, clusters it into t
 ### Tasks
 
 1. **GitHub repo** `skimr` (you do this by hand):
-    - add all 5 members and create `develop`
-    - protect `main` and `develop`: PR required, 1 approval, CI must pass, no force-push
+    - add all 5 members and create `dev`
+    - protect `main` and `dev`: PR required, 1 approval, CI must pass, no force-push
     - **turn off squash merging and rebase merging**; allow merge commits only
     - turn on secret scanning and push protection
 2. **Monorepo skeleton**, exactly as in spec 18: `backend/`, `frontend/`, `ai-service/`, `shared/`, `docs/`, `deploy/`, `.github/`. Add a `README.md` (Windows/Laragon setup for all three services), `.gitignore` (`.env`, `vendor/`, `node_modules/`, `backend/public/app/`, `__pycache__/`, `.venv/`), `.editorconfig`, and `.env.example` (copy spec 17.4).
@@ -130,7 +130,7 @@ The system extracts the text, makes it searchable by meaning, clusters it into t
 
 ### Acceptance
 
-- [ ] CI is green on `develop`.
+- [ ] CI is green on `dev`.
 - [ ] `GET /api/v1/health` works locally (`http://localhost:8080`) and on staging over HTTPS.
 - [ ] Migrations run `migrate` and `migrate:prev` cleanly.
 - [ ] A teammate reaches a running setup using only the README.
@@ -213,7 +213,7 @@ The system extracts the text, makes it searchable by meaning, clusters it into t
     - send the exact CSP and headers from spec 11.3
     - send `X-Robots-Tag: noindex, nofollow` on `/app*` and `/api*`, and on **every** response when `APP_ENV != production`
 2. **Profile endpoints:**
-    - **`GET` / `PATCH /me`:** names, phone, alt_phone, institution, discipline, locale, theme, citation_style, notification_prefs
+    - **`GET` / `PATCH /me`:** names, phone, alt_phone, institution, discipline, locale, theme, citation_style, notification_prefs. `GET /me` also returns `features` (`upload_images`, `add_link`, `paste_text`, `discover`, `chat`), read from the `settings` table feature flags (all `false` when unset), as already defined in `openapi.yaml`. P4 hides "Add source" options from it.
     - **`POST /me/password`:** requires the current password; signs out everywhere
     - **`POST /me/email`:** verify the new address, notify the old one
     - **`DELETE /me`:** requires the password; soft delete; P2's purge happens after 30 days
@@ -225,12 +225,12 @@ The system extracts the text, makes it searchable by meaning, clusters it into t
 
 1. Keep `openapi.yaml` in step with every endpoint P2 adds, including all `/sources/*` endpoints. **Reject any PR that adds an endpoint without updating the contract.**
 2. Be the main reviewer for P2's research endpoints, checking that `ProjectPolicy` runs on every query.
-3. At the end of the batch, merge `develop` → `main`, tag `v0.3` and deploy to staging.
+3. At the end of the batch, merge `dev` → `main`, tag `v0.3` and deploy to staging.
 
 ## B4 — Security test (weeks 8–9)
 
 1. With one teammate, run the **whole spec 20 security checklist** on staging, including the new SSRF and image tests. Log each issue as a GitHub issue labelled `security`, and fix or assign each one.
-2. Add database indexes for audit-log filters: `(actor_id, created_at)` and `(action, created_at)`.
+2. ~~Add database indexes for audit-log filters~~: already done in B0. `Version20261119230000` creates `(actor_id, created_at)` and `(action, created_at)`. Check they're used with `EXPLAIN` on the audit-log queries P2 writes.
 3. Tag `v0.4`.
 
 ## B5 — Hardening (weeks 10–11)
@@ -242,7 +242,7 @@ The system extracts the text, makes it searchable by meaning, clusters it into t
 
 ## B6 — Launch (week 12)
 
-1. Final review, then merge `develop` → `main` and tag `v1.0`.
+1. Final review, then merge `dev` → `main` and tag `v1.0`.
 2. Deploy, and smoke-test the spec 20 end-to-end journey on staging.
 3. Finish `docs/handover.md`: deploy steps, key rotation, creating a super admin, restoring a backup.
 

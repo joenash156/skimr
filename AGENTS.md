@@ -10,7 +10,7 @@ This repository is **Skimr** (slug `skimr`), a 5-person monorepo.
 If the user says something short like "start batch 2" or "B3 task 4":
 
 - Find out which member (P1–P5) they are. If they haven't said, **ask first**. Don't guess from the branch name or the files.
-- Open that member's brief and the master spec, then follow section 0 ("Instructions for the AI agent") of the brief.
+- Open that member's brief and the master spec, then follow section 0 ("Instructions for the AI agent") of the brief. Read section 3a ("Notes from P1") too: it describes what already exists in the repo (loaders, shared classes, CI requirements, the CSP nonce). Build on it instead of recreating it.
 - Confirm the batch and task back to the user before you write code.
 
 ## Hard rules
@@ -19,4 +19,4 @@ If the user says something short like "start batch 2" or "B3 task 4":
 - Use only the libraries in master spec §8.
 - Shared files (`composer.json`, `package.json`, lock files, `docs/api/openapi.yaml`, `shared/design-tokens.css`, anything in `docs/specs/`) change only in small dedicated PRs by their owner.
 - Never commit secrets. `.env` is git-ignored, and `.env.example` holds placeholders only.
-- Follow the git workflow in `docs/git-workflow.md`. Work on a `feature/p<n>-F<xx>-short-name` branch cut from `develop`, never on `main` or `develop`.
+- Follow the git workflow in `docs/git-workflow.md`. Work on a `feature/p<n>-F<xx>-short-name` branch cut from `dev`, never on `main` or `dev`.

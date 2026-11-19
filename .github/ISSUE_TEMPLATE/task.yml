@@ -1,0 +1,37 @@
+name: Task
+description: A piece of work from a member's batch, or a request to another folder's owner.
+labels: [task]
+body:
+  - type: input
+    id: ids
+    attributes:
+      label: Feature / batch
+      placeholder: F06 · B2
+    validations:
+      required: true
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Owner
+      options: [P1, P2, P3, P4, P5]
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What needs doing
+      description: Link the spec section or the brief task.
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      description: The acceptance checks.
+    validations:
+      required: true
+  - type: textarea
+    id: blocks
+    attributes:
+      label: Blocked by / blocks
+      description: Contracts or endpoints this depends on, and who is waiting for it.

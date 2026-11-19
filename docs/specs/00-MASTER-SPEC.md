@@ -34,7 +34,7 @@ This is the single source of truth for Skimr. If a member workbook disagrees wit
 
 | Version | Date | Change |
 | --- | --- | --- |
-| 1.2 | 19 Nov 2026 | Product name set to **Skimr** (slug `skimr`) and repo URL filled in. Spec files moved to `docs/specs/`. Section 13 translation paths aligned with section 18 (one file per module); section 18 `ai-service/` tree aligned with the P3 brief. |
+| 1.2 | 19 Nov 2026 | Product name set to **Skimr** (slug `skimr`) and repo URL filled in. Spec files moved to `docs/specs/`. Section 13 translation paths aligned with section 18 (one file per module); section 18 `ai-service/` tree aligned with the P3 brief. Integration branch is `dev` (was `develop`) everywhere. Section 8: `firebase/php-jwt` raised to ^7 (security advisory on all of v6), versions pinned for `resend-php` and PHPStan; `league/commonmark` listed (already required by 11.2). Section 11.3: CSP `script-src` gets a per-request nonce for the no-flash theme script (14.4 needs an inline script, which plain `'self'` blocks). API contract: account lockout returns 429 `ACCOUNT_LOCKED`, since 423 is not in the 10.1 status list. |
 | 1.1 | 18 Nov 2026 | Multi-format sources added: images with OCR (F22, which also covers scanned PDFs), web links and pasted text (F23), and the source-hunting assistant (F21). Tables renamed from `papers` / `paper_*` to `sources` / `source_*`, plus a new `source_files` table. Chat (F15) moved to stretch. |
 | 1.0 | 18 Nov 2026 | First complete specification. |
 
@@ -504,17 +504,18 @@ Use only the libraries listed here. To add one, open a pull request that also up
 | Templates | `slim/twig-view` ^3 |
 | Database | `doctrine/dbal` ^4 (query builder + prepared statements), `doctrine/migrations` ^3 |
 | Environment config | `vlucas/phpdotenv` ^5 |
-| JWT | `firebase/php-jwt` ^6 (HS256 for access tokens) |
+| JWT | `firebase/php-jwt` ^7 (HS256 for access tokens; every v6 release is affected by advisory PKSA-y2cr-5h3j-g3ys) |
 | Google OAuth | `league/oauth2-google` ^4 |
 | Validation | `respect/validation` ^2 |
 | HTTP client | `guzzlehttp/guzzle` ^7 |
 | Cloudinary | `cloudinary/cloudinary_php` ^2 |
-| Email | `resend/resend-php` |
+| Email | `resend/resend-php` ^1 |
 | Word export | `phpoffice/phpword` ^1 |
+| Markdown (guides) | `league/commonmark` ^2 (raw HTML escaped) |
 | UUIDs | `ramsey/uuid` ^4 |
 | CLI | `symfony/console` ^7 (`bin/console`) |
 | Logging | `monolog/monolog` ^3 |
-| Quality | `phpunit/phpunit` ^11, `phpstan/phpstan` (level 6), `friendsofphp/php-cs-fixer` (PSR-12) |
+| Quality | `phpunit/phpunit` ^11, `phpstan/phpstan` ^2 (level 6), `friendsofphp/php-cs-fixer` (PSR-12) |
 | Image checks and metadata removal | PHP's built-in GD extension (re-encode JPEG/PNG/WebP, which drops EXIF and location data) |
 
 **Passwords:** use PHP's built-in `password_hash($pw, PASSWORD_BCRYPT, ['cost' => 12])` and `password_verify()`. Never write your own hashing.
@@ -792,7 +793,7 @@ The handler runs only after all eight pass. P1 owns the chain. Nobody bypasses i
 
 - `Content-Security-Policy`, with these directives:
   - `default-src 'self'`
-  - `script-src 'self' https://challenges.cloudflare.com`
+  - `script-src 'self' 'nonce-{per-request}' https://challenges.cloudflare.com`: the nonce lets the one inline script we need (the no-flash theme script, 14.4) run. Twig templates write `<script nonce="{{ csp_nonce }}">`; the React `index.html` writes `<script nonce="__CSP_NONCE__">`, which PHP replaces when it serves `/app`. No other inline scripts.
   - `frame-src https://challenges.cloudflare.com`
   - `img-src 'self' data: https://res.cloudinary.com https://lh3.googleusercontent.com`
   - `connect-src 'self'`
@@ -1278,20 +1279,20 @@ skimr/
 
 - **Branches:**
   - `main` is protected: release only, tagged `v0.1`, `v0.2`, and so on.
-  - `develop` is protected: where finished work is combined. Everyone branches from it.
+  - `dev` is protected: where finished work is combined. Everyone branches from it.
   - Work branches are named `feature/p2-F06-pdf-upload`, `fix/p4-sidebar-collapse`, `chore/p1-ci`, `docs/p5-seo`.
 - **Commits:** Conventional Commits, small and often, at least daily on active days, e.g. `feat(sources): validate PDF magic bytes (F06)`. Each person commits their own work under their own GitHub account, which is what the facilitator reviews.
 - **Pull requests:**
-  - Open a PR into `develop`, filling in the PR template (what, why, feature id, screenshots, checklist).
+  - Open a PR into `dev`, filling in the PR template (what, why, feature id, screenshots, checklist).
   - Each PR needs 1 approval plus green CI, and the folder owner must approve.
   - **Merge with "Create a merge commit".** Squash merging is turned off in repository settings, because it would erase individual commit history.
 - **Avoiding conflicts:**
   - Stay inside the folders you own.
   - Each module has its own routes, container and translation files.
-  - Pull and rebase from `develop` every morning (`git pull --rebase origin develop`).
+  - Pull and rebase from `dev` every morning (`git pull --rebase origin dev`).
   - Keep branches under 3 days old.
   - Shared files (`composer.json`, `package.json`, lock files, `openapi.yaml`, `design-tokens.css`) change only in small dedicated PRs by their owner.
-- **Release:** at the end of each batch, P1 merges `develop` into `main`, tags it, and deploys to staging.
+- **Release:** at the end of each batch, P1 merges `dev` into `main`, tags it, and deploys to staging.
 
 ## 19. Team ownership and batch roadmap
 
@@ -1379,7 +1380,7 @@ The biggest risk is free-tier limits, not code. Each risk below has a named owne
 | Render cold start (about 1 min) during the demo | High | Medium | Warm-up ping when a project opens; open the app 2 minutes before presenting | P3 |
 | LLM invents quotes | Medium | High | Exact-quote validation (6.4), with dropped items reported, never hidden | P3 |
 | Scanned PDFs have no text | Medium | Low | Flag "text not extractable"; the user can add an abstract by hand | P3, P4 |
-| Merge conflicts and broken `develop` | Medium | Medium | Folder ownership, per-module files, daily rebase, required CI, small PRs | P1 |
+| Merge conflicts and broken `dev` | Medium | Medium | Folder ownership, per-module files, daily rebase, required CI, small PRs | P1 |
 | An AI assistant generates code that ignores this spec | High | Medium | Paste the spec and workbook into every session; reviewers check against the spec; the library allow-list (section 8) | All |
 | Secrets leaked in a commit | Medium | High | Push protection, `.env` ignored, rotate immediately | P1 |
 | Uneven workload or a member goes quiet | Medium | High | Weekly 15-minute check-in on the batch table; reassign by batch, not by file | Nana |

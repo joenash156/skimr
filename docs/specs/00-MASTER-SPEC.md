@@ -1,21 +1,21 @@
-# [app-name] — Master Project Specification
+# Skimr — Master Project Specification
 
 Nov 18, 2026
 
 ## 1. Document control
 
-This is the single source of truth for [app-name]. If a member workbook disagrees with this spec, this spec wins, and the workbook gets fixed.
+This is the single source of truth for Skimr. If a member workbook disagrees with this spec, this spec wins, and the workbook gets fixed.
 
 **Placeholders.** Use Find and Replace to fill them in once they are decided:
 
 | Placeholder | Meaning | Current value |
 | --- | --- | --- |
-| [app-name] | Product name, shown in the UI and emails | Not chosen yet |
-| [app-slug] | Lowercase name used in code, repo and database names | Not chosen yet |
-| [app-domain] | Staging/demo domain | [app-slug].foliony.app |
+| `[app-name]` | Product name, shown in the UI and emails | **Skimr** (replaced throughout) |
+| `[app-slug]` | Lowercase name used in code, repo and database names | **skimr** (replaced throughout) |
+| [app-domain] | Staging/demo domain | skimr.foliony.app |
 | [mail-domain] | Domain verified in Resend | mail.foliony.app (or [app-domain]) |
 | [ai-service-url] | Public URL of the Python AI service | Set after the first Render deploy |
-| [repo-url] | GitHub repository | Set when the repo is created |
+| [repo-url] | GitHub repository | https://github.com/joenash156/skimr |
 
 **Decisions locked on 18 Nov 2026:**
 
@@ -34,6 +34,7 @@ This is the single source of truth for [app-name]. If a member workbook disagree
 
 | Version | Date | Change |
 | --- | --- | --- |
+| 1.2 | 19 Nov 2026 | Product name set to **Skimr** (slug `skimr`) and repo URL filled in. Spec files moved to `docs/specs/`. Section 13 translation paths aligned with section 18 (one file per module); section 18 `ai-service/` tree aligned with the P3 brief. |
 | 1.1 | 18 Nov 2026 | Multi-format sources added: images with OCR (F22, which also covers scanned PDFs), web links and pasted text (F23), and the source-hunting assistant (F21). Tables renamed from `papers` / `paper_*` to `sources` / `source_*`, plus a new `source_files` table. Chat (F15) moved to stretch. |
 | 1.0 | 18 Nov 2026 | First complete specification. |
 
@@ -41,7 +42,7 @@ This is the single source of truth for [app-name]. If a member workbook disagree
 
 ## 2. Product overview
 
-[app-name] is a research workspace. It turns a pile of academic papers into an organised, evidence-backed literature review. Every claim it shows traces back to the exact passage it came from.
+Skimr is a research workspace. It turns a pile of academic papers into an organised, evidence-backed literature review. Every claim it shows traces back to the exact passage it came from.
 
 **Problem.** Students and researchers spend weeks on the same chores:
 
@@ -480,7 +481,7 @@ One PHP application serves three things on the same domain: the public pages, th
    - the auth token, project access and the user's quota
    - **files:** size, and the real file type from the first bytes. PDFs must start with `%PDF-`; images must be real JPEG, PNG or WebP. Images are re-encoded with PHP GD, which removes location and other metadata.
    - **links:** the URL must be well formed and https (or http, which is upgraded), with a maximum length of 2,048 characters.
-3. Files are uploaded to Cloudinary as `type=authenticated`, under `[app-slug]/sources/{user_uuid}/{source_uuid}/`. Their ids are saved in `source_files`.
+3. Files are uploaded to Cloudinary as `type=authenticated`, under `skimr/sources/{user_uuid}/{source_uuid}/`. Their ids are saved in `source_files`.
 4. PHP creates a `sources` row with `status = processing` and the right `source_type`, plus an `ai_jobs` row of type `extract_source`. It sends Python the matching `input` (6.2): signed URLs for files, the URL plus signed upload parameters for links, or the text itself.
 5. React shows a progress bar and polls the job. When the job succeeds, PHP saves sections, chunks, vectors and references, and sets `status = ready`. If a link was unreadable, it sets `status = unreadable`, and the UI offers upload or paste.
 
@@ -765,7 +766,7 @@ The handler runs only after all eight pass. P1 owns the chain. Nobody bypasses i
 | Rotation | Every `/auth/refresh` call issues a new refresh token. The old hash moves to `refresh_token_prev_hash`. |
 | Reuse detection | If a presented token matches `refresh_token_prev_hash`, a stolen token was replayed. Clear both hashes, increase `token_version` (which cancels every access token), and email the user. |
 | Checks on every request | Signature, `exp`, `iss` and `aud`, plus `tv` must equal `users.token_version`, and status must be `active`. Suspending a user takes effect on their next request. |
-| CSRF | Bearer-token endpoints can't be forged across sites. The two cookie endpoints (`/auth/refresh`, `/auth/logout`) also require (a) an `Origin` header equal to `APP_URL` and (b) the header `X-Requested-With: [app-slug]`. |
+| CSRF | Bearer-token endpoints can't be forged across sites. The two cookie endpoints (`/auth/refresh`, `/auth/logout`) also require (a) an `Origin` header equal to `APP_URL` and (b) the header `X-Requested-With: skimr`. |
 | Sign out everywhere | Clear the refresh hashes and increase `token_version`. This also happens automatically after a password reset or password change. |
 
 ### 11.2 Threats and controls
@@ -779,7 +780,7 @@ The handler runs only after all eight pass. P1 owns the chain. Nobody bypasses i
 | Weak passwords | The section 5.2 rules, bcrypt cost 12, and a check against 10,000 common passwords. |
 | Account takeover via Google | Require Google's `email_verified`. Linking to an existing password account needs that password. Verify `state`, PKCE and the id_token's `aud` and `iss`. |
 | Malicious uploads | PDFs: `finfo` MIME type plus the `%PDF-` first bytes, 10 MB maximum. Images: JPEG, PNG or WebP only, checked by first bytes and by decoding with GD (which rejects fake images), 5 MB maximum and 20 per source; re-encoded to strip EXIF and GPS data. Random file names. Stored on Cloudinary as `authenticated`, never served from our domain. Viewed only through signed URLs that expire in 10 minutes. |
-| SSRF (web links and open-access PDF fetches) | Only Python fetches URLs, never PHP. Only `http`/`https` on ports 80 and 443. The guard resolves the DNS and refuses private, loopback, link-local and cloud-metadata addresses (e.g. 169.254.169.254), and re-checks after every redirect (max 3). 20-second timeout; 2 MB for HTML, 10 MB for PDFs. Sends an honest `User-Agent` naming [app-name]. Fetched HTML is never shown as HTML: only the extracted plain text is stored. |
+| SSRF (web links and open-access PDF fetches) | Only Python fetches URLs, never PHP. Only `http`/`https` on ports 80 and 443. The guard resolves the DNS and refuses private, loopback, link-local and cloud-metadata addresses (e.g. 169.254.169.254), and re-checks after every redirect (max 3). 20-second timeout; 2 MB for HTML, 10 MB for PDFs. Sends an honest `User-Agent` naming Skimr. Fetched HTML is never shown as HTML: only the extracted plain text is stored. |
 | Prompt injection inside sources | Source text (PDF, OCR, web, pasted) is wrapped as data, the output schema is enforced, and quotes are verified (6.4). The LLM has no tools and can't reach the database. |
 | Bots and spam | Turnstile on register, login, forgot password and contact. The server checks the `success`, `hostname` and `action` fields, and each token works once. |
 | Secret leakage | `.env` is in `.gitignore`; `.env.example` holds placeholder values only. GitHub secret scanning and push protection are on. Any leaked key is rotated the same day. |
@@ -932,8 +933,8 @@ Every word a user sees comes from a translation file. English is the source lang
 
 | Layer | Mechanism | Files |
 | --- | --- | --- |
-| Public site (Twig) | A custom `trans()` Twig function reading JSON catalogues | `backend/translations/public.{en,fr,es}.json` |
-| API messages and emails | A `Translator` service with the same JSON format | `backend/translations/api.{en,fr,es}.json`, `backend/templates/emails/{en,fr,es}/` |
+| Public site (Twig) | A custom `trans()` Twig function reading JSON catalogues | `backend/translations/public/{en,fr,es}.json` |
+| API messages and emails | A `Translator` service with the same JSON format, merging every module's file | `backend/translations/api/{module}.{en,fr,es}.json` (one file per module, so owners never edit the same file), `backend/templates/emails/{en,fr,es}/` |
 | Dashboard (React) | `react-i18next`, one namespace per feature, loaded lazily | `frontend/src/locales/{en,fr,es}/{common,auth,projects,sources,synthesis,admin}.json` |
 | AI output | The `language` parameter sent to Python | Prompts ask for output in that language; quotes stay in the original |
 
@@ -1102,12 +1103,12 @@ All files live on Cloudinary, and none are kept on the PHP server. Uploaded sour
 
 | Asset | Folder / public_id | Delivery type | Who uploads | Who reads |
 | --- | --- | --- | --- | --- |
-| Source PDF | `[app-slug]/sources/{user_uuid}/{source_uuid}/file` | `authenticated` | PHP (server-side, signed); Python for open-access PDFs found via links or search, using PHP-signed upload parameters | Python via signed URL (15 min); user's browser via signed URL (10 min) |
-| Source page images | `[app-slug]/sources/{user_uuid}/{source_uuid}/p{ordinal}` | `authenticated` | PHP, after GD re-encoding | Python via signed URL; browser via signed URL (shown beside the OCR text) |
-| Web snapshot (extracted text as .txt) | `[app-slug]/sources/{user_uuid}/{source_uuid}/snapshot` | `authenticated` (raw) | Python, using PHP-signed upload parameters | Kept as proof of what the page said on the accessed date |
+| Source PDF | `skimr/sources/{user_uuid}/{source_uuid}/file` | `authenticated` | PHP (server-side, signed); Python for open-access PDFs found via links or search, using PHP-signed upload parameters | Python via signed URL (15 min); user's browser via signed URL (10 min) |
+| Source page images | `skimr/sources/{user_uuid}/{source_uuid}/p{ordinal}` | `authenticated` | PHP, after GD re-encoding | Python via signed URL; browser via signed URL (shown beside the OCR text) |
+| Web snapshot (extracted text as .txt) | `skimr/sources/{user_uuid}/{source_uuid}/snapshot` | `authenticated` (raw) | Python, using PHP-signed upload parameters | Kept as proof of what the page said on the accessed date |
 | PDF / image thumbnails | Same asset, with a `pg_1,w_400,f_auto` (PDF) or `w_400,f_auto` (image) transformation | `authenticated` | Generated | Browser via signed URL |
-| Avatar | `[app-slug]/avatars/{user_uuid}` | `upload` (public) | PHP | Anyone (no personal data in the image URL beyond the uuid) |
-| Site images, OG images | `[app-slug]/site/...` | `upload` (public) | P5 manually or by script | Public pages |
+| Avatar | `skimr/avatars/{user_uuid}` | `upload` (public) | PHP | Anyone (no personal data in the image URL beyond the uuid) |
+| Site images, OG images | `skimr/site/...` | `upload` (public) | P5 manually or by script | Public pages |
 | Word exports | Not stored | – | Generated on request and streamed | Browser download |
 
 **Rules:**
@@ -1122,7 +1123,7 @@ All files live on Cloudinary, and none are kept on the PHP server. Uploaded sour
 The plan costs nothing:
 
 - Everyone develops locally.
-- The shared demo is at **[app-domain]** (e.g. `[app-slug].foliony.app`), hosted on InfinityFree. It serves PHP, MySQL and the built React files.
+- The shared demo is at **[app-domain]** (e.g. `skimr.foliony.app`), hosted on InfinityFree. It serves PHP, MySQL and the built React files.
 - The Python AI service runs on Render's free tier.
 
 This works, but free hosting has hard limits that the architecture is designed around. They are listed in 17.3 so nobody loses a week debugging them.
@@ -1131,7 +1132,7 @@ This works, but free hosting has hard limits that the architecture is designed a
 
 | Environment | URL | Where | Database | Purpose |
 | --- | --- | --- | --- | --- |
-| Local | `http://localhost:8080` (PHP), `http://localhost:5173` (Vite), `http://localhost:8000` (Python) | Each laptop (Windows: Laragon or XAMPP with PHP 8.2+, Node 20 LTS, Python 3.11) | Local MySQL 8, `[app-slug]_dev` | Daily development |
+| Local | `http://localhost:8080` (PHP), `http://localhost:5173` (Vite), `http://localhost:8000` (Python) | Each laptop (Windows: Laragon or XAMPP with PHP 8.2+, Node 20 LTS, Python 3.11) | Local MySQL 8, `skimr_dev` | Daily development |
 | Staging / demo | `https://[app-domain]` | InfinityFree (PHP + MySQL), Render free (Python) | InfinityFree MySQL | Facilitator demo, integration testing |
 | Production | `https://[final-domain]` | Decided later (a small paid VPS is recommended, from about $5/month) | Managed MySQL | After the course, if the project continues |
 
@@ -1139,7 +1140,7 @@ In local development, Vite proxies `/api` to `localhost:8080`, so the browser se
 
 ### 17.2 Staging setup on [app-domain] (P1 leads, Nana holds the DNS access)
 
-1. Create the InfinityFree account on a free InfinityFree subdomain first. Then add `[app-slug].foliony.app` using **CNAME verification**: InfinityFree shows a CNAME record to add at foliony.app's DNS provider, and you don't have to change nameservers.
+1. Create the InfinityFree account on a free InfinityFree subdomain first. Then add `skimr.foliony.app` using **CNAME verification**: InfinityFree shows a CNAME record to add at foliony.app's DNS provider, and you don't have to change nameservers.
 2. Add the DNS records InfinityFree gives for that subdomain, then turn on its free SSL certificate in the panel. Force HTTPS in `.htaccess`.
 3. Create the MySQL database in the InfinityFree panel, and run migrations (`vendor/bin/doctrine-migrations migrate`) through a protected one-off script or from a local machine. InfinityFree's database usually can't be reached from outside, so the fallback is importing an SQL dump through phpMyAdmin.
 4. Upload the build over FTP, using the `deploy/` script, which uploads `backend/` with `vendor/` and `public/`, and the React build in `public/app/`. The document root is `backend/public`.
@@ -1166,10 +1167,10 @@ In local development, Vite proxies `/api` to `localhost:8080`, so the browser se
 APP_ENV=local            # local | staging | production
 APP_DEBUG=true
 APP_URL=http://localhost:8080
-APP_NAME="[app-name]"
+APP_NAME="Skimr"
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_NAME=[app-slug]_dev
+DB_NAME=skimr_dev
 DB_USER=root
 DB_PASS=
 JWT_ACCESS_SECRET=change-me-64-random-bytes
@@ -1180,7 +1181,7 @@ GOOGLE_REDIRECT_URI=http://localhost:8080/api/v1/auth/google/callback
 TURNSTILE_SITE_KEY=1x00000000000000000000AA     # Cloudflare test key
 TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
 RESEND_API_KEY=
-MAIL_FROM="[app-name] <no-reply@[mail-domain]>"
+MAIL_FROM="Skimr <no-reply@[mail-domain]>"
 MAIL_REPLY_TO=
 CLOUDINARY_URL=
 AI_SERVICE_URL=http://localhost:8000
@@ -1200,7 +1201,7 @@ Share real keys only through a private channel, such as a password manager or a 
 There is one GitHub repository (a monorepo) with one top-level folder per part of the system. Folder ownership is the main defence against merge conflicts. CODEOWNERS makes the owner of a folder a required reviewer for any change to it.
 
 ```
-[app-slug]/
+skimr/
 ├─ backend/                      PHP (Slim)
 │  ├─ bin/console                CLI (P1)
 │  ├─ config/
@@ -1234,7 +1235,10 @@ There is one GitHub repository (a monorepo) with one top-level folder per part o
 │     ├─ features/admin/         admin console screens (P5)
 │     └─ locales/{en,fr,es}/     one JSON file per feature (feature owner)
 ├─ ai-service/                   Python (P3)
-│  └─ app/  main.py, security.py, routers/, jobs/, pipeline/{intake/{pdf,images,url,text},ocr,extract,chunk,embed,cluster,methods,synthesize,citations,gaps,chat,discover}/, llm/, schemas/
+│  ├─ app/  main.py, config.py, security.py, routers/, jobs/handlers/, llm/, prompts/, schemas/, tools/,
+│  │        pipeline/intake/{pdf,images,url,text,discovered,ssrf}.py,
+│  │        pipeline/{ocr,extract,chunk,embed,methods,evidence,cluster,synthesize,citations,gaps,suggest,chat}.py
+│  └─ tests/fixtures/{pdfs,images,web}/   (exact layout: P3 brief, section 2)
 ├─ shared/design-tokens.css      (P4 owns; P5 must approve changes)
 ├─ docs/                         api/openapi.yaml (P1), api/ai-service.md (P3), decisions/ (ADRs), i18n-review.md
 ├─ deploy/                       FTP deploy script, Render config (P1)

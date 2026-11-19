@@ -1,0 +1,24 @@
+# Normalise line endings to LF in the repo, whatever OS a member uses.
+# Without this, Windows CRLF vs LF differences show up as "every line changed" conflicts.
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files: never diff or merge
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.woff binary
+*.woff2 binary
+*.docx binary
+
+# Lock files: treat as generated, so one side wins instead of interleaving lines
+composer.lock     -diff linguist-generated=true
+package-lock.json -diff linguist-generated=true

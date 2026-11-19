@@ -1,4 +1,4 @@
-# [app-name] — P1 Implementation Brief: Tech Lead & Backend Core
+# Skimr — P1 Implementation Brief: Tech Lead & Backend Core
 
 **Spec version:** 1.1 (19 Nov 2026) · **Owner:** [P1 name]
 
@@ -8,7 +8,7 @@
 
 ## 0. Instructions for the AI agent (read first, follow always)
 
-You are a senior engineer implementing part of **[app-name]**, a research literature synthesis web app. `00-MASTER-SPEC.md` is the single source of truth. This brief is my personal task list.
+You are a senior engineer implementing part of **Skimr**, a research literature synthesis web app. `00-MASTER-SPEC.md` is the single source of truth. This brief is my personal task list.
 
 1. Follow the spec exactly: architecture, folder structure, naming, API contract, data model and security rules. If this brief and the spec disagree, **the spec wins**. Tell me about the conflict.
 2. Use **only** the libraries in spec section 8. If something seems to need a new library, stop and ask me.
@@ -33,7 +33,7 @@ Start every session by confirming the batch and task we're on.
 
 ## 1. Project in one paragraph
 
-[app-name] lets students and researchers build an evidence-backed literature review. Users add sources in five ways:
+Skimr lets students and researchers build an evidence-backed literature review. Users add sources in five ways:
 
 - PDFs
 - photos or scans of pages (read with OCR)
@@ -91,7 +91,7 @@ The system extracts the text, makes it searchable by meaning, clusters it into t
 
 ### Tasks
 
-1. **GitHub repo** `[app-slug]` (you do this by hand):
+1. **GitHub repo** `skimr` (you do this by hand):
     - add all 5 members and create `develop`
     - protect `main` and `develop`: PR required, 1 approval, CI must pass, no force-push
     - **turn off squash merging and rebase merging**; allow merge commits only
@@ -169,7 +169,7 @@ The system extracts the text, makes it searchable by meaning, clusters it into t
     - return `{access_token, user}` and set the refresh cookie
     - unverified users get a token but `user.status=pending_verification`, so the frontend shows the verify screen
 9. **`POST /auth/refresh`:**
-    - require an `Origin` header equal to `APP_URL`, and `X-Requested-With: [app-slug]`
+    - require an `Origin` header equal to `APP_URL`, and `X-Requested-With: skimr`
     - verify the cookie JWT and compare its SHA-256 with `refresh_token_hash`
     - **rotate**: issue a new token, move the old hash to `refresh_token_prev_hash`
     - **reuse detection**: if the token matches `refresh_token_prev_hash`, clear both hashes, increase `token_version`, send the security email, and return 401

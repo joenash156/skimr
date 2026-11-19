@@ -1,0 +1,47 @@
+# --- Secrets (never commit) ---
+.env
+.env.*
+!.env.example
+ai-service/.env
+*.pem
+*.key
+
+# --- PHP ---
+backend/vendor/
+backend/var/
+backend/.phpunit.cache/
+backend/.phpunit.result.cache
+backend/.php-cs-fixer.cache
+# React build output (spec 18) - never edited by hand
+backend/public/app/
+
+# --- Node / frontend ---
+node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
+*.tsbuildinfo
+npm-debug.log*
+
+# --- Python / ai-service ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- OS / editors ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+
+# --- AI assistants (personal settings only) ---
+.claude/settings.local.json

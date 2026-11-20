@@ -75,6 +75,8 @@ return [
     ],
     'cloudinary' => [
         'url' => $env('CLOUDINARY_URL'),
+        // Root folder for user uploads (spec 16): skimr-dev locally, skimr-prod on the server.
+        'folder' => $env('CLOUDINARY_FOLDER', 'skimr-dev'),
     ],
     'ai_service' => [
         'url' => rtrim($env('AI_SERVICE_URL', 'http://localhost:8000') ?? '', '/'),

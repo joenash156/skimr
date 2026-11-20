@@ -33,14 +33,14 @@ Owner: P1. Spec: 17.2 (setup) and 17.3 (free-tier limits).
 
 The server's secrets live **only** in `htdocs/.env` on the server. They are never in the repo, never in GitHub and never uploaded by a deploy.
 
-1. Copy `.env.example` locally to a temporary file and fill in **staging** values:
+1. Start from [`staging.env.example`](staging.env.example): it says where each value comes from. Fill in **staging** values:
     - `APP_ENV=staging`, `APP_DEBUG=false`, `APP_URL=https://skimr.foliony.app`
     - the InfinityFree database values
     - **new** JWT secrets (`php -r "echo bin2hex(random_bytes(64)), PHP_EOL;"` twice). Never reuse your local ones.
     - real Turnstile keys for the domain (the test keys are refused when `APP_ENV=production`)
     - Google OAuth with redirect URI `https://skimr.foliony.app/api/v1/auth/google/callback`
     - Resend, Cloudinary and AI service values when those parts are live
-2. Upload it as `htdocs/.env` with the InfinityFree **file manager**, which runs over HTTPS. Then delete the local copy.
+2. Create it as `htdocs/.env` in the InfinityFree **file manager** (runs over HTTPS) and fill it in right there, so no filled-in copy exists on a laptop. The only other copy goes in a password manager.
 3. Check it isn't reachable: `https://skimr.foliony.app/.env` must answer **403** or **404**, never the file.
 
 ### 3. GitHub

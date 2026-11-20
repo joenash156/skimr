@@ -1,4 +1,16 @@
 {
+  "auth": {
+    "errors": {
+      "invalid_credentials": "The email or password is incorrect.",
+      "account_locked": "Too many attempts. Try again in {minutes} minutes.",
+      "account_suspended": "This account has been suspended. Contact support if you think this is a mistake.",
+      "refresh_reused": "For your security, you have been signed out everywhere. Please sign in again.",
+      "email_taken": "An account with this email already exists."
+    },
+    "messages": {
+      "reset_link_sent": "If that email exists, we've sent a link to reset your password."
+    }
+  },
   "validation": {
     "password": {
       "length": "Use 10 to 72 characters.",

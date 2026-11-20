@@ -14,5 +14,15 @@
     "turnstile_failed": "Veuillez effectuer la vérification de sécurité.",
     "invalid_token": "Ce lien n'est pas valide ou a expiré.",
     "email_not_verified": "Veuillez vérifier votre adresse e-mail pour continuer."
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire.",
+    "too_long": "Cette valeur est trop longue.",
+    "too_short": "Cette valeur est trop courte.",
+    "invalid": "Cette valeur n'est pas valide.",
+    "email": "Cette adresse e-mail n'est pas valide.",
+    "phone": "Saisissez le numéro au format international, par ex. +233241234567.",
+    "accepted": "Vous devez accepter pour continuer.",
+    "confirmation": "Les deux saisies ne correspondent pas."
   }
 }

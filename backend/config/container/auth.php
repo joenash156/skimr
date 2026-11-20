@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Auth\AuthLinks;
+use App\Auth\Console\CreateSuperAdminCommand;
+use App\Auth\Http\AuthController;
+use App\Auth\Http\CsrfGuard;
 use App\Auth\Jwt\JwtService;
 use App\Auth\Password\PasswordHasher;
 use App\Auth\Password\PasswordPolicy;
@@ -12,6 +16,10 @@ use App\Shared\Mail\Mailer;
 use GuzzleHttp\Client;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+
+use function DI\add;
+use function DI\autowire;
+use function DI\factory;
 
 /*
  * Auth and security services (P1). Everything not listed here is autowired:
@@ -70,6 +78,17 @@ return [
             $c->get(LoggerInterface::class),
         );
     },
+
+    AuthLinks::class => static fn (ContainerInterface $c): AuthLinks => new AuthLinks($settings($c)['app']['url']),
+
+    CsrfGuard::class => static fn (ContainerInterface $c): CsrfGuard => new CsrfGuard($settings($c)['app']['url']),
+
+    AuthController::class => autowire()->constructorParameter(
+        'accessTtl',
+        factory(static fn (ContainerInterface $c): int => $settings($c)['jwt']['access_ttl']),
+    ),
+
+    'console.commands' => add([CreateSuperAdminCommand::class]),
 
     // P2 replaces this with MailService in config/container/mail.php (loaded after this file).
     Mailer::class => static fn (ContainerInterface $c): Mailer => new LogMailer(

@@ -107,6 +107,8 @@ paths:
         Unknown email and wrong password give the same 401. After 5 failures in 15 minutes the
         account is locked for 15 minutes (`ACCOUNT_LOCKED`). A user with
         `status=pending_verification` still gets a token; the app then shows the verify screen.
+        A suspended account gets 403 `ACCOUNT_SUSPENDED`, but only after the right password.
+        Turnstile action: `login`.
       operationId: login
       security: []
       requestBody:
@@ -123,7 +125,12 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/SessionResponse' }
         '401': { $ref: '#/components/responses/InvalidCredentials' }
-        '403': { $ref: '#/components/responses/TurnstileFailed' }
+        '403':
+          description: "`TURNSTILE_FAILED` (bot check) or `ACCOUNT_SUSPENDED` (right password, suspended account)."
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+              example: { error: { code: ACCOUNT_SUSPENDED, message: This account has been suspended. Contact support if you think this is a mistake., request_id: 48c11ea2bec4c37ed3fc05e8 } }
         '422': { $ref: '#/components/responses/ValidationFailed' }
         '429': { $ref: '#/components/responses/AccountLockedOrRateLimited' }
 

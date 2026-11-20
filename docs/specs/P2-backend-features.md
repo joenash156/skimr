@@ -108,7 +108,7 @@ P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1
 - **Account deletion (B2):** `DELETE /me` sets `status = deleted` and `deleted_at`. Your purge job (spec 9.2) removes accounts whose `deleted_at` is older than 30 days, with their projects and Cloudinary files.
 - **More auth email templates** (B2): `email_change_requested` (to the old address: `first_name`, `new_email`, `at`) and `email_changed` (to the old address once confirmed: same variables). The confirmation link itself reuses `verify_email`.
 - **Route groups:** the callback you pass to `$app->group(...)` must **not** be `static`. Slim binds it to the container, and a static closure fails with "bindToContainer(): Return value must be of type callable". See `config/routes/me.php`.
-- **Local checks before every PR** (in `backend/`): `composer test`, `composer stan`, `composer cs`. CI runs the same, plus `composer audit`.
+- **Local checks before every PR** (in `backend/`): `composer test`, `composer stan`, `composer cs`, `composer contract`. CI runs the same, plus `composer audit`. **`composer contract` fails if you add an `/api/v1` route without describing it in `docs/api/openapi.yaml` in the same PR** (P1 rejects such PRs anyway).
 - **Integration branch is `dev`.** Branch from it; open PRs into it.
 
 ---

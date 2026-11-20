@@ -86,12 +86,14 @@ Invoke-Step "Upload to $env:SKIMR_FTP_HOST$RemoteDir" {
     $pass = [Uri]::EscapeDataString($env:SKIMR_FTP_PASS)
     $log = Join-Path $build "winscp.log"
     # synchronize remote -delete mirrors the build; files that only exist on the server
-    # are removed, EXCEPT .env, which is excluded from the sync and so always kept.
+    # are removed, EXCEPT the excluded ones, which are always kept: .env (the server's
+    # secrets), var/ (logs) and the GitHub Actions deploy state file.
+    # -explicit = FTP over TLS, so the password and files are encrypted in transit.
     & $winscp /ini=nul /log="$log" /command `
         "open ftp://${user}:${pass}@$($env:SKIMR_FTP_HOST)/ -explicit" `
         "option batch abort" `
         "option confirm off" `
-        "synchronize remote -delete -filemask=""|.env"" ""$target"" ""$RemoteDir""" `
+        "synchronize remote -delete -filemask=""|.env; var/; .ftp-deploy-sync-state.json"" ""$target"" ""$RemoteDir""" `
         "exit"
 }
 

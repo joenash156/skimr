@@ -115,4 +115,15 @@ git tag -a v0.<n> -m "Batch B<n>"
 git push origin main --tags
 ```
 
-With branch protection on, the same thing is done as a PR from `dev` into `main`, and the tag is added after it's merged.
+With branch protection on, the same thing is done as a PR from `dev` into `main`, and the tag is added after it's merged:
+
+```powershell
+git switch main
+git pull
+git tag -a v0.<n> -m "Batch B<n>"
+git push origin v0.<n>
+```
+
+**Merging into `main` deploys to staging automatically** (`.github/workflows/deploy-staging.yml`, guide in `deploy/README.md`). Only merge into `main` what should be live, then do the manual checks listed in the workflow's summary: open `/api/v1/health` in a browser, and run migrations if the summary says they changed.
+
+**Every PR that adds or changes an `/api/v1` route must update `docs/api/openapi.yaml` in the same PR.** CI's contract check (`composer contract`) fails otherwise.

@@ -33,6 +33,7 @@ jobs:
           filters: |
             backend:
               - 'backend/**'
+              - 'docs/api/openapi.yaml'
               - '.github/workflows/ci.yml'
             frontend:
               - 'frontend/**'
@@ -97,6 +98,8 @@ jobs:
         run: composer stan -- --no-progress --error-format=github
       - name: Tests
         run: composer test
+      - name: API contract covers every route (B3)
+        run: composer contract
       - name: Migrations up, down, up
         run: |
           composer migrate

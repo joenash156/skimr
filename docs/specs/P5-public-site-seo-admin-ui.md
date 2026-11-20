@@ -103,7 +103,7 @@ P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1
     - Validation: `App\Shared\Http\Input::fromRequest($request)` then `email()`, `requiredString()`... and `validate()` (one 422 with every field error; messages already translated).
     - Email: inject `App\Shared\Mail\Mailer` (P2's `MailService` once it lands; until then it writes to `backend/var/mail.log`).
 - **Admin UI:** you need `recharts` from P4's `frontend/package.json` (P4 adds it in B0); don't edit their `package.json`. `shared/design-tokens.css` is P4's, and you're the required second reviewer.
-- **Local checks before every PR** (in `backend/`): `composer test`, `composer stan`, `composer cs`.
+- **Local checks before every PR** (in `backend/`): `composer test`, `composer stan`, `composer cs`, `composer contract` (the last fails if an `/api/v1` route is missing from `docs/api/openapi.yaml`; your public HTML pages are not checked).
 - **Integration branch is `dev`.** Branch from it; open PRs into it.
 
 ---

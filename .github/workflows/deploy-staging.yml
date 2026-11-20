@@ -1,0 +1,120 @@
+name: Deploy staging
+
+# Continuous deployment to InfinityFree (spec 17.2): every push to `main` builds
+# the app and uploads only the files that changed. `main` only receives
+# release PRs from `dev` that already passed CI (branch protection), so this
+# workflow doesn't re-run the test suite.
+#
+# What it can't do (spec 17.3): InfinityFree's browser check blocks GitHub's
+# servers and its MySQL isn't reachable from outside, so it can't run
+# migrations or call the health check. The job summary lists both as manual
+# steps when they apply.
+#
+# Secrets (GitHub > Settings > Environments > staging, deployable from `main` only):
+#   STAGING_FTP_HOST, STAGING_FTP_USER, STAGING_FTP_PASSWORD
+# Variable (same environment, not secret):
+#   STAGING_URL   e.g. https://skimr.foliony.app
+#
+# The server's .env is NEVER uploaded or deleted by this workflow: put it in
+# htdocs/.env once, by hand, through the InfinityFree file manager.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false # never stop an upload halfway
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build and upload to InfinityFree
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: ${{ vars.STAGING_URL }}
+    steps:
+      - name: Check the staging secrets are set
+        env:
+          HOST: ${{ secrets.STAGING_FTP_HOST }}
+          USER: ${{ secrets.STAGING_FTP_USER }}
+          PASS: ${{ secrets.STAGING_FTP_PASSWORD }}
+        run: |
+          if [ -z "$HOST" ] || [ -z "$USER" ] || [ -z "$PASS" ]; then
+            echo "::error::Set STAGING_FTP_HOST, STAGING_FTP_USER and STAGING_FTP_PASSWORD in the 'staging' environment first."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history, to see whether anything in this push changed migrations
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # InfinityFree's version; matches config.platform.php
+          extensions: mbstring, intl, gd, fileinfo, openssl, pdo_mysql, curl, sodium, zip
+          coverage: none
+          tools: composer:v2
+
+      - name: Set up Node (only once the dashboard exists)
+        if: hashFiles('frontend/package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build (dashboard + backend with production dependencies)
+        run: ./deploy/deploy-staging.sh --dry-run
+
+      - name: Make sure no secrets or dev files are in the build
+        run: |
+          cd deploy/build/htdocs
+          bad=$(find . \( -name '.env' -o -name '.env.*' -o -name '*.pem' -o -name '*.key' -o -path './tests' -o -path './var' \) -print)
+          if [ -n "$bad" ]; then
+            echo "::error::Refusing to deploy, these must not be uploaded:"; echo "$bad"; exit 1
+          fi
+          test -f .htaccess || { echo "::error::htdocs/.htaccess is missing"; exit 1; }
+          test -f vendor/autoload.php || { echo "::error::vendor/ is missing"; exit 1; }
+
+      - name: Upload changed files over FTPS
+        # Pinned to the v4.3.5 commit, so a moved tag can't change what runs with our FTP password.
+        uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65
+        with:
+          server: ${{ secrets.STAGING_FTP_HOST }}
+          username: ${{ secrets.STAGING_FTP_USER }}
+          password: ${{ secrets.STAGING_FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./deploy/build/htdocs/
+          server-dir: /htdocs/
+          # The action tracks file hashes in this state file on the server and deletes only
+          # files it uploaded itself, so .env and var/ (logs) on the server are never touched.
+          state-name: .ftp-deploy-sync-state.json
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .env
+            .env.*
+            var/**
+          log-level: minimal
+
+      - name: Summary
+        env:
+          URL: ${{ vars.STAGING_URL }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          # On a manual run (or a brand-new branch) there's no "before": compare with the previous commit.
+          base="$BEFORE"
+          if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then base="HEAD~1"; fi
+          {
+            echo "## Deployed to staging"
+            echo ""
+            echo "1. Open ${URL:-the staging site}/api/v1/health **in a browser** (the host blocks automated checks)."
+            if git diff --name-only "$base" HEAD -- backend/migrations | grep -q .; then
+              echo "2. **This push changed migrations.** Run them on staging before using the site (see deploy/README.md)."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

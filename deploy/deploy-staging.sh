@@ -52,11 +52,18 @@ if [ "$DRY_RUN" = true ]; then
 fi
 
 echo "==> Upload to $SKIMR_FTP_HOST$REMOTE_DIR"
-# --delete mirrors the build, but .env on the server is excluded and therefore kept.
-lftp -u "$SKIMR_FTP_USER,$SKIMR_FTP_PASS" "ftp://$SKIMR_FTP_HOST" <<EOF
-set ftp:ssl-allow yes
-mirror --reverse --delete --parallel=4 --exclude-glob .env "$TARGET/" "$REMOTE_DIR/"
+# --delete mirrors the build, but the excluded paths on the server are kept:
+# .env (the server's secrets), var/ (logs) and the GitHub Actions deploy state file.
+# TLS is required, so the password and files are never sent in clear text.
+# The password goes through the environment (--env-password), not the command line,
+# so it doesn't show up in the process list.
+export LFTP_PASSWORD="$SKIMR_FTP_PASS"
+lftp --env-password -u "$SKIMR_FTP_USER" "ftp://$SKIMR_FTP_HOST" <<EOF
+set ftp:ssl-force yes
+set ftp:ssl-protect-data yes
+mirror --reverse --delete --parallel=4 --exclude-glob .env --exclude-glob var/ --exclude-glob .ftp-deploy-sync-state.json "$TARGET/" "$REMOTE_DIR/"
 bye
 EOF
+unset LFTP_PASSWORD
 
 echo "Deployed. Check https://skimr.foliony.app/api/v1/health in a browser."

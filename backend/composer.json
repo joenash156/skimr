@@ -60,7 +60,8 @@
         "cs": "php-cs-fixer fix --dry-run --diff",
         "cs:fix": "php-cs-fixer fix",
         "migrate": "doctrine-migrations migrate --no-interaction",
-        "migrate:prev": "doctrine-migrations migrate prev --no-interaction"
+        "migrate:prev": "doctrine-migrations migrate prev --no-interaction",
+        "contract": "php bin/check-contract.php"
     },
     "minimum-stability": "stable",
     "prefer-stable": true

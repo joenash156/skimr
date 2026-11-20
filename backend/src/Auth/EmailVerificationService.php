@@ -9,6 +9,7 @@ use App\Auth\Token\UserTokenService;
 use App\Shared\Clock\Clock;
 use App\Shared\Exception\InvalidTokenException;
 use App\Shared\Mail\Mailer;
+use App\Users\AccountService;
 use App\Users\User;
 use App\Users\UserRepository;
 
@@ -26,6 +27,7 @@ final class EmailVerificationService
         private readonly AuthLinks $links,
         private readonly Mailer $mailer,
         private readonly Clock $clock,
+        private readonly AccountService $accounts,
     ) {
     }
 
@@ -40,10 +42,27 @@ final class EmailVerificationService
         ]);
     }
 
-    /** @throws InvalidTokenException */
+    /**
+     * Opens a verification link. Both kinds of link land on the same
+     * /app/verify-email page: sign-up verification, and confirming a new
+     * address after an email change (B2).
+     *
+     * @throws InvalidTokenException
+     */
     public function verify(string $token): User
     {
-        $consumed = $this->tokens->consume($token, TokenType::VERIFY_EMAIL);
+        try {
+            $consumed = $this->tokens->consume($token, TokenType::VERIFY_EMAIL);
+        } catch (InvalidTokenException $notSignUp) {
+            try {
+                $change = $this->tokens->consume($token, TokenType::CHANGE_EMAIL);
+            } catch (InvalidTokenException) {
+                throw $notSignUp;
+            }
+
+            return $this->accounts->confirmEmailChange($change->userId, $change->payload);
+        }
+
         $user = $this->users->findById($consumed->userId) ?? throw new InvalidTokenException();
 
         $changes = [];

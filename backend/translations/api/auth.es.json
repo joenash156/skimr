@@ -8,7 +8,8 @@
       "email_taken": "Ya existe una cuenta con este correo electrónico."
     },
     "messages": {
-      "reset_link_sent": "Si ese correo existe, te hemos enviado un enlace para restablecer tu contraseña."
+      "reset_link_sent": "Si ese correo existe, te hemos enviado un enlace para restablecer tu contraseña.",
+      "email_change_sent": "Hemos enviado un enlace de confirmación a tu nueva dirección. Tu correo cambiará cuando lo abras."
     }
   },
   "validation": {

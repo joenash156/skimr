@@ -122,6 +122,54 @@ final class Input
         return in_array($value, ['en', 'fr', 'es'], true) ? $value : $this->fail($field, 'validation.invalid', null);
     }
 
+    /** True when the body contains the field at all (even as null). For partial updates (PATCH). */
+    public function has(string $field): bool
+    {
+        return array_key_exists($field, $this->body);
+    }
+
+    /** @return list<string> the field names present in the body */
+    public function keys(): array
+    {
+        return array_keys($this->body);
+    }
+
+    /**
+     * Required, and one of $allowed.
+     *
+     * @param list<string> $allowed
+     */
+    public function oneOf(string $field, array $allowed): string
+    {
+        $value = $this->body[$field] ?? null;
+
+        return is_string($value) && in_array($value, $allowed, true) ? $value : $this->fail($field, 'validation.invalid', '');
+    }
+
+    /**
+     * An object of booleans limited to $allowedKeys, e.g. notification_prefs.
+     *
+     * @param list<string> $allowedKeys
+     * @return array<string, bool>
+     */
+    public function booleanMap(string $field, array $allowedKeys): array
+    {
+        $value = $this->body[$field] ?? null;
+        if (!is_array($value)) {
+            return $this->fail($field, 'validation.invalid', []);
+        }
+
+        $map = [];
+        foreach ($value as $key => $flag) {
+            if (!in_array($key, $allowedKeys, true) || !is_bool($flag)) {
+                return $this->fail($field, 'validation.invalid', []);
+            }
+            $map[(string) $key] = $flag;
+        }
+
+        return $map;
+    }
+
     /** The field must be boolean true (e.g. accept_terms). */
     public function accepted(string $field): bool
     {

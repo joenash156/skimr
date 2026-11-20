@@ -8,7 +8,8 @@
       "email_taken": "Un compte existe déjà avec cette adresse e-mail."
     },
     "messages": {
-      "reset_link_sent": "Si cette adresse existe, nous vous avons envoyé un lien pour réinitialiser votre mot de passe."
+      "reset_link_sent": "Si cette adresse existe, nous vous avons envoyé un lien pour réinitialiser votre mot de passe.",
+      "email_change_sent": "Nous avons envoyé un lien de confirmation à votre nouvelle adresse. Votre e-mail sera modifié dès que vous l'ouvrirez."
     }
   },
   "validation": {

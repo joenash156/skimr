@@ -56,12 +56,19 @@ The server's secrets live **only** in `htdocs/.env` on the server. They are neve
 InfinityFree's browser check blocks GitHub's servers, and its MySQL can't be reached from outside. So:
 
 - **Health check:** open `https://skimr.foliony.app/api/v1/health` in a browser after a deploy.
-- **Database migrations:** a deploy uploads new migration files but can't run them. The plan is a migration runner that only a signed-in super admin can trigger from the browser, with the password re-entered and an audit entry. P1 builds it as part of the staging setup, before the first deploy. Until then, nothing that needs the database should go to staging.
+- **Database migrations:** a deploy uploads new migration files but can't run them. Run them from a browser with the migration page:
+    1. Generate a token: `php -r "echo bin2hex(random_bytes(32)), PHP_EOL;"`.
+    2. In the InfinityFree file manager, add `MIGRATION_TOKEN=<that token>` to `htdocs/.env`.
+    3. Open `https://skimr.foliony.app/_system/migrate`, paste the token, click **Show status**, then **Run pending migrations**. The run is recorded in the audit log (`system.migrations.run`).
+    4. **Remove the `MIGRATION_TOKEN` line from `.env`.** The page then answers 404 again. Use a new token next time.
+
+    The very first deploy works the same way: the page needs no existing tables. Locked down: it exists only while the token is set (32+ characters), compares it in constant time, answers wrong tokens slowly and logs them, and never shows SQL or error details.
   - Why not import an SQL dump through phpMyAdmin? Doctrine's `--write-sql` export leaves out the `doctrine_migration_versions` rows, so the next real migration run would try to create every table again.
 
 ## Security checklist for every deploy
 
 - [ ] `.env` on the server has `APP_ENV=staging` (or `production`) and `APP_DEBUG=false`. The app ignores `APP_DEBUG=true` outside local anyway.
 - [ ] `https://<site>/.env`, `/vendor/autoload.php`, `/var/log/app.log` and `/.ftp-deploy-sync-state.json` all answer 403 or 404.
+- [ ] `https://<site>/_system/migrate` answers **404** (no `MIGRATION_TOKEN` left in `.env`).
 - [ ] Response headers show the CSP, HSTS and `X-Robots-Tag: noindex` (staging isn't production).
 - [ ] A secret that was ever pasted into a chat, screenshot or commit is rotated the same day (spec 11.2).

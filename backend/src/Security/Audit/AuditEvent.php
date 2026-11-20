@@ -37,6 +37,9 @@ final class AuditEvent
 
     public const SETTINGS_UPDATED = 'settings.updated';
 
+    /** Migrations run from the browser page on staging (B4). Not in the 11.5 list. */
+    public const SYSTEM_MIGRATIONS_RUN = 'system.migrations.run';
+
     public const SYNTHESIS_PUBLISHED = 'synthesis.published';
     public const SYNTHESIS_UNPUBLISHED = 'synthesis.unpublished';
 

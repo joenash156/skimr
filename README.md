@@ -27,7 +27,7 @@ You only need the tools for the part you work on, but everyone should be able to
 | Tool | Version | Who needs it | Check with |
 | --- | --- | --- | --- |
 | Git | any recent | everyone | `git --version` |
-| PHP | 8.2 or newer (Laragon, XAMPP, or a plain PHP zip) | everyone | `php -v` |
+| PHP | 8.2 or newer, **latest patch only** — at least 8.2.36 / 8.3.37 / 8.4.28 / 8.5.13 (Nov 2026 security release). Laragon, XAMPP, or a plain PHP zip | everyone | `php -v` |
 | Composer | 2.x | everyone | `composer --version` |
 | MySQL | 8.0 | everyone | `mysql --version` |
 | Node.js | 20 LTS or newer | P4, P5 (and `npm run mock`) | `node -v` |

@@ -2,8 +2,8 @@
 # The owner of a path is a required reviewer for any PR that changes it.
 # GitHub uses the LAST matching line, so specific paths come after general ones.
 #
-# P1 tech lead: @joenash156 · P2 backend features: @P2-USERNAME · P3 AI service: @P3-USERNAME
-# P4 dashboard: @P4-USERNAME · P5 public site, SEO, admin UI: @P5-USERNAME
+# P1 tech lead: @joenash156 · P2 backend features: @Prina5 · P3 AI service: @kwantsimahschool
+# P4 dashboard: @NanaBanyinKwofie · P5 public site, SEO, admin UI: @CALEB-KOUFIE
 
 # Default: anything not listed below (root config, README, .gitignore, ...) -> P1
 *                                       @joenash156
@@ -12,60 +12,60 @@
 /backend/                               @joenash156
 /backend/composer.json                  @joenash156
 /backend/composer.lock                  @joenash156
-/backend/config/routes/projects.php     @P2-USERNAME
-/backend/config/routes/sources.php      @P2-USERNAME
-/backend/config/routes/research.php     @P2-USERNAME
-/backend/config/routes/admin.php        @P2-USERNAME
-/backend/config/container/projects.php  @P2-USERNAME
-/backend/config/container/sources.php   @P2-USERNAME
-/backend/config/container/research.php  @P2-USERNAME
-/backend/config/container/admin.php     @P2-USERNAME
-/backend/config/routes/public.php       @P5-USERNAME
-/backend/config/container/public.php    @P5-USERNAME
-/backend/src/Projects/                  @P2-USERNAME
-/backend/src/Sources/                   @P2-USERNAME
-/backend/src/Ai/                        @P2-USERNAME
-/backend/src/Research/                  @P2-USERNAME
-/backend/src/Admin/                     @P2-USERNAME
-/backend/src/Media/                     @P2-USERNAME
-/backend/src/Mail/                      @P2-USERNAME
-/backend/src/Public/                    @P5-USERNAME
-/backend/templates/emails/              @P2-USERNAME
-/backend/templates/public/              @P5-USERNAME
-/backend/translations/public/           @P5-USERNAME
-/backend/translations/api/projects.*    @P2-USERNAME
-/backend/translations/api/sources.*     @P2-USERNAME
-/backend/translations/api/ai.*          @P2-USERNAME
-/backend/translations/api/research.*    @P2-USERNAME
-/backend/translations/api/admin.*       @P2-USERNAME
-/backend/translations/api/mail.*        @P2-USERNAME
-/backend/translations/api/public.*      @P5-USERNAME
-/backend/content/guides/                @P5-USERNAME
-/backend/public/assets/                 @P5-USERNAME
-/backend/package.json                   @P5-USERNAME
-/backend/tests/Projects/                @P2-USERNAME
-/backend/tests/Sources/                 @P2-USERNAME
-/backend/tests/Ai/                      @P2-USERNAME
-/backend/tests/Research/                @P2-USERNAME
-/backend/tests/Admin/                   @P2-USERNAME
-/backend/tests/Media/                   @P2-USERNAME
-/backend/tests/Mail/                    @P2-USERNAME
-/backend/tests/Public/                  @P5-USERNAME
+/backend/config/routes/projects.php     @Prina5
+/backend/config/routes/sources.php      @Prina5
+/backend/config/routes/research.php     @Prina5
+/backend/config/routes/admin.php        @Prina5
+/backend/config/container/projects.php  @Prina5
+/backend/config/container/sources.php   @Prina5
+/backend/config/container/research.php  @Prina5
+/backend/config/container/admin.php     @Prina5
+/backend/config/routes/public.php       @CALEB-KOUFIE
+/backend/config/container/public.php    @CALEB-KOUFIE
+/backend/src/Projects/                  @Prina5
+/backend/src/Sources/                   @Prina5
+/backend/src/Ai/                        @Prina5
+/backend/src/Research/                  @Prina5
+/backend/src/Admin/                     @Prina5
+/backend/src/Media/                     @Prina5
+/backend/src/Mail/                      @Prina5
+/backend/src/Public/                    @CALEB-KOUFIE
+/backend/templates/emails/              @Prina5
+/backend/templates/public/              @CALEB-KOUFIE
+/backend/translations/public/           @CALEB-KOUFIE
+/backend/translations/api/projects.*    @Prina5
+/backend/translations/api/sources.*     @Prina5
+/backend/translations/api/ai.*          @Prina5
+/backend/translations/api/research.*    @Prina5
+/backend/translations/api/admin.*       @Prina5
+/backend/translations/api/mail.*        @Prina5
+/backend/translations/api/public.*      @CALEB-KOUFIE
+/backend/content/guides/                @CALEB-KOUFIE
+/backend/public/assets/                 @CALEB-KOUFIE
+/backend/package.json                   @CALEB-KOUFIE
+/backend/tests/Projects/                @Prina5
+/backend/tests/Sources/                 @Prina5
+/backend/tests/Ai/                      @Prina5
+/backend/tests/Research/                @Prina5
+/backend/tests/Admin/                   @Prina5
+/backend/tests/Media/                   @Prina5
+/backend/tests/Mail/                    @Prina5
+/backend/tests/Public/                  @CALEB-KOUFIE
 # Migrations are shared by P1, P2 and P5; the tech lead reviews every schema change.
-/backend/migrations/                    @joenash156 @P2-USERNAME
+/backend/migrations/                    @joenash156 @Prina5
 
 # --- AI service (Python) ---
-/ai-service/                            @P3-USERNAME
-/docs/api/ai-service.md                 @P3-USERNAME @P2-USERNAME
-/docs/ai-evaluation.md                  @P3-USERNAME
+/ai-service/                            @kwantsimahschool
+/docs/api/ai-service.md                 @kwantsimahschool @Prina5
+/docs/ai-evaluation.md                  @kwantsimahschool
 
 # --- Dashboard (React) ---
-/frontend/                              @P4-USERNAME
-/frontend/src/features/admin/           @P5-USERNAME
-/frontend/src/locales/en/admin.json     @P5-USERNAME
-/frontend/src/locales/fr/admin.json     @P5-USERNAME
-/frontend/src/locales/es/admin.json     @P5-USERNAME
-/shared/design-tokens.css               @P4-USERNAME @P5-USERNAME
+/frontend/                              @NanaBanyinKwofie
+/frontend/src/features/admin/           @CALEB-KOUFIE
+/frontend/src/locales/en/admin.json     @CALEB-KOUFIE
+/frontend/src/locales/fr/admin.json     @CALEB-KOUFIE
+/frontend/src/locales/es/admin.json     @CALEB-KOUFIE
+/shared/design-tokens.css               @NanaBanyinKwofie @CALEB-KOUFIE
 
 # --- Contracts, specs and repo plumbing (P1) ---
 /docs/api/openapi.yaml                  @joenash156

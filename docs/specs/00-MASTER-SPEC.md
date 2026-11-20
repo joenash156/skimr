@@ -34,6 +34,7 @@ This is the single source of truth for Skimr. If a member workbook disagrees wit
 
 | Version | Date | Change |
 | --- | --- | --- |
+| 1.3 | 20 Nov 2026 | Section 19 team table filled in (members and GitHub handles); `.github/CODEOWNERS` now uses the real handles. Minimum PHP is the latest patch of a supported branch (Nov 2026 security release: 8.2.36 / 8.3.37 / 8.4.28 / 8.5.13). |
 | 1.2 | 19 Nov 2026 | Product name set to **Skimr** (slug `skimr`) and repo URL filled in. Spec files moved to `docs/specs/`. Section 13 translation paths aligned with section 18 (one file per module); section 18 `ai-service/` tree aligned with the P3 brief. Integration branch is `dev` (was `develop`) everywhere. Section 8: `firebase/php-jwt` raised to ^7 (security advisory on all of v6), versions pinned for `resend-php` and PHPStan; `league/commonmark` listed (already required by 11.2). Section 11.3: CSP `script-src` gets a per-request nonce for the no-flash theme script (14.4 needs an inline script, which plain `'self'` blocks). API contract: account lockout returns 429 `ACCOUNT_LOCKED`, since 423 is not in the 10.1 status list. |
 | 1.1 | 18 Nov 2026 | Multi-format sources added: images with OCR (F22, which also covers scanned PDFs), web links and pasted text (F23), and the source-hunting assistant (F21). Tables renamed from `papers` / `paper_*` to `sources` / `source_*`, plus a new `source_files` table. Chat (F15) moved to stretch. |
 | 1.0 | 18 Nov 2026 | First complete specification. |
@@ -1296,15 +1297,15 @@ skimr/
 
 ## 19. Team ownership and batch roadmap
 
-Five roles each own separate folders, and work moves forward in 7 batches over about 12 weeks. Every batch ends with something working on staging. Names are filled in once each person's strengths are known.
+Five roles each own separate folders, and work moves forward in 7 batches over about 12 weeks. Every batch ends with something working on staging.
 
 | Role | Member | Owns | Best fit |
 | --- | --- | --- | --- |
-| P1 – Tech lead and backend core | [name] | Slim skeleton, config, middleware, security, auth, OAuth, Turnstile, JWT, OpenAPI contract, CI, deployment | Strongest in PHP; careful, security-minded; comfortable with Git |
-| P2 – Backend features | [name] | Projects, sources (all types), Cloudinary, jobs and quotas, research endpoints, admin API, Resend emails, exports | Good with PHP and SQL; enjoys data modelling |
-| P3 – AI service | [name] | The whole `ai-service/`: extraction, embeddings, clustering, LLM router, synthesis, citations, gaps, chat, discovery | Strongest in Python; interested in ML |
-| P4 – Dashboard frontend | [name] | React app shell, sidebar, theme, i18n setup, UI components, auth screens, every user-facing dashboard feature | Strongest in React/TypeScript; eye for UI |
-| P5 – Public site, SEO and admin UI | [name] | Twig public site, SEO (sitemaps, robots, structured data), public synthesis pages, contact, admin console screens in React | Enjoys HTML/CSS and content; detail-oriented |
+| P1 – Tech lead and backend core | @joenash156 | Slim skeleton, config, middleware, security, auth, OAuth, Turnstile, JWT, OpenAPI contract, CI, deployment | Strongest in PHP; careful, security-minded; comfortable with Git |
+| P2 – Backend features | Prince (@Prina5) | Projects, sources (all types), Cloudinary, jobs and quotas, research endpoints, admin API, Resend emails, exports | Good with PHP and SQL; enjoys data modelling |
+| P3 – AI service | Kwantsimah (@kwantsimahschool) | The whole `ai-service/`: extraction, embeddings, clustering, LLM router, synthesis, citations, gaps, chat, discovery | Strongest in Python; interested in ML |
+| P4 – Dashboard frontend | Nana (@NanaBanyinKwofie) | React app shell, sidebar, theme, i18n setup, UI components, auth screens, every user-facing dashboard feature | Strongest in React/TypeScript; eye for UI |
+| P5 – Public site, SEO and admin UI | Caleb (@CALEB-KOUFIE) | Twig public site, SEO (sitemaps, robots, structured data), public synthesis pages, contact, admin console screens in React | Enjoys HTML/CSS and content; detail-oriented |
 
 ### 19.1 Batches
 

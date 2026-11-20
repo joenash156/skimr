@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Auth\Http\AuthController;
+use App\Auth\Http\GoogleController;
 use App\Security\Middleware\AuthMiddleware;
 use App\Security\RateLimit\RateLimit;
 use App\Security\RateLimit\RateLimiter;
@@ -46,6 +47,13 @@ return static function (App $app): void {
     $app->post('/api/v1/auth/verify-email', [AuthController::class, 'verifyEmail']);
     $app->post('/api/v1/auth/password/reset', [AuthController::class, 'resetPassword']);
     $app->post('/api/v1/auth/invite/accept', [AuthController::class, 'acceptInvite']);
+
+    // Google sign-in (browser navigations; the callback always redirects into the app).
+    $app->get('/api/v1/auth/google/redirect', [GoogleController::class, 'redirect']);
+    $app->get('/api/v1/auth/google/callback', [GoogleController::class, 'callback']);
+    // Linking needs the account password: same per-IP limit as login, CSRF-checked in the controller.
+    $app->post('/api/v1/auth/google/link', [GoogleController::class, 'link'])
+        ->add($limiter->middleware(RateLimit::login(), RateLimiter::byIp()));
 
     // Signed in (pending users allowed: AuthMiddleware lets them reach /auth/*).
     $app->post('/api/v1/auth/verify-email/resend', [AuthController::class, 'resendVerification'])

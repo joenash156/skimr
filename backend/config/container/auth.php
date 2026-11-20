@@ -4,15 +4,23 @@ declare(strict_types=1);
 
 use App\Auth\AuthLinks;
 use App\Auth\Console\CreateSuperAdminCommand;
+use App\Auth\Google\GoogleAuthService;
+use App\Auth\Google\GoogleClient;
+use App\Auth\Google\LeagueGoogleClient;
+use App\Auth\Google\SignedCookie;
 use App\Auth\Http\AuthController;
 use App\Auth\Http\CsrfGuard;
+use App\Auth\Http\GoogleController;
 use App\Auth\Jwt\JwtService;
 use App\Auth\Password\PasswordHasher;
 use App\Auth\Password\PasswordPolicy;
+use App\Auth\RefreshCookie;
 use App\Security\Turnstile\TurnstileVerifier;
 use App\Shared\Clock\Clock;
+use App\Shared\Http\JsonResponder;
 use App\Shared\Mail\LogMailer;
 use App\Shared\Mail\Mailer;
+use App\Users\UserPresenter;
 use GuzzleHttp\Client;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -32,11 +40,12 @@ use function DI\factory;
  *     app: array{env: string, url: string},
  *     jwt: array{access_secret: ?string, refresh_secret: ?string, access_ttl: int, refresh_ttl: int},
  *     auth: array{bcrypt_cost: int, common_passwords: string, mail_log: string},
- *     turnstile: array{secret_key: ?string}
+ *     turnstile: array{secret_key: ?string},
+ *     google: array{client_id: ?string, client_secret: ?string, redirect_uri: ?string}
  * }
  */
 $settings = static function (ContainerInterface $c): array {
-    /** @var array{app: array{env: string, url: string}, jwt: array{access_secret: ?string, refresh_secret: ?string, access_ttl: int, refresh_ttl: int}, auth: array{bcrypt_cost: int, common_passwords: string, mail_log: string}, turnstile: array{secret_key: ?string}} $s */
+    /** @var array{app: array{env: string, url: string}, jwt: array{access_secret: ?string, refresh_secret: ?string, access_ttl: int, refresh_ttl: int}, auth: array{bcrypt_cost: int, common_passwords: string, mail_log: string}, turnstile: array{secret_key: ?string}, google: array{client_id: ?string, client_secret: ?string, redirect_uri: ?string}} $s */
     $s = $c->get('settings');
 
     return $s;
@@ -89,6 +98,35 @@ return [
     ),
 
     'console.commands' => add([CreateSuperAdminCommand::class]),
+
+    // Google sign-in (B1 task 12). Its two short-lived cookies are signed with a key
+    // derived from JWT_REFRESH_SECRET, so .env needs no extra secret.
+    GoogleClient::class => static fn (ContainerInterface $c): GoogleClient => new LeagueGoogleClient(
+        $settings($c)['google']['client_id'],
+        $settings($c)['google']['client_secret'],
+        $settings($c)['google']['redirect_uri'],
+        $c->get(Clock::class),
+    ),
+
+    'google.cookie_key' => static fn (ContainerInterface $c): string => hash_hmac(
+        'sha256',
+        'skimr google oauth cookies',
+        (string) $settings($c)['jwt']['refresh_secret'],
+    ),
+
+    GoogleController::class => static fn (ContainerInterface $c): GoogleController => new GoogleController(
+        $c->get(GoogleClient::class),
+        $c->get(GoogleAuthService::class),
+        new SignedCookie('__Secure-gstate', $c->get('google.cookie_key'), $c->get(Clock::class)),
+        new SignedCookie('__Secure-glink', $c->get('google.cookie_key'), $c->get(Clock::class)),
+        $c->get(RefreshCookie::class),
+        $c->get(CsrfGuard::class),
+        $c->get(UserPresenter::class),
+        $c->get(JsonResponder::class),
+        $c->get(LoggerInterface::class),
+        $settings($c)['app']['url'],
+        $settings($c)['jwt']['access_ttl'],
+    ),
 
     // P2 replaces this with MailService in config/container/mail.php (loaded after this file).
     Mailer::class => static fn (ContainerInterface $c): Mailer => new LogMailer(

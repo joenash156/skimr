@@ -1,4 +1,16 @@
 {
+  "auth": {
+    "errors": {
+      "invalid_credentials": "L'adresse e-mail ou le mot de passe est incorrect.",
+      "account_locked": "Trop de tentatives. Réessayez dans {minutes} minutes.",
+      "account_suspended": "Ce compte a été suspendu. Contactez le support si vous pensez qu'il s'agit d'une erreur.",
+      "refresh_reused": "Pour votre sécurité, vous avez été déconnecté partout. Veuillez vous reconnecter.",
+      "email_taken": "Un compte existe déjà avec cette adresse e-mail."
+    },
+    "messages": {
+      "reset_link_sent": "Si cette adresse existe, nous vous avons envoyé un lien pour réinitialiser votre mot de passe."
+    }
+  },
   "validation": {
     "password": {
       "length": "Utilisez entre 10 et 72 caractères.",

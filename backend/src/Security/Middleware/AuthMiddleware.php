@@ -70,8 +70,14 @@ final class AuthMiddleware implements MiddlewareInterface
             throw new UnauthorizedException();
         }
 
+        $request = $request->withAttribute(RequestAttributes::USER, $user);
+        if ($request->getAttribute(RequestAttributes::LOCALE) === null) {
+            // API messages, including errors, follow the user's saved language (spec 10.1).
+            $request = $request->withAttribute(RequestAttributes::LOCALE, $user->locale);
+        }
+
         try {
-            return $handler->handle($request->withAttribute(RequestAttributes::USER, $user));
+            return $handler->handle($request);
         } catch (RoleDeniedException $denied) {
             $this->auditDenied($denied, $request);
             throw $denied;

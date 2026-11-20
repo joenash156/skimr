@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Security\RateLimit;
 
+use App\Security\Middleware\RouteRateLimitMiddleware;
 use App\Shared\Clock\Clock;
 use App\Shared\Exception\QuotaExceededException;
+use App\Shared\Http\ClientIp;
 use Doctrine\DBAL\Connection;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Fixed-window rate limiter stored in the rate_limits table (spec 11.4).
@@ -23,6 +26,37 @@ final class RateLimiter
         private readonly Connection $db,
         private readonly Clock $clock,
     ) {
+    }
+
+    /**
+     * Route middleware for one bucket; see RouteRateLimitMiddleware.
+     *
+     * @param \Closure(ServerRequestInterface): string $subject e.g. RateLimiter::byIp()
+     */
+    public function middleware(RateLimit $limit, \Closure $subject): RouteRateLimitMiddleware
+    {
+        return new RouteRateLimitMiddleware($this, $limit, $subject);
+    }
+
+    /** @return \Closure(ServerRequestInterface): string counts per client IP */
+    public static function byIp(): \Closure
+    {
+        return static fn (ServerRequestInterface $request): string => 'ip:' . (ClientIp::of($request) ?? 'unknown');
+    }
+
+    /**
+     * @return \Closure(ServerRequestInterface): string counts per email in the JSON body
+     *                                                  (plus the IP when $withIp), lowercased
+     */
+    public static function byBodyEmail(bool $withIp = false): \Closure
+    {
+        return static function (ServerRequestInterface $request) use ($withIp): string {
+            $body = $request->getParsedBody();
+            $email = is_array($body) && is_string($body['email'] ?? null) ? mb_strtolower(trim($body['email'])) : '';
+            $subject = 'email:' . mb_substr($email, 0, 254);
+
+            return $withIp ? $subject . '|ip:' . (ClientIp::of($request) ?? 'unknown') : $subject;
+        };
     }
 
     /**

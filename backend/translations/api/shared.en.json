@@ -14,5 +14,15 @@
     "turnstile_failed": "Please complete the security check.",
     "invalid_token": "This link is invalid or has expired.",
     "email_not_verified": "Please verify your email address to continue."
+  },
+  "validation": {
+    "required": "This field is required.",
+    "too_long": "This is too long.",
+    "too_short": "This is too short.",
+    "invalid": "This value is not valid.",
+    "email": "This email address is not valid.",
+    "phone": "Enter the number in international format, e.g. +233241234567.",
+    "accepted": "You must accept this to continue.",
+    "confirmation": "The two entries don't match."
   }
 }

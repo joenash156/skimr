@@ -24,12 +24,23 @@ abstract class AppTestCase extends TestCase
     protected function app(): App
     {
         if ($this->app === null) {
-            /** @var callable(): App<ContainerInterface|null> $create */
+            /** @var callable(array<string, mixed>): App<ContainerInterface|null> $create */
             $create = require dirname(__DIR__) . '/config/bootstrap.php';
-            $this->app = $create();
+            $this->app = $create($this->containerOverrides());
         }
 
         return $this->app;
+    }
+
+    /**
+     * Container definitions to swap in for this test class (fakes for
+     * Cloudflare, email, the clock...). Applied after every module file.
+     *
+     * @return array<string, mixed>
+     */
+    protected function containerOverrides(): array
+    {
+        return [];
     }
 
     /**

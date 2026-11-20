@@ -9,3 +9,5 @@ When you review a file, tick it and write your name and the date. When you add m
 | `backend/translations/api/shared.{fr,es}.json` | all `errors.*` (11 keys) | P1, B0 (machine draft) | [ ] | [ ] |
 | `backend/translations/api/shared.{fr,es}.json` | `errors.turnstile_failed`, `errors.invalid_token`, `errors.email_not_verified` | P1, B1 (machine draft) | [ ] | [ ] |
 | `backend/translations/api/auth.{fr,es}.json` | `validation.password.*` (3 keys) | P1, B1 (machine draft) | [ ] | [ ] |
+| `backend/translations/api/shared.{fr,es}.json` | `validation.*` (8 keys: required, too_long, too_short, invalid, email, phone, accepted, confirmation) | P1, B1 (machine draft) | [ ] | [ ] |
+| `backend/translations/api/auth.{fr,es}.json` | `auth.errors.*` (5 keys), `auth.messages.reset_link_sent` | P1, B1 (machine draft) | [ ] | [ ] |

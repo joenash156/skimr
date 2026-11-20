@@ -17,15 +17,18 @@ use Slim\Factory\AppFactory;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-return static function (): App {
+/*
+ * @param array<string, mixed> $overrides container definitions applied last (tests only)
+ */
+return static function (array $overrides = []): App {
     Dotenv::createImmutable([dirname(__DIR__), dirname(__DIR__, 2)])->safeLoad();
 
     /** @var array<string, mixed> $settings */
     $settings = require __DIR__ . '/settings.php';
 
-    /** @var callable(array<string, mixed>): \Psr\Container\ContainerInterface $buildContainer */
+    /** @var callable(array<string, mixed>, array<string, mixed>): \Psr\Container\ContainerInterface $buildContainer */
     $buildContainer = require __DIR__ . '/container.php';
-    $app = AppFactory::createFromContainer($buildContainer($settings));
+    $app = AppFactory::createFromContainer($buildContainer($settings, $overrides));
 
     (require __DIR__ . '/middleware.php')($app);
 

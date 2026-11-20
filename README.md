@@ -56,6 +56,23 @@ upload_max_filesize = 10M
 post_max_size = 110M
 ```
 
+**HTTPS certificates (Windows, plain PHP zip).** PHP for Windows ships without a list of trusted certificate authorities, so every outgoing HTTPS call (Cloudflare Turnstile, Resend, Google sign-in) fails with `cURL error 60` and sign-up/login answer `TURNSTILE_FAILED`. Fix it once (Laragon and XAMPP usually already have this):
+
+```powershell
+$php = Split-Path (Get-Command php).Source
+New-Item -ItemType Directory -Force "$php\extras\ssl" | Out-Null
+Invoke-WebRequest https://curl.se/ca/cacert.pem -OutFile "$php\extras\ssl\cacert.pem"
+```
+
+Then add these two lines to `php.ini` (forward slashes, your PHP folder) and restart any running `composer start`:
+
+```ini
+curl.cainfo = "C:/php-8.5/php/extras/ssl/cacert.pem"
+openssl.cafile = "C:/php-8.5/php/extras/ssl/cacert.pem"
+```
+
+Check: `php -r "var_dump((bool) file_get_contents('https://curl.se'));"` prints `bool(true)`.
+
 Check with `php -m`: every extension above should be listed.
 
 **Composer** (if `composer --version` fails): install it from https://getcomposer.org/download/ (the Windows installer is easiest).

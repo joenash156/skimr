@@ -29,9 +29,13 @@ use function DI\autowire;
  * own file (projects.php, sources.php, public.php, ...) and never edit this one.
  * Each module file returns an array of PHP-DI definitions.
  *
+ * $overrides are applied last. Only tests use them (to swap in fakes for
+ * Cloudflare, email and the clock); the running app never passes any.
+ *
  * @param array<string, mixed> $settings
+ * @param array<string, mixed> $overrides
  */
-return static function (array $settings): ContainerInterface {
+return static function (array $settings, array $overrides = []): ContainerInterface {
     $builder = new ContainerBuilder();
     $builder->useAutowiring(true);
 
@@ -87,6 +91,10 @@ return static function (array $settings): ContainerInterface {
             throw new RuntimeException(sprintf('%s must return an array of container definitions.', $file));
         }
         $builder->addDefinitions($definitions);
+    }
+
+    if ($overrides !== []) {
+        $builder->addDefinitions($overrides);
     }
 
     return $builder->build();

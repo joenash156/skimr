@@ -143,7 +143,7 @@ P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1
     - `signedUploadParams(publicId, resourceType)`, which Python uses to upload open-access PDFs and web snapshots
     - `delete(publicId)`
 
-    Folder layout follows spec 16: `skimr/sources/{user_uuid}/{source_uuid}/...`.
+    Folder layout follows spec 16: `{root}/sources/{user_uuid}/{source_uuid}/...`. `{root}` is `$settings['cloudinary']['folder']` (`CLOUDINARY_FOLDER`: `skimr-dev` locally, `skimr-prod` on the server). Never hard-code `skimr/`.
 3. **`Mail/MailService`:**
     - renders Twig HTML + text from `templates/emails/{locale}/`, then sends via Resend
     - logs and swallows failures

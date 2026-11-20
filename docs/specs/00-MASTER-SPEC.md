@@ -482,7 +482,7 @@ One PHP application serves three things on the same domain: the public pages, th
    - the auth token, project access and the user's quota
    - **files:** size, and the real file type from the first bytes. PDFs must start with `%PDF-`; images must be real JPEG, PNG or WebP. Images are re-encoded with PHP GD, which removes location and other metadata.
    - **links:** the URL must be well formed and https (or http, which is upgraded), with a maximum length of 2,048 characters.
-3. Files are uploaded to Cloudinary as `type=authenticated`, under `skimr/sources/{user_uuid}/{source_uuid}/`. Their ids are saved in `source_files`.
+3. Files are uploaded to Cloudinary as `type=authenticated`, under `{root}/sources/{user_uuid}/{source_uuid}/`. Their ids are saved in `source_files`.
 4. PHP creates a `sources` row with `status = processing` and the right `source_type`, plus an `ai_jobs` row of type `extract_source`. It sends Python the matching `input` (6.2): signed URLs for files, the URL plus signed upload parameters for links, or the text itself.
 5. React shows a progress bar and polls the job. When the job succeeds, PHP saves sections, chunks, vectors and references, and sets `status = ready`. If a link was unreadable, it sets `status = unreadable`, and the UI offers upload or paste.
 
@@ -1102,14 +1102,15 @@ All files live on Cloudinary, and none are kept on the PHP server. Uploaded sour
 - Turn on **Settings → Security → "Allow delivery of PDF and ZIP files"**. Free accounts block PDF delivery by default, and without this setting Python can't download uploaded PDFs (images are not affected).
 - Create the upload presets `sources_private` (type authenticated) and `avatars` (public, incoming transformation: 256 × 256 crop on the face).
 - Keys go in `.env` only: `CLOUDINARY_URL=cloudinary://<key>:<secret>@<cloud_name>`.
+- `{root}` below is `CLOUDINARY_FOLDER`: `skimr-dev` on every laptop, `skimr-prod` on the server. Local testing never mixes with real users' files, and a dev folder can be emptied at any time. Site images (`skimr/site/...`) are shared by both.
 
 | Asset | Folder / public_id | Delivery type | Who uploads | Who reads |
 | --- | --- | --- | --- | --- |
-| Source PDF | `skimr/sources/{user_uuid}/{source_uuid}/file` | `authenticated` | PHP (server-side, signed); Python for open-access PDFs found via links or search, using PHP-signed upload parameters | Python via signed URL (15 min); user's browser via signed URL (10 min) |
-| Source page images | `skimr/sources/{user_uuid}/{source_uuid}/p{ordinal}` | `authenticated` | PHP, after GD re-encoding | Python via signed URL; browser via signed URL (shown beside the OCR text) |
-| Web snapshot (extracted text as .txt) | `skimr/sources/{user_uuid}/{source_uuid}/snapshot` | `authenticated` (raw) | Python, using PHP-signed upload parameters | Kept as proof of what the page said on the accessed date |
+| Source PDF | `{root}/sources/{user_uuid}/{source_uuid}/file` | `authenticated` | PHP (server-side, signed); Python for open-access PDFs found via links or search, using PHP-signed upload parameters | Python via signed URL (15 min); user's browser via signed URL (10 min) |
+| Source page images | `{root}/sources/{user_uuid}/{source_uuid}/p{ordinal}` | `authenticated` | PHP, after GD re-encoding | Python via signed URL; browser via signed URL (shown beside the OCR text) |
+| Web snapshot (extracted text as .txt) | `{root}/sources/{user_uuid}/{source_uuid}/snapshot` | `authenticated` (raw) | Python, using PHP-signed upload parameters | Kept as proof of what the page said on the accessed date |
 | PDF / image thumbnails | Same asset, with a `pg_1,w_400,f_auto` (PDF) or `w_400,f_auto` (image) transformation | `authenticated` | Generated | Browser via signed URL |
-| Avatar | `skimr/avatars/{user_uuid}` | `upload` (public) | PHP | Anyone (no personal data in the image URL beyond the uuid) |
+| Avatar | `{root}/avatars/{user_uuid}` | `upload` (public) | PHP | Anyone (no personal data in the image URL beyond the uuid) |
 | Site images, OG images | `skimr/site/...` | `upload` (public) | P5 manually or by script | Public pages |
 | Word exports | Not stored | – | Generated on request and streamed | Browser download |
 
@@ -1186,6 +1187,7 @@ RESEND_API_KEY=
 MAIL_FROM="Skimr <no-reply@[mail-domain]>"
 MAIL_REPLY_TO=
 CLOUDINARY_URL=
+CLOUDINARY_FOLDER=skimr-dev   # {root} in spec 16: skimr-dev locally, skimr-prod on the server
 AI_SERVICE_URL=http://localhost:8000
 AI_SERVICE_SECRET=change-me-shared-hmac-secret
 # ai-service/.env only:

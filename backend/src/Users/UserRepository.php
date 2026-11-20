@@ -50,6 +50,18 @@ final class UserRepository
         return $this->findOneBy('email', self::normalizeEmail($email));
     }
 
+    /** The account linked to this Google id ("sub"), if any. */
+    public function findByGoogleSub(string $sub): ?User
+    {
+        return $sub === '' ? null : $this->findOneBy('google_sub', $sub);
+    }
+
+    /** True if any account, including a deleted one, holds this Google id. */
+    public function googleSubExists(string $sub): bool
+    {
+        return (bool) $this->db->fetchOne('SELECT 1 FROM users WHERE google_sub = ? LIMIT 1', [$sub]);
+    }
+
     /** True if any account, including a deleted one, holds this email (the column is UNIQUE). */
     public function emailExists(string $email): bool
     {
@@ -86,7 +98,7 @@ final class UserRepository
         $now = $this->now();
         $uuid = Uuid::uuid4()->toString();
         $this->db->insert('users', [
-            ...$columns,
+            ...self::toRow($columns),
             'uuid' => $uuid,
             'email' => self::normalizeEmail((string) $columns['email']),
             'created_at' => $now,
@@ -113,7 +125,18 @@ final class UserRepository
             $columns['email'] = self::normalizeEmail($columns['email']);
         }
 
-        $row = ['updated_at' => $this->now()];
+        $this->db->update('users', ['updated_at' => $this->now()] + self::toRow($columns), ['id' => $id]);
+    }
+
+    /**
+     * DateTimeImmutable values become UTC DATETIME(3) strings; arrays become JSON.
+     *
+     * @param array<string, mixed> $columns
+     * @return array<string, mixed>
+     */
+    private static function toRow(array $columns): array
+    {
+        $row = [];
         foreach ($columns as $column => $value) {
             $row[$column] = match (true) {
                 $value instanceof \DateTimeImmutable => self::format($value),
@@ -122,7 +145,7 @@ final class UserRepository
             };
         }
 
-        $this->db->update('users', $row, ['id' => $id]);
+        return $row;
     }
 
     /**
@@ -189,7 +212,7 @@ final class UserRepository
         return $row === false ? null : User::fromRow($row);
     }
 
-    /** @param 'id'|'uuid'|'email' $column */
+    /** @param 'id'|'uuid'|'email'|'google_sub' $column */
     private function findOneBy(string $column, int|string $value): ?User
     {
         $row = $this->db->createQueryBuilder()

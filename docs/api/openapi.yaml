@@ -321,9 +321,15 @@ paths:
     post:
       tags: [Auth]
       summary: Link Google to an existing password account
-      description: The password is required, so a Google account can't take over someone else's account.
+      description: |
+        The password is required, so a Google account can't take over someone else's account.
+        Call it from `/app/login?link=google`: the callback left a short-lived (10 minutes)
+        HttpOnly cookie saying which Google account to link, so the body only carries the password.
+        Same lockout and rate limit as login. Cookie endpoint, so `Origin` must equal `APP_URL`.
       operationId: googleLink
       security: []
+      parameters:
+        - $ref: '#/components/parameters/XRequestedWith'
       requestBody:
         required: true
         content:
@@ -343,6 +349,8 @@ paths:
               schema: { $ref: '#/components/schemas/SessionResponse' }
         '400': { $ref: '#/components/responses/InvalidToken' }
         '401': { $ref: '#/components/responses/InvalidCredentials' }
+        '403': { $ref: '#/components/responses/CsrfFailed' }
+        '429': { $ref: '#/components/responses/AccountLockedOrRateLimited' }
 
   /me:
     get:

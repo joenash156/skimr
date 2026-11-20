@@ -16,6 +16,9 @@ final class AuditEvent
     public const AUTH_PASSWORD_RESET = 'auth.password.reset';
     public const AUTH_REFRESH_REUSE_DETECTED = 'auth.refresh.reuse_detected';
 
+    /** A password account was linked to a Google account (spec 5.2). Not in the 11.5 list; added with B1 task 12. */
+    public const AUTH_GOOGLE_LINKED = 'auth.google.linked';
+
     public const USER_EMAIL_CHANGED = 'user.email.changed';
 
     public const ADMIN_USER_SUSPENDED = 'admin.user.suspended';

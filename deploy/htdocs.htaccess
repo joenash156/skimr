@@ -9,6 +9,12 @@
 
 Options -Indexes
 
+# Never serve dotfiles (.env, .htaccess, the deploy state file) or anything
+# outside public/, even if the rewrite below were changed by mistake.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteRule ^(.*)$ public/$1 [L]

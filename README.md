@@ -112,7 +112,7 @@ Useful commands (run in `backend/`):
 
 | Command | What it does |
 | --- | --- |
-| `composer start` | Dev server on http://localhost:8080 |
+| `composer start` | Dev server on http://localhost:8080. While it runs, **http://localhost:8080/_dev/api-docs** is an interactive Swagger UI for the contract: "Try it out" calls your real local API (local only; 404 on any server). Turnstile: send `XXXX.DUMMY.TOKEN.XXXX`; email links are in `backend/var/mail.log`. |
 | `composer test` | PHPUnit. Needs MySQL running: it creates and migrates a separate `skimr_test` database first, so your dev data is untouched |
 | `composer stan` | PHPStan, level 6 |
 | `composer cs` / `composer cs:fix` | Check / fix PSR-12 code style |

@@ -29,8 +29,11 @@ final class SecurityHeadersMiddleware implements MiddlewareInterface
         $nonce = base64_encode(random_bytes(16));
         $response = $handler->handle($request->withAttribute(RequestAttributes::CSP_NONCE, $nonce));
 
+        $path = $request->getUri()->getPath();
+        $devPage = $this->appEnv === 'local' && str_starts_with($path, '/_dev/');
+
         $headers = [
-            'Content-Security-Policy' => self::csp($nonce),
+            'Content-Security-Policy' => $devPage ? self::devCsp($nonce) : self::csp($nonce),
             'X-Content-Type-Options' => 'nosniff',
             'Referrer-Policy' => 'strict-origin-when-cross-origin',
             'Permissions-Policy' => 'camera=(), microphone=(), geolocation=()',
@@ -42,7 +45,6 @@ final class SecurityHeadersMiddleware implements MiddlewareInterface
             $headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
         }
 
-        $path = $request->getUri()->getPath();
         if ($this->appEnv !== 'production' || self::isPrivatePath($path)) {
             $headers['X-Robots-Tag'] = 'noindex, nofollow';
         }
@@ -66,6 +68,27 @@ final class SecurityHeadersMiddleware implements MiddlewareInterface
             "object-src 'none'",
             "base-uri 'self'",
             "form-action 'self' https://accounts.google.com",
+            "frame-ancestors 'none'",
+        ]);
+    }
+
+    /**
+     * LOCAL ONLY, /_dev/ pages (the Swagger UI in DevApiDocsController):
+     * Swagger UI loads from jsDelivr (pinned, with integrity hashes) and its
+     * bundle needs 'unsafe-eval'. Never used outside APP_ENV=local.
+     */
+    private static function devCsp(string $nonce): string
+    {
+        $cdn = 'https://cdn.jsdelivr.net';
+
+        return implode('; ', [
+            "default-src 'self'",
+            "script-src 'self' 'nonce-{$nonce}' 'unsafe-eval' {$cdn}",
+            "style-src 'self' 'unsafe-inline' {$cdn}",
+            "img-src 'self' data: {$cdn}",
+            "connect-src 'self'",
+            "object-src 'none'",
+            "base-uri 'self'",
             "frame-ancestors 'none'",
         ]);
     }

@@ -1,0 +1,9 @@
+{
+  "validation": {
+    "password": {
+      "length": "Utilisez entre 10 et 72 caractères.",
+      "letter_and_number": "Incluez au moins une lettre et un chiffre.",
+      "common": "Ce mot de passe est trop courant. Choisissez-en un autre."
+    }
+  }
+}

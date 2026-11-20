@@ -77,6 +77,8 @@ Generate your own local JWT secrets:
 php -r "echo bin2hex(random_bytes(64)), PHP_EOL;"   # run twice: one for JWT_ACCESS_SECRET, one for JWT_REFRESH_SECRET
 ```
 
+The API refuses to start while these are still the `change-me` placeholders (every `/api/` call returns 500 and the log says why).
+
 ### 3. Backend (PHP), at http://localhost:8080
 
 ```powershell
@@ -94,7 +96,7 @@ Useful commands (run in `backend/`):
 | Command | What it does |
 | --- | --- |
 | `composer start` | Dev server on http://localhost:8080 |
-| `composer test` | PHPUnit |
+| `composer test` | PHPUnit. Needs MySQL running: it creates and migrates a separate `skimr_test` database first, so your dev data is untouched |
 | `composer stan` | PHPStan, level 6 |
 | `composer cs` / `composer cs:fix` | Check / fix PSR-12 code style |
 | `composer migrate` / `composer migrate:prev` | Apply all migrations / undo the last one |

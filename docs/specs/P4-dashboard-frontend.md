@@ -97,6 +97,9 @@ frontend/src/
     - `GET /me` returns a `features` object (`upload_images`, `add_link`, `paste_text`, `discover`, `chat`). Use it for the "Add source" menu flags in B2.
     - An account locked after 5 failed logins returns **429** with code `ACCOUNT_LOCKED` (plus `Retry-After`); other rate limits return 429 `RATE_LIMITED`.
     - Error bodies include `request_id`. Show it in error toasts ("Reference: ...") so users can report it.
+    - A signed-in user with `status=pending_verification` gets **403 `EMAIL_NOT_VERIFIED`** from every endpoint except `GET /me` and `/auth/*`. Route them to the verify screen when you see it.
+    - **401 `UNAUTHENTICATED`** on any call means the access token expired or was revoked (logout elsewhere, suspension). Call `/auth/refresh` once; if that also fails, go to login.
+    - Turnstile widgets: pass `action` = `register`, `login` or `forgot_password` (the server checks it) and send the token as `turnstile_token`. Bot-check failure is 403 `TURNSTILE_FAILED`.
     - `/auth/refresh` and `/auth/logout` need the header `X-Requested-With: skimr`.
 - **Packages P5 needs from you:** P5's admin screens use `recharts` from your `package.json`. Add it in B0 so P5 never has to edit your `package.json`.
 - **`shared/design-tokens.css` early:** P5's public site builds its CSS from the same file in B0. Open it as its **own small PR first**, so P5 isn't blocked.

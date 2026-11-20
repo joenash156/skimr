@@ -82,7 +82,16 @@ P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1
 - **Responses:** inject `App\Shared\Http\JsonResponder` and use `success()`, `created()`, `paginated()` and `noContent()`. Never `json_encode` in a controller.
 - **Messages:** put your API strings in `backend/translations/api/{module}.{en,fr,es}.json` (nested JSON becomes dotted keys). Inject `App\Shared\Translator`. Add machine-drafted FR/ES strings to `docs/i18n-review.md`.
 - **Time:** inject `App\Shared\Clock\Clock` instead of `new DateTimeImmutable()`. Use `FrozenClock` in tests.
-- **Auth until B1:** `AuthMiddleware` and `RoleGuard` exist but are fail-closed stubs: they reject every request until P1 finishes B1. Attach them to your routes now. They start working without any change on your side. The authenticated user will be on the request attribute `App\Shared\Http\RequestAttributes::USER`.
+- **Auth (working since P1's B1, PR "auth core"):**
+    - Protect a group with `->add(RoleGuard::allow('admin', 'super_admin'))->add(AuthMiddleware::class)` (Slim runs the last-added first, so Auth runs before RoleGuard). Plain user routes need only `->add(AuthMiddleware::class)`.
+    - The signed-in user is `$request->getAttribute(RequestAttributes::USER)`, an `App\Users\User` (readonly: `id`, `uuid`, `role`, `status`, `email`, `locale`, ...; helpers `isAdmin()`, `isSuperAdmin()`). Never put a `User` straight into a response: it carries the password hash.
+    - Admin actions on another account: inject `App\Security\RolePolicy` and call `assertCanActOn($actor, $target, RolePolicy::ACTION_SUSPEND)` (also `ACTION_REACTIVATE`, `ACTION_DELETE`, `ACTION_CHANGE_ROLE`, `ACTION_RESET_QUOTA`, `ACTION_VIEW`). This is the brief's "`RoleGuard::assertCanActOn`". It throws 403 and writes the `security.forbidden` audit row itself.
+    - `ProjectPolicy` implements `App\Security\Policy` (`can(User $user, string $ability, object $resource): bool`).
+    - Audit: inject `App\Security\Audit\AuditLogger` and call `log($actor, AuditEvent::ADMIN_USER_SUSPENDED, 'user', $target->uuid, $reason, $meta, ClientIp::of($request))`. Event names are constants on `App\Security\Audit\AuditEvent`. No secrets in `reason` or `meta`.
+    - Invite tokens: inject `App\Auth\Token\UserTokenService`. `issue($userId, TokenType::ADMIN_INVITE, 86400)` returns the raw token for the email link; issuing again cancels the previous link (so "resend" needs nothing extra); `revoke($userId, $type)` cancels without issuing.
+    - Rate limits: inject `App\Security\RateLimit\RateLimiter` and call `consume(RateLimit::upload(), 'user:' . $user->uuid)` (also `RateLimit::addLink()`). It throws 429 `RATE_LIMITED` with `Retry-After`. The general 120-per-minute API limit is already applied globally.
+- **Email interface:** your `MailService` must implement `App\Shared\Mail\Mailer` (`send(string $template, string $to, string $locale, array $vars, bool $optional = false): void`). Until it exists, P1's auth code sends through `LogMailer`, which writes each email to `backend/var/mail.log`. When yours is ready, bind it in `backend/config/container/mail.php`: `Mailer::class => \DI\get(MailService::class)`. That file loads after P1's `auth.php`, so it wins. Templates P1's auth code sends: `verify_email`, `reset_password`, `new_sign_in`, `password_changed`, `suspicious_activity`.
+- **Tests with the database:** `composer test` creates and migrates a separate `skimr_test` database first (your migrations included), so your dev data is never touched. Extend `App\Tests\DatabaseTestCase` for DB tests: it empties P1's tables before each test and gives you `db()`, `service(Class::class)` and `createUser([...])`. Empty your own tables in your test's `setUp()`.
 - **Migrations:** P1's first migration is `Version20261119230000` (users, user_tokens, login_events, rate_limits, audit_logs, settings). Yours must have a **later timestamp** (`vendor/bin/doctrine-migrations generate`). Write raw MySQL in `addSql()` with `ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`. Foreign keys to `users.id` are `BIGINT UNSIGNED`. Every `down()` must undo its `up()`: CI runs migrations up, down to the first version, then up again, on a real MySQL 8.
 - **CLI commands** (e.g. `app:seed-demo` in B6): register them in your container file with `'console.commands' => \DI\add([YourCommand::class])`. Don't edit `bin/console`.
 - **`/me` endpoints you own** (`/me/avatar`, `/me/usage`, `/me/export`): put them in your own routes file. P1 owns `GET/PATCH/DELETE /me`.
@@ -214,7 +223,7 @@ P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1
 6. **Admin users API** (P5 needs it now):
     - `GET /admin/users` (filters, sort, pagination) and `/admin/users/{id}`
     - `POST /admin/users/{id}/suspend|reactivate|delete|reset-quota|resend-verification`
-    - a reason is required; check `RoleGuard::assertCanActOn`; write an audit entry for every action
+    - a reason is required; check `RolePolicy::assertCanActOn` (see 3a); write an audit entry for every action
 
 **Acceptance:**
 

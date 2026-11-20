@@ -10,6 +10,9 @@
     "validation": "Please check the highlighted fields.",
     "quota_exceeded": "You've reached your limit. Please try again later.",
     "rate_limited": "Too many attempts. Please wait a moment and try again.",
-    "server": "Something went wrong on our side. Please try again."
+    "server": "Something went wrong on our side. Please try again.",
+    "turnstile_failed": "Please complete the security check.",
+    "invalid_token": "This link is invalid or has expired.",
+    "email_not_verified": "Please verify your email address to continue."
   }
 }

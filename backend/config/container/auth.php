@@ -15,12 +15,16 @@ use App\Auth\Jwt\JwtService;
 use App\Auth\Password\PasswordHasher;
 use App\Auth\Password\PasswordPolicy;
 use App\Auth\RefreshCookie;
+use App\Security\Audit\AuditLogger;
 use App\Security\Turnstile\TurnstileVerifier;
 use App\Shared\Clock\Clock;
 use App\Shared\Http\JsonResponder;
 use App\Shared\Mail\LogMailer;
 use App\Shared\Mail\Mailer;
+use App\Shared\Migrations\MigrationPageController;
+use App\Shared\Migrations\MigrationRunner;
 use App\Users\UserPresenter;
+use Doctrine\DBAL\Connection;
 use GuzzleHttp\Client;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -127,6 +131,24 @@ return [
         $settings($c)['app']['url'],
         $settings($c)['jwt']['access_ttl'],
     ),
+
+    // Browser migration page for staging (B4). The token comes straight from .env.
+    MigrationRunner::class => static fn (ContainerInterface $c): MigrationRunner => new MigrationRunner(
+        $c->get(Connection::class),
+        dirname(__DIR__, 2) . '/migrations.php',
+    ),
+
+    MigrationPageController::class => static function (ContainerInterface $c): MigrationPageController {
+        /** @var array{deploy: array{migration_token: ?string}} $s */
+        $s = $c->get('settings');
+
+        return new MigrationPageController(
+            $c->get(MigrationRunner::class),
+            $c->get(AuditLogger::class),
+            $c->get(LoggerInterface::class),
+            $s['deploy']['migration_token'],
+        );
+    },
 
     // P2 replaces this with MailService in config/container/mail.php (loaded after this file).
     Mailer::class => static fn (ContainerInterface $c): Mailer => new LogMailer(

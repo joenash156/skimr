@@ -80,6 +80,11 @@ return [
         'url' => rtrim($env('AI_SERVICE_URL', 'http://localhost:8000') ?? '', '/'),
         'secret' => $env('AI_SERVICE_SECRET'),
     ],
+    'deploy' => [
+        // Turns on the browser migration page at /_system/migrate (deploy/README.md).
+        // Unset = the page doesn't exist (404). Set it only while deploying, then remove it.
+        'migration_token' => $env('MIGRATION_TOKEN'),
+    ],
     'log' => [
         'level' => $env('LOG_LEVEL', $appEnv === 'production' ? 'warning' : 'debug'),
     ],

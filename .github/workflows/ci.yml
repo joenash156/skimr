@@ -83,7 +83,7 @@ jobs:
           # The lowest version we support (InfinityFree staging); matches config.platform.php.
           php-version: '8.2'
           extensions: mbstring, intl, gd, fileinfo, openssl, pdo_mysql, curl, sodium, zip
-          coverage: none
+          coverage: pcov # line coverage for the spec 20 gate (fast; tests only)
           tools: composer:v2
       - name: Cache Composer packages
         uses: actions/cache@v4
@@ -96,8 +96,10 @@ jobs:
         run: composer cs
       - name: Static analysis (PHPStan level 6)
         run: composer stan -- --no-progress --error-format=github
-      - name: Tests
-        run: composer test
+      - name: Tests (with coverage)
+        run: composer test -- --coverage-clover var/coverage.xml
+      - name: Coverage at least 70% in src/Auth and src/Security (spec 20)
+        run: php bin/check-coverage.php var/coverage.xml
       - name: API contract covers every route (B3)
         run: composer contract
       - name: Migrations up, down, up

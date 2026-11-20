@@ -178,6 +178,10 @@ paths:
     post:
       tags: [Auth]
       summary: Confirm an email address with the token from the email
+      description: |
+        Handles both kinds of link: sign-up verification (activates the account) and confirming
+        a new address after `POST /me/email` (switches the account to it). 409 if the new
+        address was taken by someone else in the meantime.
       operationId: verifyEmail
       security: []
       requestBody:
@@ -200,6 +204,7 @@ paths:
                     properties:
                       user: { $ref: '#/components/schemas/User' }
         '400': { $ref: '#/components/responses/InvalidToken' }
+        '409': { $ref: '#/components/responses/Conflict' }
 
   /auth/verify-email/resend:
     post:
@@ -405,8 +410,12 @@ paths:
               properties:
                 password: { type: string, writeOnly: true }
       responses:
-        '204': { description: Account scheduled for deletion; signed out everywhere. }
+        '204':
+          description: Account scheduled for deletion; signed out everywhere; refresh cookie expired.
+          headers:
+            Set-Cookie: { $ref: '#/components/headers/RefreshCookieCleared' }
         '401': { $ref: '#/components/responses/InvalidCredentials' }
+        '429': { $ref: '#/components/responses/RateLimited' }
 
   /me/password:
     post:
@@ -424,16 +433,28 @@ paths:
                 current_password: { type: string, writeOnly: true }
                 password: { $ref: '#/components/schemas/Password' }
                 password_confirmation: { type: string, writeOnly: true }
+      description: |
+        Every session ends, including this one: the response expires the refresh cookie and the
+        current access token stops working, so send the user to the login screen.
+        Google-only accounts (`has_password: false`) have no current password: they set one
+        through "forgot password" first. 5 wrong current passwords in 15 minutes give 429.
       responses:
-        '204': { description: Password changed. }
+        '204':
+          description: Password changed; signed out everywhere.
+          headers:
+            Set-Cookie: { $ref: '#/components/headers/RefreshCookieCleared' }
         '401': { $ref: '#/components/responses/InvalidCredentials' }
         '422': { $ref: '#/components/responses/ValidationFailed' }
+        '429': { $ref: '#/components/responses/RateLimited' }
 
   /me/email:
     post:
       tags: [Me]
       summary: Start an email change
-      description: Sends a verification link to the new address and a notice to the old one.
+      description: |
+        Sends a verification link (24 hours) to the new address and a notice to the old one.
+        Nothing changes until the link is opened: it lands on `/app/verify-email?token=...`,
+        the same page as sign-up verification, which calls `POST /auth/verify-email`.
       operationId: changeEmail
       requestBody:
         required: true
@@ -454,6 +475,7 @@ paths:
         '401': { $ref: '#/components/responses/InvalidCredentials' }
         '409': { $ref: '#/components/responses/Conflict' }
         '422': { $ref: '#/components/responses/ValidationFailed' }
+        '429': { $ref: '#/components/responses/RateLimited' }
 
 components:
   securitySchemes:

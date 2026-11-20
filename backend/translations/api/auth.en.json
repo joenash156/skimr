@@ -8,7 +8,8 @@
       "email_taken": "An account with this email already exists."
     },
     "messages": {
-      "reset_link_sent": "If that email exists, we've sent a link to reset your password."
+      "reset_link_sent": "If that email exists, we've sent a link to reset your password.",
+      "email_change_sent": "We've sent a confirmation link to your new address. Your email changes once you open it."
     }
   },
   "validation": {

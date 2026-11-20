@@ -21,6 +21,10 @@ final class AuditEvent
 
     public const USER_EMAIL_CHANGED = 'user.email.changed';
 
+    /** Not in the 11.5 list; added with B2 (POST /me/password, DELETE /me). */
+    public const USER_PASSWORD_CHANGED = 'user.password.changed';
+    public const USER_ACCOUNT_DELETED = 'user.account.deleted';
+
     public const ADMIN_USER_SUSPENDED = 'admin.user.suspended';
     public const ADMIN_USER_REACTIVATED = 'admin.user.reactivated';
     public const ADMIN_USER_DELETED = 'admin.user.deleted';

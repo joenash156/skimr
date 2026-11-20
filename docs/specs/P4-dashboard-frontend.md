@@ -107,6 +107,11 @@ frontend/src/
         - `/app/complete-profile`: a new Google account (refresh first, then the profile form, with phone optional);
         - `/app/login?link=google`: a password account already uses that email. Ask for the password, then `POST /auth/google/link` with `{password}` (same CSRF headers as refresh). It returns a session like login. 401 is a wrong password, 400 `INVALID_TOKEN` means the 10-minute window passed (start Google again);
         - `/app/login?error=google`: anything went wrong or the user cancelled. Show a generic "Google sign-in didn't work" message.
+    - **`/me` is live** (P1 B2): `GET /me` (works for unverified users too), `PATCH /me` (send only changed fields; `notification_prefs` can be just the switch that changed), `POST /me/password`, `POST /me/email`, `DELETE /me`.
+        - After a password change or account deletion, **every** session ends, this one included: clear the in-memory token and go to login.
+        - An email change completes when the user opens the link sent to the new address. It lands on your normal `/app/verify-email` page, so no extra screen is needed. Show the 202 `message` meanwhile.
+        - Google-only users (`has_password: false`) have no current password: for "change password" or "delete account", point them to "forgot password" to set one first.
+        - 5 wrong current passwords in 15 minutes give 429 `RATE_LIMITED`.
     - Send `credentials: 'include'` on `/auth/refresh`, `/auth/logout` and `/auth/google/link` so the browser sends the cookie, plus `X-Requested-With: skimr`. In development, proxy `/api` through Vite to `http://localhost:8080` so the app and API share one origin, and set `APP_URL=http://localhost:5173` in your `.env` while you do: the CSRF check compares `Origin` with `APP_URL`.
     - `/auth/refresh` and `/auth/logout` need the header `X-Requested-With: skimr`.
 - **Packages P5 needs from you:** P5's admin screens use `recharts` from your `package.json`. Add it in B0 so P5 never has to edit your `package.json`.

@@ -10,6 +10,9 @@
     "validation": "Revisa los campos marcados.",
     "quota_exceeded": "Has alcanzado tu límite. Inténtalo de nuevo más tarde.",
     "rate_limited": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
-    "server": "Algo salió mal por nuestra parte. Inténtalo de nuevo."
+    "server": "Algo salió mal por nuestra parte. Inténtalo de nuevo.",
+    "turnstile_failed": "Completa la verificación de seguridad.",
+    "invalid_token": "Este enlace no es válido o ha caducado.",
+    "email_not_verified": "Verifica tu dirección de correo electrónico para continuar."
   }
 }

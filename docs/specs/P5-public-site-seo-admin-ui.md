@@ -96,6 +96,10 @@ P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1
 - **Locale:** in `LocaleMiddleware`, set the request attribute `RequestAttributes::LOCALE` (`'locale'`) to the URL's language. The error handler then answers in that language too.
 - **Indexing rules are already handled.** `SecurityHeadersMiddleware` sends `X-Robots-Tag: noindex, nofollow` on `/app*` and `/api*`, and on **every** page when `APP_ENV` isn't `production`. Don't add your own. Your `robots.txt` still needs the spec 12.5 content.
 - **Contact form (B2):** throw the exceptions in `App\Shared\Exception\` (e.g. `ValidationException(['email' => 'contact.email.invalid'])`) and return JSON with `App\Shared\Http\JsonResponder`. Your only migration (`contact_messages`) must have a timestamp later than P1's `Version20261119230000`. Generate it with `vendor/bin/doctrine-migrations generate` in `backend/`.
+- **Contact form security (ready since P1's B1):**
+    - Turnstile: `$turnstile = $app->getContainer()->get(App\Security\Turnstile\TurnstileVerifier::class);` then `->add($turnstile->middleware('contact'))` on the POST route. It reads `cf-turnstile-response` (the field the widget adds to HTML forms) or `turnstile_token`, and fails with 403 `TURNSTILE_FAILED`. Set the widget's `data-action="contact"` so the action check passes. Locally the Cloudflare test keys in `.env.example` always pass.
+    - Rate limit: inject `App\Security\RateLimit\RateLimiter` and call `consume(RateLimit::contact(), 'ip:' . ClientIp::of($request))` (`App\Shared\Http\ClientIp`). It throws 429 `RATE_LIMITED`.
+    - Email: inject `App\Shared\Mail\Mailer` (P2's `MailService` once it lands; until then it writes to `backend/var/mail.log`).
 - **Admin UI:** you need `recharts` from P4's `frontend/package.json` (P4 adds it in B0); don't edit their `package.json`. `shared/design-tokens.css` is P4's, and you're the required second reviewer.
 - **Local checks before every PR** (in `backend/`): `composer test`, `composer stan`, `composer cs`.
 - **Integration branch is `dev`.** Branch from it; open PRs into it.

@@ -52,6 +52,13 @@ return [
         'access_ttl' => 900,
         'refresh_ttl' => 1209600,
     ],
+    'auth' => [
+        // Spec 11.2: bcrypt cost 12. Tests use the minimum (4) so the suite stays fast.
+        'bcrypt_cost' => $appEnv === 'testing' ? 4 : 12,
+        'common_passwords' => dirname(__DIR__) . '/resources/common-passwords.txt',
+        // Local fallback for email until P2's MailService replaces the Mailer binding.
+        'mail_log' => dirname(__DIR__) . '/var/mail.log',
+    ],
     'google' => [
         'client_id' => $env('GOOGLE_CLIENT_ID'),
         'client_secret' => $env('GOOGLE_CLIENT_SECRET'),

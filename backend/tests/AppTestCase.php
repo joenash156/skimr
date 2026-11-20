@@ -7,6 +7,7 @@ namespace App\Tests;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
@@ -33,15 +34,29 @@ abstract class AppTestCase extends TestCase
 
     /**
      * @param array<string, string> $headers
+     * @param array<string, mixed>|null $body sent as JSON when given
      */
-    protected function request(string $method, string $path, array $headers = []): ResponseInterface
+    protected function request(string $method, string $path, array $headers = [], ?array $body = null, string $ip = '203.0.113.10'): ResponseInterface
     {
-        $request = (new ServerRequestFactory())->createServerRequest($method, 'http://localhost' . $path);
+        return $this->app()->handle($this->buildRequest($method, $path, $headers, $body, $ip));
+    }
+
+    /**
+     * @param array<string, string> $headers
+     * @param array<string, mixed>|null $body
+     */
+    protected function buildRequest(string $method, string $path, array $headers = [], ?array $body = null, string $ip = '203.0.113.10'): ServerRequestInterface
+    {
+        $request = (new ServerRequestFactory())->createServerRequest($method, 'http://localhost' . $path, ['REMOTE_ADDR' => $ip]);
         foreach ($headers as $name => $value) {
             $request = $request->withHeader($name, $value);
         }
+        if ($body !== null) {
+            $request->getBody()->write(json_encode($body, JSON_THROW_ON_ERROR));
+            $request = $request->withHeader('Content-Type', 'application/json');
+        }
 
-        return $this->app()->handle($request);
+        return $request;
     }
 
     /** @return array<mixed> */

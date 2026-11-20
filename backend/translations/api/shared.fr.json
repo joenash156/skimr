@@ -10,6 +10,9 @@
     "validation": "Veuillez vérifier les champs signalés.",
     "quota_exceeded": "Vous avez atteint votre limite. Veuillez réessayer plus tard.",
     "rate_limited": "Trop de tentatives. Veuillez patienter un instant puis réessayer.",
-    "server": "Un problème est survenu de notre côté. Veuillez réessayer."
+    "server": "Un problème est survenu de notre côté. Veuillez réessayer.",
+    "turnstile_failed": "Veuillez effectuer la vérification de sécurité.",
+    "invalid_token": "Ce lien n'est pas valide ou a expiré.",
+    "email_not_verified": "Veuillez vérifier votre adresse e-mail pour continuer."
   }
 }

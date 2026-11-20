@@ -17,6 +17,11 @@ info:
       as the `__Secure-rt` HttpOnly cookie, sent by the browser to `/api/v1/auth/*` only.
     - Cookie endpoints (`/auth/refresh`, `/auth/logout`) also require `Origin: <APP_URL>` and
       `X-Requested-With: skimr` (spec 11.1, CSRF).
+    - Every bearer-protected endpoint can answer 401 `UNAUTHENTICATED` (expired or revoked token).
+      Users with `status=pending_verification` get 403 `EMAIL_NOT_VERIFIED` everywhere except
+      `GET /me` and `/auth/*`.
+    - Every `/api/` call counts against 120 requests per minute per user (per IP when signed out);
+      over the limit is 429 `RATE_LIMITED` with `Retry-After`.
 servers:
   - url: http://localhost:8080/api/v1
     description: Local PHP (composer start)

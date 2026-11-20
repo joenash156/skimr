@@ -189,7 +189,7 @@ The system extracts the text, makes it searchable by meaning, clusters it into t
 13. **`AuthMiddleware`:** verify the JWT and `tv == users.token_version`, and require `status=active` (pending users may only call `/me`, `/auth/*` and `/auth/verify-email/resend`). It puts the user on the request attribute `user`.
 14. **`RoleGuard`:**
     - route options `role:admin` and `role:super_admin`
-    - `RoleGuard::assertCanActOn(actor, target)`: an admin can only act on `role=user`, nobody can change their own role, and the last active super admin can't be demoted, suspended or deleted
+    - `RolePolicy::assertCanActOn(actor, target, action)` (a service, since the `RoleGuard` middleware is built with `RoleGuard::allow()` and has no dependencies): an admin can only act on `role=user`, nobody can change their own role, and the last active super admin can't be demoted, suspended or deleted
     - any violation returns 403 and writes the audit entry `security.forbidden`
 15. **The `Policy` interface** (`can(User $user, string $ability, object $resource): bool`) for P2's `ProjectPolicy`.
 16. **`AuditLogger::log(actor, action, targetType, targetId, reason, meta)`**, using the event names in spec 11.5.

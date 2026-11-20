@@ -1,0 +1,9 @@
+{
+  "validation": {
+    "password": {
+      "length": "Use 10 to 72 characters.",
+      "letter_and_number": "Include at least one letter and one number.",
+      "common": "This password is too common. Choose another one."
+    }
+  }
+}

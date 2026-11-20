@@ -42,8 +42,20 @@ final class Db
             'charset' => 'utf8mb4',
             'driverOptions' => [
                 // Store and compare every DATETIME in UTC (spec 9 conventions).
-                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET time_zone = '+00:00', NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",
+                self::initCommandAttribute() => "SET time_zone = '+00:00', NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",
             ],
         ];
+    }
+
+    /**
+     * PHP 8.4 added Pdo\Mysql::ATTR_INIT_COMMAND and 8.5 deprecates the old
+     * PDO::MYSQL_ATTR_INIT_COMMAND; staging still runs 8.2. Same value either way.
+     */
+    private static function initCommandAttribute(): int
+    {
+        $modern = 'Pdo\Mysql::ATTR_INIT_COMMAND';
+        $legacy = 'PDO::MYSQL_ATTR_INIT_COMMAND';
+
+        return (int) \constant(\defined($modern) ? $modern : $legacy);
     }
 }

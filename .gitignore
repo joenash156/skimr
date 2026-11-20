@@ -45,3 +45,5 @@ desktop.ini
 
 # --- AI assistants (personal settings only) ---
 .claude/settings.local.json
+# Personal notes and starter prompts, e.g. P4-agent-start.local.md
+*.local.md

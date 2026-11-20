@@ -18,6 +18,7 @@ use App\Auth\RefreshCookie;
 use App\Security\Audit\AuditLogger;
 use App\Security\Turnstile\TurnstileVerifier;
 use App\Shared\Clock\Clock;
+use App\Shared\Http\DevApiDocsController;
 use App\Shared\Http\JsonResponder;
 use App\Shared\Mail\LogMailer;
 use App\Shared\Mail\Mailer;
@@ -130,6 +131,12 @@ return [
         $c->get(LoggerInterface::class),
         $settings($c)['app']['url'],
         $settings($c)['jwt']['access_ttl'],
+    ),
+
+    // Local-only Swagger UI for the contract.
+    DevApiDocsController::class => static fn (ContainerInterface $c): DevApiDocsController => new DevApiDocsController(
+        $settings($c)['app']['env'],
+        dirname(__DIR__, 3) . '/docs/api/openapi.yaml',
     ),
 
     // Browser migration page for staging (B4). The token comes straight from .env.

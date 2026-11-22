@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Public\Contact\ContactController;
 use App\Public\Http\LocaleMiddleware;
 use App\Public\Http\PageController;
 use App\Public\Http\PublicController;
@@ -9,6 +10,9 @@ use App\Public\Http\TrailingSlashMiddleware;
 use App\Public\Seo\PublicPageMap;
 use App\Public\Seo\RobotsController;
 use App\Public\Seo\SitemapController;
+use App\Security\RateLimit\RateLimit;
+use App\Security\RateLimit\RateLimiter;
+use App\Security\Turnstile\TurnstileVerifier;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
@@ -30,6 +34,14 @@ return static function (App $app): void {
     $app->get('/sitemap-pages.xml', [SitemapController::class, 'pages']);
 
     $container = $app->getContainer() ?? throw new RuntimeException('The app must be built with a container.');
+    /** @var TurnstileVerifier $turnstile */
+    $turnstile = $container->get(TurnstileVerifier::class);
+    /** @var RateLimiter $limiter */
+    $limiter = $container->get(RateLimiter::class);
+    $app->post('/api/v1/contact', [ContactController::class, 'send'])
+        ->add($turnstile->middleware('contact'))
+        ->add($limiter->middleware(RateLimit::contact(), RateLimiter::byIp()));
+
     /** @var Twig $twig */
     $twig = $container->get(Twig::class . '.public');
     $twigMiddleware = TwigMiddleware::create($app, $twig);

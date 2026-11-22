@@ -128,24 +128,21 @@ final class PublicPagesTest extends AppTestCase
         }
     }
 
-    public function testContactPageShowsLocalizedFieldsAndExplainsSubmissionIsNotReady(): void
+    public function testContactPageRendersLocalizedFormAndStatus(): void
     {
-        $paths = [
-            '/en/contact' => 'Secure message submission is being connected.',
-            '/fr/contact' => 'L’envoi sécurisé des messages est en cours de préparation.',
-            '/es/contacto' => 'Estamos preparando el envío seguro de mensajes.',
-        ];
+        $paths = ['/en/contact', '/fr/contact', '/es/contacto'];
 
-        foreach ($paths as $path => $notice) {
+        foreach ($paths as $path) {
             $response = $this->request('GET', $path);
             $html = (string) $response->getBody();
 
             self::assertSame(200, $response->getStatusCode(), $path);
-            self::assertStringContainsString($notice, $html, $path);
+            self::assertStringContainsString('id="contact-form-status"', $html, $path);
             self::assertStringContainsString('name="name"', $html, $path);
             self::assertStringContainsString('name="email"', $html, $path);
             self::assertStringContainsString('name="message"', $html, $path);
-            self::assertStringContainsString('<fieldset disabled>', $html, $path);
+            self::assertStringContainsString('data-contact-form', $html, $path);
+            self::assertStringContainsString('data-contact-fields disabled', $html, $path);
         }
     }
 

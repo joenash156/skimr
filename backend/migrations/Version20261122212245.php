@@ -19,7 +19,7 @@ final class Version20261122212245 extends AbstractMigration
         $this->addSql(<<<'SQL'
             CREATE TABLE contact_messages (
                 id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
-                name VARCHAR(120) NOT NULL,
+                name VARCHAR(100) NOT NULL,
                 email VARCHAR(254) NOT NULL,
                 message TEXT NOT NULL,
                 ip VARBINARY(16) NULL COMMENT 'inet_pton() bytes; REMOTE_ADDR only',

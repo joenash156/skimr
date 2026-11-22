@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Public\Contact\ContactController;
+use App\Public\Contact\ContactMessageRepository;
+use App\Public\Contact\ContactMessageService;
 use App\Public\Http\PublicErrorRenderer;
 use App\Public\Seo\JsonLd;
 use App\Public\Seo\MetaBuilder;
@@ -9,15 +12,39 @@ use App\Public\Seo\OgImageBuilder;
 use App\Public\Seo\RobotsController;
 use App\Public\Seo\SitemapController;
 use App\Public\Twig\TransExtension;
+use App\Shared\Http\JsonResponder;
+use App\Shared\Mail\Mailer;
 use App\Shared\Translator;
 use Cloudinary\Cloudinary;
 use Psr\Container\ContainerInterface;
 use Slim\Views\Twig;
 
+use function DI\autowire;
+
 return [
     Translator::class . '.public' => static fn (ContainerInterface $container): Translator => new Translator(
         $container->get('settings')['paths']['translations_public'],
     ),
+
+    ContactController::class => static fn (ContainerInterface $container): ContactController => new ContactController(
+        $container->get(ContactMessageService::class),
+        $container->get(JsonResponder::class),
+        $container->get(Translator::class . '.public'),
+    ),
+
+    ContactMessageService::class => static function (ContainerInterface $container): ContactMessageService {
+        $settings = $container->get('settings');
+        $recipient = $settings['mail']['reply_to'] ?? null;
+        $teamInbox = is_string($recipient) && trim($recipient) !== '' ? trim($recipient) : null;
+
+        return new ContactMessageService(
+            $container->get(ContactMessageRepository::class),
+            $container->get(Mailer::class),
+            $teamInbox,
+        );
+    },
+
+    ContactMessageRepository::class => autowire(),
 
     MetaBuilder::class => static function (ContainerInterface $container): MetaBuilder {
         $settings = $container->get('settings');
@@ -75,6 +102,16 @@ return [
         ]);
         $twig->addExtension(new TransExtension($container->get(Translator::class . '.public')));
         $twig->getEnvironment()->addGlobal('site_url', $settings['app']['url']);
+        $siteKey = $settings['turnstile']['site_key'] ?? null;
+        $secretKey = $settings['turnstile']['secret_key'] ?? null;
+        $siteKey = is_string($siteKey) && trim($siteKey) !== ''
+            && is_string($secretKey) && trim($secretKey) !== ''
+                ? trim($siteKey)
+                : '';
+        $twig->getEnvironment()->addGlobal(
+            'turnstile_site_key',
+            $siteKey,
+        );
 
         return $twig;
     },

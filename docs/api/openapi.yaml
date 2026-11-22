@@ -36,6 +36,8 @@ tags:
     description: Sign-up, login, sessions, email verification, password reset, Google OAuth (P1).
   - name: Me
     description: The signed-in user's own profile, preferences and account (P1).
+  - name: Public
+    description: Endpoints used by the public website, no account needed (P5).
 security:
   - bearerAuth: []
 
@@ -474,6 +476,47 @@ paths:
               schema: { $ref: '#/components/schemas/MessageResponse' }
         '401': { $ref: '#/components/responses/InvalidCredentials' }
         '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /contact:
+    post:
+      tags: [Public]
+      summary: Send a message from the public contact form
+      description: |
+        Stores the message in `contact_messages` and emails a copy to the team inbox
+        (template `contact_message`). Sent as JSON by the contact page's script (spec 4, F01).
+        Rate limit: 3 per hour per IP (checked before Turnstile). Turnstile action: `contact`.
+        Error messages are in `locale` (default `en`).
+      operationId: sendContactMessage
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, message, turnstile_token]
+              properties:
+                name: { type: string, minLength: 1, maxLength: 100 }
+                email: { type: string, format: email, maxLength: 254 }
+                message: { type: string, minLength: 10, maxLength: 5000 }
+                locale: { $ref: '#/components/schemas/Locale' }
+                turnstile_token: { type: string }
+            example:
+              name: Ama Mensah
+              email: ama@example.com
+              message: Does Skimr support reviews in French?
+              locale: en
+              turnstile_token: XXXX.DUMMY.TOKEN.XXXX
+      responses:
+        '201':
+          description: Received. Show `data.message` to the visitor.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MessageResponse' }
+              example: { data: { message: "Thanks, your message has been sent. We'll reply by email." } }
+        '403': { $ref: '#/components/responses/TurnstileFailed' }
         '422': { $ref: '#/components/responses/ValidationFailed' }
         '429': { $ref: '#/components/responses/RateLimited' }
 

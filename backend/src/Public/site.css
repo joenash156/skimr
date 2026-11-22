@@ -22,10 +22,6 @@ body {
   font-family: Inter, sans-serif;
 }
 
-[x-cloak] {
-  display: none !important;
-}
-
 a:focus-visible,
 button:focus-visible,
 summary:focus-visible {

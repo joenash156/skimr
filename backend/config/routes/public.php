@@ -22,6 +22,11 @@ return static function (App $app): void {
     $app->get('/', [PublicController::class, 'root']);
     $app->get('/{lang:(?:en|fr|es)}', [PublicController::class, 'languageHomeRedirect']);
 
+    $container = $app->getContainer() ?? throw new RuntimeException('The app must be built with a container.');
+    /** @var Twig $twig */
+    $twig = $container->get(Twig::class . '.public');
+    $twigMiddleware = TwigMiddleware::create($app, $twig);
+
     // Not static: Slim binds group callbacks to the container.
     $public = $app->group('/{lang:(?:en|fr|es)}', function (RouteCollectorProxy $group): void {
         $group->get('/', [PublicController::class, 'home']);
@@ -29,8 +34,5 @@ return static function (App $app): void {
     });
 
     $public->add(TrailingSlashMiddleware::class);
-    $container = $app->getContainer() ?? throw new RuntimeException('The app must be built with a container.');
-    /** @var Twig $twig */
-    $twig = $container->get(Twig::class . '.public');
-    $public->add(TwigMiddleware::create($app, $twig));
+    $public->add($twigMiddleware);
 };

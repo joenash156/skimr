@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Public\Http;
 
+use App\Public\Seo\JsonLd;
+use App\Public\Seo\MetaBuilder;
 use App\Shared\Exception\NotFoundException;
 use App\Shared\Http\RequestAttributes;
 use Psr\Http\Message\ResponseInterface;
@@ -12,6 +14,12 @@ use Slim\Views\Twig;
 
 final class PageController
 {
+    public function __construct(
+        private readonly MetaBuilder $metaBuilder,
+        private readonly JsonLd $jsonLd,
+    ) {
+    }
+
     /** @var array<string, string> */
     private const PAGE_KEYS = [
         'features' => 'features',
@@ -42,7 +50,8 @@ final class PageController
             'locale' => 'en',
             'csp_nonce' => $request->getAttribute(RequestAttributes::CSP_NONCE, ''),
             'page_key' => $pageKey,
-            'canonical_path' => '/en/' . $slug,
+            'metadata' => $this->metaBuilder->forPage($pageKey, '/en/' . $slug),
+            'jsonld' => $this->jsonLd->forLocale('en'),
         ];
 
         if ($pageKey === 'features') {

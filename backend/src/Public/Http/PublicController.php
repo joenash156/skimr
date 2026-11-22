@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Public\Http;
 
+use App\Public\Seo\JsonLd;
+use App\Public\Seo\MetaBuilder;
 use App\Shared\Exception\NotFoundException;
 use App\Shared\Http\RequestAttributes;
 use Psr\Http\Message\ResponseInterface;
@@ -12,6 +14,12 @@ use Slim\Views\Twig;
 
 final class PublicController
 {
+    public function __construct(
+        private readonly MetaBuilder $metaBuilder,
+        private readonly JsonLd $jsonLd,
+    ) {
+    }
+
     public function root(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         return $response->withStatus(301)->withHeader('Location', '/en/');
@@ -34,7 +42,8 @@ final class PublicController
         return $view->render($response, 'home.html.twig', [
             'locale' => $locale,
             'csp_nonce' => $request->getAttribute(RequestAttributes::CSP_NONCE, ''),
-            'canonical_path' => '/' . $locale . '/',
+            'metadata' => $this->metaBuilder->forHome($locale),
+            'jsonld' => $this->jsonLd->forLocale($locale),
         ])->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 

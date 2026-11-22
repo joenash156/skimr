@@ -6,6 +6,8 @@ use App\Public\Http\LocaleMiddleware;
 use App\Public\Http\PageController;
 use App\Public\Http\PublicController;
 use App\Public\Http\TrailingSlashMiddleware;
+use App\Public\Seo\RobotsController;
+use App\Public\Seo\SitemapController;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
@@ -22,6 +24,9 @@ return static function (App $app): void {
     $app->add(LocaleMiddleware::class);
     $app->get('/', [PublicController::class, 'root']);
     $app->get('/{lang:(?:en|fr|es)}', [PublicController::class, 'languageHomeRedirect']);
+    $app->get('/robots.txt', [RobotsController::class, 'show']);
+    $app->get('/sitemap.xml', [SitemapController::class, 'index']);
+    $app->get('/sitemap-pages.xml', [SitemapController::class, 'pages']);
 
     $container = $app->getContainer() ?? throw new RuntimeException('The app must be built with a container.');
     /** @var Twig $twig */

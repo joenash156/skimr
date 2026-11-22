@@ -1,6 +1,11 @@
 <nav id="mobile-menu" class="mobile-menu" x-show="open" x-cloak
      aria-label="{{ trans('public.mobile_navigation') }}">
     <a href="/{{ locale }}/#main">{{ trans('public.navigation.home') }}</a>
+    {% if locale == 'en' %}
+        <a href="/en/features">{{ trans('public.navigation.features') }}</a>
+        <a href="/en/how-it-works">{{ trans('public.navigation.how_it_works') }}</a>
+        <a href="/en/about">{{ trans('public.navigation.about') }}</a>
+    {% endif %}
     <a href="/app/login">{{ trans('public.login') }}</a>
     <a href="/app/register">{{ trans('public.signup') }}</a>
     <div class="language-switcher" aria-label="{{ trans('public.language') }}">

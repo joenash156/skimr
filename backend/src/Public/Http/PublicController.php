@@ -34,6 +34,7 @@ final class PublicController
         return $view->render($response, 'home.html.twig', [
             'locale' => $locale,
             'csp_nonce' => $request->getAttribute(RequestAttributes::CSP_NONCE, ''),
+            'canonical_path' => '/' . $locale . '/',
         ])->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 

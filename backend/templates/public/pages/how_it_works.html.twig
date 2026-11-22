@@ -1,0 +1,12 @@
+<section aria-labelledby="page-title">
+    <h1 id="page-title">{{ trans('public.pages.how_it_works.heading') }}</h1>
+    <p>{{ trans('public.pages.how_it_works.intro') }}</p>
+    <ol>
+        {% for step in 1..4 %}
+            <li>
+                <h2>{{ trans('public.pages.how_it_works.steps.' ~ step ~ '.title') }}</h2>
+                <p>{{ trans('public.pages.how_it_works.steps.' ~ step ~ '.description') }}</p>
+            </li>
+        {% endfor %}
+    </ol>
+</section>

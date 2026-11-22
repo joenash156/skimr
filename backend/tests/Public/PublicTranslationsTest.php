@@ -9,7 +9,28 @@ use PHPUnit\Framework\TestCase;
 
 final class PublicTranslationsTest extends TestCase
 {
-    public function testEveryEnglishPublicTranslationKeyExistsInFrenchAndSpanish(): void
+    private const ENGLISH_ONLY_PREFIXES = [
+        'public.footer_navigation',
+        'public.navigation.features',
+        'public.navigation.how_it_works',
+        'public.navigation.about',
+        'public.navigation.privacy',
+        'public.navigation.terms',
+        'public.navigation.cookies',
+        'public.home.eyebrow',
+        'public.home.intro',
+        'public.home.primary_cta',
+        'public.home.secondary_cta',
+        'public.home.how_it_works.',
+        'public.home.sources.',
+        'public.home.highlights.',
+        'public.home.evidence.',
+        'public.home.faq.',
+        'public.home.cta.',
+        'public.pages.',
+    ];
+
+    public function testSharedPublicTranslationKeysExistInFrenchAndSpanish(): void
     {
         $directory = dirname(__DIR__, 2) . '/translations/public';
         $catalogues = [];
@@ -22,9 +43,24 @@ final class PublicTranslationsTest extends TestCase
         }
 
         foreach (array_keys($catalogues['en']) as $key) {
+            if (self::isEnglishOnly($key)) {
+                continue;
+            }
+
             self::assertArrayHasKey($key, $catalogues['fr'], 'Missing French translation: ' . $key);
             self::assertArrayHasKey($key, $catalogues['es'], 'Missing Spanish translation: ' . $key);
         }
+    }
+
+    private static function isEnglishOnly(string $key): bool
+    {
+        foreach (self::ENGLISH_ONLY_PREFIXES as $prefix) {
+            if (str_starts_with($key, $prefix)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

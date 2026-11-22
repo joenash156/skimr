@@ -1,0 +1,16 @@
+<section aria-labelledby="page-title">
+    <h1 id="page-title">{{ trans('public.pages.features.heading') }}</h1>
+    <p>{{ trans('public.pages.features.intro') }}</p>
+    <p>{{ trans('public.pages.features.tier_note') }}</p>
+    <ul class="feature-list">
+        {% for feature in features %}
+            <li>
+                <article id="feature-{{ feature.id|lower }}">
+                    <p>{{ feature.id }} · {{ trans('public.pages.features.tiers.' ~ feature.tier) }}</p>
+                    <h2>{{ trans('public.pages.features.items.' ~ feature.key ~ '.title') }}</h2>
+                    <p>{{ trans('public.pages.features.items.' ~ feature.key ~ '.description') }}</p>
+                </article>
+            </li>
+        {% endfor %}
+    </ul>
+</section>

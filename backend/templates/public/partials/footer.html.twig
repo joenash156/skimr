@@ -1,12 +1,9 @@
 <footer>
-    {% if locale == 'en' %}
+    {% if page_urls is defined %}
         <nav aria-label="{{ trans('public.footer_navigation') }}">
-            <a href="/en/features">{{ trans('public.navigation.features') }}</a>
-            <a href="/en/how-it-works">{{ trans('public.navigation.how_it_works') }}</a>
-            <a href="/en/about">{{ trans('public.navigation.about') }}</a>
-            <a href="/en/privacy">{{ trans('public.navigation.privacy') }}</a>
-            <a href="/en/terms">{{ trans('public.navigation.terms') }}</a>
-            <a href="/en/cookies">{{ trans('public.navigation.cookies') }}</a>
+            {% for page in ['features', 'how_it_works', 'about', 'contact', 'privacy', 'terms', 'cookies'] %}
+                <a href="{{ page_urls[page] }}">{{ trans('public.navigation.' ~ page) }}</a>
+            {% endfor %}
         </nav>
     {% endif %}
     <p>{{ trans('public.footer.copyright', {year: 'now'|date('Y')}) }}</p>

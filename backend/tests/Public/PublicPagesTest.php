@@ -8,16 +8,33 @@ use App\Tests\AppTestCase;
 
 final class PublicPagesTest extends AppTestCase
 {
-    public function testEnglishPublicPagesHaveUniqueBoundedMetadataAndOneHeading(): void
+    public function testLocalizedPublicPagesHaveUniqueBoundedMetadataAndOneHeading(): void
     {
         $paths = [
             '/en/' => 'Skimr — evidence-led literature reviews',
+            '/fr/' => 'Skimr — la recherche fondée sur des preuves',
+            '/es/' => 'Skimr — investigación basada en evidencias',
             '/en/features' => 'Research features | Skimr',
             '/en/how-it-works' => 'How Skimr works | Evidence-led research',
             '/en/about' => 'About Skimr | Research, grounded in evidence',
+            '/en/contact' => 'Contact Skimr | Questions and feedback',
             '/en/privacy' => 'Privacy policy | Skimr',
             '/en/terms' => 'Terms of use | Skimr',
             '/en/cookies' => 'Cookies | Skimr',
+            '/fr/fonctionnalites' => 'Fonctionnalités de recherche | Skimr',
+            '/fr/comment-ca-marche' => 'Comment fonctionne Skimr | Preuves vérifiables',
+            '/fr/a-propos' => 'À propos de Skimr | Recherche et preuves',
+            '/fr/contact' => 'Contacter Skimr | Questions et retours',
+            '/fr/confidentialite' => 'Confidentialité | Skimr',
+            '/fr/conditions-utilisation' => 'Conditions d’utilisation | Skimr',
+            '/fr/cookies' => 'Préférences et cookies | Skimr',
+            '/es/funciones' => 'Funciones de investigación | Skimr',
+            '/es/como-funciona' => 'Cómo funciona Skimr | Evidencias verificables',
+            '/es/acerca-de' => 'Acerca de Skimr | Investigación y evidencias',
+            '/es/contacto' => 'Contacta con Skimr | Preguntas y comentarios',
+            '/es/privacidad' => 'Privacidad | Skimr',
+            '/es/terminos-de-uso' => 'Términos de uso | Skimr',
+            '/es/cookies' => 'Preferencias y cookies | Skimr',
         ];
         $titles = [];
         $descriptions = [];
@@ -77,22 +94,76 @@ final class PublicPagesTest extends AppTestCase
         self::assertStringContainsString('does not display full source text, images, or snapshots', $terms);
     }
 
-    public function testEnglishContentRoutesRemainUnavailableInUntranslatedLocales(): void
+    public function testLocalizedPageRoutesResolveAndEnglishSlugsRemainUnavailable(): void
     {
-        $response = $this->request('GET', '/fr/features');
+        foreach (['/fr/fonctionnalites', '/es/funciones'] as $path) {
+            self::assertSame(200, $this->request('GET', $path)->getStatusCode(), $path);
+        }
 
-        self::assertSame(404, $response->getStatusCode());
-        self::assertStringContainsString('<html lang="fr">', (string) $response->getBody());
+        self::assertSame(404, $this->request('GET', '/fr/features')->getStatusCode());
+        self::assertSame(404, $this->request('GET', '/es/features')->getStatusCode());
     }
 
-    public function testExpandedEnglishHomepageDoesNotLeakIntoOtherLocales(): void
+    public function testPageLanguageSwitcherLinksToEquivalentLocalizedPages(): void
     {
-        foreach (['fr', 'es'] as $locale) {
+        $pages = [
+            '/en/features' => ['/en/features', '/fr/fonctionnalites', '/es/funciones'],
+            '/fr/comment-ca-marche' => ['/en/how-it-works', '/fr/comment-ca-marche', '/es/como-funciona'],
+            '/es/acerca-de' => ['/en/about', '/fr/a-propos', '/es/acerca-de'],
+            '/en/contact' => ['/en/contact', '/fr/contact', '/es/contacto'],
+            '/en/privacy' => ['/en/privacy', '/fr/confidentialite', '/es/privacidad'],
+            '/fr/conditions-utilisation' => ['/en/terms', '/fr/conditions-utilisation', '/es/terminos-de-uso'],
+            '/es/cookies' => ['/en/cookies', '/fr/cookies', '/es/cookies'],
+        ];
+
+        foreach ($pages as $source => $alternates) {
+            $response = $this->request('GET', $source);
+            $html = (string) $response->getBody();
+
+            self::assertSame(200, $response->getStatusCode(), $source);
+            foreach ($alternates as $alternate) {
+                self::assertStringContainsString('href="http://localhost' . $alternate . '"', $html, $source);
+            }
+            self::assertStringNotContainsString('public.navigation.', $html, $source);
+        }
+    }
+
+    public function testContactPageShowsLocalizedFieldsAndExplainsSubmissionIsNotReady(): void
+    {
+        $paths = [
+            '/en/contact' => 'Secure message submission is being connected.',
+            '/fr/contact' => 'L’envoi sécurisé des messages est en cours de préparation.',
+            '/es/contacto' => 'Estamos preparando el envío seguro de mensajes.',
+        ];
+
+        foreach ($paths as $path => $notice) {
+            $response = $this->request('GET', $path);
+            $html = (string) $response->getBody();
+
+            self::assertSame(200, $response->getStatusCode(), $path);
+            self::assertStringContainsString($notice, $html, $path);
+            self::assertStringContainsString('name="name"', $html, $path);
+            self::assertStringContainsString('name="email"', $html, $path);
+            self::assertStringContainsString('name="message"', $html, $path);
+            self::assertStringContainsString('<fieldset disabled>', $html, $path);
+        }
+    }
+
+    public function testExpandedHomepageRendersTranslatedContentInEveryLocale(): void
+    {
+        $homeHeadings = [
+            'en' => 'Bring your sources together',
+            'fr' => 'Rassemblez vos sources',
+            'es' => 'Reúne tus fuentes',
+        ];
+
+        foreach ($homeHeadings as $locale => $heading) {
             $response = $this->request('GET', '/' . $locale . '/');
             $html = (string) $response->getBody();
 
             self::assertSame(200, $response->getStatusCode());
-            self::assertStringNotContainsString('Bring your sources together', $html);
+            self::assertStringContainsString($heading, $html);
+            self::assertSame(1, substr_count($html, '<h1'));
             self::assertStringNotContainsString('public.home.', $html);
         }
     }

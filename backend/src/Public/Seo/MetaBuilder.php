@@ -10,13 +10,6 @@ use InvalidArgumentException;
 final class MetaBuilder
 {
     /** @var array<string, string> */
-    private const HOME_PATHS = [
-        'en' => '/en/',
-        'fr' => '/fr/',
-        'es' => '/es/',
-    ];
-
-    /** @var array<string, string> */
     private const OG_LOCALES = [
         'en' => 'en_US',
         'fr' => 'fr_FR',
@@ -28,6 +21,7 @@ final class MetaBuilder
     public function __construct(
         private readonly Translator $translator,
         string $siteUrl,
+        private readonly OgImageBuilder $ogImageBuilder,
     ) {
         $this->siteUrl = rtrim($siteUrl, '/');
     }
@@ -36,6 +30,7 @@ final class MetaBuilder
      * @return array{
      *     title: string,
      *     description: string,
+     *     og_image: string,
      *     canonical: string,
      *     alternates: list<array{locale: string, url: string}>,
      *     og_locale: string
@@ -47,25 +42,34 @@ final class MetaBuilder
             throw new InvalidArgumentException('Unsupported public locale.');
         }
 
-        return $this->build('public.home', $locale, self::HOME_PATHS[$locale], self::HOME_PATHS);
+        $paths = PublicPageMap::homePaths();
+
+        return $this->build('public.home', $locale, $paths[$locale], $paths);
     }
 
     /**
      * @return array{
      *     title: string,
      *     description: string,
+     *     og_image: string,
      *     canonical: string,
      *     alternates: list<array{locale: string, url: string}>,
      *     og_locale: string
      * }
      */
-    public function forPage(string $pageKey, string $canonicalPath): array
+    public function forPage(string $pageKey, string $locale): array
     {
+        if (!Translator::isSupported($locale)) {
+            throw new InvalidArgumentException('Unsupported public locale.');
+        }
+
+        $paths = PublicPageMap::pagePaths($pageKey);
+
         return $this->build(
             'public.pages.' . $pageKey,
-            'en',
-            $canonicalPath,
-            ['en' => $canonicalPath],
+            $locale,
+            $paths[$locale],
+            $paths,
         );
     }
 
@@ -74,6 +78,7 @@ final class MetaBuilder
      * @return array{
      *     title: string,
      *     description: string,
+     *     og_image: string,
      *     canonical: string,
      *     alternates: list<array{locale: string, url: string}>,
      *     og_locale: string
@@ -95,9 +100,12 @@ final class MetaBuilder
             ];
         }
 
+        $title = $this->translator->trans($keyPrefix . '.title', [], $locale);
+
         return [
-            'title' => $this->translator->trans($keyPrefix . '.title', [], $locale),
+            'title' => $title,
             'description' => $this->translator->trans($keyPrefix . '.description', [], $locale),
+            'og_image' => $this->ogImageBuilder->forTitle($title),
             'canonical' => $this->siteUrl . $canonicalPath,
             'alternates' => $alternates,
             'og_locale' => self::OG_LOCALES[$locale],

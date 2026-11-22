@@ -6,6 +6,7 @@ namespace App\Public\Http;
 
 use App\Public\Seo\JsonLd;
 use App\Public\Seo\MetaBuilder;
+use App\Public\Seo\PublicPageMap;
 use App\Shared\Exception\NotFoundException;
 use App\Shared\Http\RequestAttributes;
 use Psr\Http\Message\ResponseInterface;
@@ -43,7 +44,8 @@ final class PublicController
             'locale' => $locale,
             'csp_nonce' => $request->getAttribute(RequestAttributes::CSP_NONCE, ''),
             'metadata' => $this->metaBuilder->forHome($locale),
-            'jsonld' => $this->jsonLd->forLocale($locale),
+            'jsonld' => $this->jsonLd->forHome($locale),
+            'page_urls' => PublicPageMap::urlsForLocale($locale),
         ])->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 

@@ -6,8 +6,10 @@ namespace App\Public\Http;
 
 use App\Public\Seo\JsonLd;
 use App\Public\Seo\MetaBuilder;
+use App\Public\Seo\PublicPageMap;
 use App\Shared\Exception\NotFoundException;
 use App\Shared\Http\RequestAttributes;
+use App\Shared\Translator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Views\Twig;
@@ -20,16 +22,6 @@ final class PageController
     ) {
     }
 
-    /** @var array<string, string> */
-    private const PAGE_KEYS = [
-        'features' => 'features',
-        'how-it-works' => 'how_it_works',
-        'about' => 'about',
-        'privacy' => 'privacy',
-        'terms' => 'terms',
-        'cookies' => 'cookies',
-    ];
-
     /**
      * @param array<string, string> $args
      */
@@ -38,20 +30,22 @@ final class PageController
         ResponseInterface $response,
         array $args,
     ): ResponseInterface {
+        $locale = $request->getAttribute(RequestAttributes::LOCALE);
         $slug = $args['page'] ?? null;
-        if ($request->getAttribute(RequestAttributes::LOCALE) !== 'en'
+        if (!is_string($locale)
+            || !Translator::isSupported($locale)
             || !is_string($slug)
-            || !isset(self::PAGE_KEYS[$slug])) {
+            || ($pageKey = PublicPageMap::pageKeyFor($locale, $slug)) === null) {
             throw new NotFoundException();
         }
 
-        $pageKey = self::PAGE_KEYS[$slug];
         $data = [
-            'locale' => 'en',
+            'locale' => $locale,
             'csp_nonce' => $request->getAttribute(RequestAttributes::CSP_NONCE, ''),
             'page_key' => $pageKey,
-            'metadata' => $this->metaBuilder->forPage($pageKey, '/en/' . $slug),
-            'jsonld' => $this->jsonLd->forLocale('en'),
+            'metadata' => $this->metaBuilder->forPage($pageKey, $locale),
+            'jsonld' => $this->jsonLd->forLocale($locale),
+            'page_urls' => PublicPageMap::urlsForLocale($locale),
         ];
 
         if ($pageKey === 'features') {

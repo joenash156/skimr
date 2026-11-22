@@ -39,7 +39,10 @@
             <meta property="og:description" content="{{ metadata.description }}">
             <meta property="og:type" content="website">
             <meta property="og:url" content="{{ metadata.canonical }}">
-            <meta property="og:image" content="{{ site_url }}/assets/og-default.svg">
+            <meta property="og:image" content="{{ metadata.og_image }}">
+            <meta property="og:image:width" content="1200">
+            <meta property="og:image:height" content="630">
+            <meta property="og:image:alt" content="{{ metadata.title }}">
             <meta property="og:locale" content="{{ metadata.og_locale }}">
             <meta name="twitter:card" content="summary_large_image">
         {% endif %}

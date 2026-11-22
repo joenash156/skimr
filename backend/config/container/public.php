@@ -5,10 +5,12 @@ declare(strict_types=1);
 use App\Public\Http\PublicErrorRenderer;
 use App\Public\Seo\JsonLd;
 use App\Public\Seo\MetaBuilder;
+use App\Public\Seo\OgImageBuilder;
 use App\Public\Seo\RobotsController;
 use App\Public\Seo\SitemapController;
 use App\Public\Twig\TransExtension;
 use App\Shared\Translator;
+use Cloudinary\Cloudinary;
 use Psr\Container\ContainerInterface;
 use Slim\Views\Twig;
 
@@ -23,13 +25,28 @@ return [
         return new MetaBuilder(
             $container->get(Translator::class . '.public'),
             $settings['app']['url'],
+            $container->get(OgImageBuilder::class),
         );
+    },
+
+    OgImageBuilder::class => static function (ContainerInterface $container): OgImageBuilder {
+        $settings = $container->get('settings');
+        $cloudinaryUrl = $settings['cloudinary']['url'];
+        $cloudinary = is_string($cloudinaryUrl) && trim($cloudinaryUrl) !== ''
+            ? new Cloudinary($cloudinaryUrl)
+            : null;
+
+        return new OgImageBuilder($settings['app']['url'], $settings['app']['env'], $cloudinary);
     },
 
     JsonLd::class => static function (ContainerInterface $container): JsonLd {
         $settings = $container->get('settings');
 
-        return new JsonLd($settings['app']['url'], $settings['app']['name']);
+        return new JsonLd(
+            $settings['app']['url'],
+            $settings['app']['name'],
+            $container->get(Translator::class . '.public'),
+        );
     },
 
     RobotsController::class => static function (ContainerInterface $container): RobotsController {

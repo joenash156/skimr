@@ -1,0 +1,16 @@
+<div class="language-switcher" aria-label="{{ trans('public.language') }}">
+    {% if metadata is defined %}
+        {% for alternate in metadata.alternates %}
+            {% if alternate.locale != 'x-default' %}
+                <a href="{{ alternate.url }}" lang="{{ alternate.locale }}" hreflang="{{ alternate.locale }}"
+                   {% if locale == alternate.locale %}aria-current="page"{% endif %}>
+                    {{ trans('public.language_names.' ~ alternate.locale) }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <a href="/en/" lang="en" hreflang="en">{{ trans('public.language_names.en') }}</a>
+        <a href="/fr/" lang="fr" hreflang="fr">{{ trans('public.language_names.fr') }}</a>
+        <a href="/es/" lang="es" hreflang="es">{{ trans('public.language_names.es') }}</a>
+    {% endif %}
+</div>

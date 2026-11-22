@@ -12,23 +12,6 @@ final class SitemapController
 {
     private const CACHE_TTL = 3600;
 
-    /** @var array<string, string> */
-    private const HOME_PATHS = [
-        'en' => '/en/',
-        'fr' => '/fr/',
-        'es' => '/es/',
-    ];
-
-    /** @var list<string> */
-    private const ENGLISH_PAGE_PATHS = [
-        '/en/features',
-        '/en/how-it-works',
-        '/en/about',
-        '/en/privacy',
-        '/en/terms',
-        '/en/cookies',
-    ];
-
     private readonly string $siteUrl;
 
     public function __construct(
@@ -81,7 +64,7 @@ final class SitemapController
     {
         $lastModified = $this->lastModifiedDate();
         $homeAlternates = [];
-        foreach (self::HOME_PATHS as $locale => $path) {
+        foreach (PublicPageMap::homePaths() as $locale => $path) {
             $homeAlternates[$locale] = $this->siteUrl . $path;
         }
         $homeAlternates['x-default'] = $homeAlternates['en'];
@@ -91,16 +74,21 @@ final class SitemapController
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
         ];
 
-        foreach (self::HOME_PATHS as $path) {
+        foreach (PublicPageMap::homePaths() as $path) {
             $lines[] = $this->urlEntry($this->siteUrl . $path, $lastModified, $homeAlternates);
         }
 
-        foreach (self::ENGLISH_PAGE_PATHS as $path) {
-            $url = $this->siteUrl . $path;
-            $lines[] = $this->urlEntry($url, $lastModified, [
-                'en' => $url,
-                'x-default' => $url,
-            ]);
+        foreach (PublicPageMap::pageKeys() as $pageKey) {
+            $paths = PublicPageMap::pagePaths($pageKey);
+            $alternates = [];
+            foreach ($paths as $locale => $path) {
+                $alternates[$locale] = $this->siteUrl . $path;
+            }
+            $alternates['x-default'] = $alternates['en'];
+
+            foreach ($paths as $path) {
+                $lines[] = $this->urlEntry($this->siteUrl . $path, $lastModified, $alternates);
+            }
         }
 
         $lines[] = '</urlset>';
@@ -130,11 +118,17 @@ final class SitemapController
 
     private function lastModifiedDate(): string
     {
+        return gmdate('Y-m-d', $this->latestSourceModification());
+    }
+
+    private function latestSourceModification(): int
+    {
         $files = array_merge(
             [
                 $this->templatesDirectory . '/base.html.twig',
                 $this->templatesDirectory . '/home.html.twig',
                 $this->templatesDirectory . '/page.html.twig',
+                __DIR__ . '/PublicPageMap.php',
             ],
             glob($this->templatesDirectory . '/pages/*.html.twig') ?: [],
             glob($this->translationsDirectory . '/*.json') ?: [],
@@ -148,7 +142,7 @@ final class SitemapController
             $lastModified = max($lastModified, $modifiedAt);
         }
 
-        return gmdate('Y-m-d', $lastModified);
+        return $lastModified;
     }
 
     private function cached(string $key, \Closure $build): string
@@ -166,7 +160,9 @@ final class SitemapController
             if ($cachedAt === false) {
                 throw new RuntimeException(sprintf('Cannot read sitemap cache timestamp for %s.', $cachePath));
             }
-            if ($cachedAt <= time() && time() - $cachedAt < self::CACHE_TTL) {
+            if ($cachedAt >= $this->latestSourceModification()
+                && $cachedAt <= time()
+                && time() - $cachedAt < self::CACHE_TTL) {
                 $cached = file_get_contents($cachePath);
                 if ($cached === false) {
                     throw new RuntimeException(sprintf('Cannot read sitemap cache %s.', $cachePath));

@@ -9,6 +9,11 @@
     "main_navigation": "Main",
     "mobile_navigation": "Mobile",
     "language": "Language",
+    "language_names": {
+      "en": "English",
+      "fr": "Français",
+      "es": "Español"
+    },
     "footer_navigation": "Footer",
     "login": "Log in",
     "signup": "Sign up",
@@ -21,6 +26,7 @@
       "features": "Features",
       "how_it_works": "How it works",
       "about": "About",
+      "contact": "Contact",
       "privacy": "Privacy",
       "terms": "Terms",
       "cookies": "Cookies"
@@ -258,6 +264,18 @@
         "intro": "Skimr helps students, researchers, research assistants, and policy analysts organize sources and understand how findings relate.",
         "evidence_heading": "Keep the evidence in view",
         "evidence_description": "A finding should lead back to the passage it came from. An AI interpretation should be labelled and supported by findings, not presented as a source fact."
+      },
+      "contact": {
+        "title": "Contact Skimr | Questions and feedback",
+        "description": "Contact Skimr with questions or feedback about organizing research and building evidence-led literature reviews.",
+        "heading": "Contact the Skimr team",
+        "intro": "Have a question or feedback about Skimr? Use this page to get in touch with the team.",
+        "form_unavailable": "Secure message submission is being connected. The form will be available when setup is complete.",
+        "form_legend": "Your message",
+        "name_label": "Name",
+        "email_label": "Email address",
+        "message_label": "Message",
+        "submit": "Send message"
       },
       "privacy": {
         "title": "Privacy policy | Skimr",

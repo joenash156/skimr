@@ -9,6 +9,12 @@
     "main_navigation": "Navigation principale",
     "mobile_navigation": "Navigation mobile",
     "language": "Langue",
+    "footer_navigation": "Navigation de pied de page",
+    "language_names": {
+      "en": "English",
+      "fr": "Français",
+      "es": "Español"
+    },
     "login": "Se connecter",
     "signup": "Créer un compte",
     "menu": "Menu",
@@ -16,12 +22,295 @@
       "toggle": "Changer de thème"
     },
     "navigation": {
-      "home": "Accueil"
+      "home": "Accueil",
+      "features": "Fonctionnalités",
+      "how_it_works": "Fonctionnement",
+      "about": "À propos",
+      "contact": "Contact",
+      "privacy": "Confidentialité",
+      "terms": "Conditions d’utilisation",
+      "cookies": "Cookies"
     },
     "home": {
       "title": "Skimr — la recherche fondée sur des preuves",
       "description": "Organisez vos recherches et rédigez des revues où chaque résultat renvoie à sa source.",
-      "heading": "Une recherche organisée autour des preuves."
+      "eyebrow": "Un espace de recherche fondé sur les preuves",
+      "heading": "Une recherche organisée autour des preuves.",
+      "intro": "Rassemblez vos sources, mettez leurs résultats en relation et rédigez une revue de littérature dont chaque affirmation renvoie au passage d’origine.",
+      "primary_cta": "Commencer",
+      "secondary_cta": "Voir le fonctionnement",
+      "how_it_works": {
+        "heading": "Des sources à une revue plus claire",
+        "steps": {
+          "1": {
+            "title": "Rassemblez vos sources",
+            "description": "Commencez avec les sources de recherche dont vous disposez, dans les formats adaptés à votre travail."
+          },
+          "2": {
+            "title": "Explorez les preuves",
+            "description": "Recherchez des passages, comparez les méthodes et regroupez les résultats associés par thèmes."
+          },
+          "3": {
+            "title": "Rédigez une revue vérifiable",
+            "description": "Préparez une synthèse structurée qui distingue les résultats étayés par les sources des interprétations de l’IA."
+          }
+        }
+      },
+      "sources": {
+        "heading": "Cinq façons d’ajouter des sources",
+        "intro": "Commencez par des PDF ou ajoutez d’autres types de documents à votre projet.",
+        "items": {
+          "pdf": {
+            "title": "PDF",
+            "description": "Importez des articles de recherche et extrayez leur texte et leur structure."
+          },
+          "images": {
+            "title": "Photos et scans",
+            "description": "Ajoutez des images de pages pour l’OCR ; les métadonnées de localisation sont supprimées des images importées."
+          },
+          "links": {
+            "title": "Liens web",
+            "description": "Ajoutez des articles, rapports, DOI, liens arXiv ou liens directs vers des PDF."
+          },
+          "text": {
+            "title": "Texte collé",
+            "description": "Ajoutez des notes ou le texte d’une source qui ne peut pas être importée par lien."
+          },
+          "discovery": {
+            "title": "Rechercher des sources",
+            "description": "Recherchez des publications scientifiques et ajoutez les articles pertinents à un projet."
+          }
+        }
+      },
+      "highlights": {
+        "heading": "Repérez les liens entre vos sources",
+        "link": "Découvrir toutes les fonctionnalités",
+        "items": {
+          "search": {
+            "title": "Rechercher par sens",
+            "description": "Trouvez des passages pertinents dans les sources d’un projet grâce à la recherche sémantique."
+          },
+          "themes": {
+            "title": "Organiser les thèmes",
+            "description": "Regroupez les sources associées par thème et consultez les passages qui les étayent."
+          },
+          "methods": {
+            "title": "Comparer les méthodes",
+            "description": "Comparez les plans d’étude, les échantillons, les pays, les périodes et les résultats."
+          },
+          "synthesis": {
+            "title": "Rédiger avec des preuves",
+            "description": "Rédigez une synthèse structurée qui relie les résultats aux sources qui les étayent."
+          },
+          "citations": {
+            "title": "Cartographier les citations",
+            "description": "Explorez les liens de citation entre les publications d’un projet."
+          },
+          "gaps": {
+            "title": "Repérer les lacunes de recherche",
+            "description": "Examinez les sujets peu étudiés ainsi que les preuves et la couverture disponibles."
+          }
+        }
+      },
+      "evidence": {
+        "heading": "Distinguez les preuves des interprétations",
+        "intro": "Les résultats issus des sources et les interprétations de l’IA sont présentés séparément pour garder l’origine de chaque affirmation visible.",
+        "finding": {
+          "title": "Constat",
+          "description": "Une affirmation étayée par un passage source, affichée avec sa citation."
+        },
+        "interpretation": {
+          "title": "Interprétation de l’IA",
+          "description": "Une conclusion tirée de plusieurs constats, clairement signalée et reliée aux preuves correspondantes."
+        }
+      },
+      "faq": {
+        "heading": "Questions fréquentes",
+        "items": {
+          "evidence": {
+            "question": "Puis-je remonter d’un constat à sa source ?",
+            "answer": "Oui. Chaque constat est relié au passage et à la citation qui l’étayent ; les interprétations de l’IA sont signalées séparément et reliées aux constats."
+          },
+          "sources": {
+            "question": "Dois-je commencer par des PDF ?",
+            "answer": "Non. Vous pouvez aussi ajouter des images de pages, des liens web, du texte collé ou des articles trouvés par la recherche."
+          },
+          "privacy": {
+            "question": "Qui peut consulter mes sources ?",
+            "answer": "Vos sources sont accessibles au propriétaire du projet et aux membres invités, sauf si vous choisissez de publier une synthèse."
+          },
+          "languages": {
+            "question": "Quelles langues Skimr prend-il en charge ?",
+            "answer": "L’interface est conçue pour l’anglais, le français et l’espagnol. Les citations des sources restent dans leur langue d’origine."
+          }
+        }
+      },
+      "cta": {
+        "heading": "Rendez votre prochaine revue de littérature plus facile à vérifier",
+        "description": "Rassemblez vos sources dans un espace de travail et gardez les preuves associées à chaque constat."
+      }
+    },
+    "pages": {
+      "features": {
+        "title": "Fonctionnalités de recherche | Skimr",
+        "description": "Découvrez les outils de Skimr pour traiter les sources, explorer les preuves, comparer les études et rédiger des revues de littérature.",
+        "heading": "Des outils pour une recherche fondée sur les preuves",
+        "intro": "Skimr réunit le traitement des sources, l’exploration des preuves et la rédaction de revues de littérature dans un même espace de recherche.",
+        "tier_note": "Les niveaux indiquent la feuille de route du produit ; la disponibilité varie selon le déploiement des fonctionnalités.",
+        "tiers": {
+          "core": "Essentiel",
+          "extended": "Étendu",
+          "stretch": "Objectif supplémentaire"
+        },
+        "items": {
+          "source_processing": {
+            "title": "Traitement des sources",
+            "description": "Convertissez le texte des sources en métadonnées, sections, références, fragments et vecteurs pour la recherche dans un projet."
+          },
+          "semantic_search": {
+            "title": "Recherche sémantique",
+            "description": "Recherchez par sens dans les sources d’un projet et trouvez des passages pertinents avec leur source et leur page."
+          },
+          "theme_clustering": {
+            "title": "Regroupement par thèmes",
+            "description": "Regroupez les sources associées par thème, consultez des citations représentatives et renommez ou fusionnez les groupes."
+          },
+          "methods_comparison": {
+            "title": "Comparaison des méthodes et des résultats",
+            "description": "Comparez le plan d’étude, la taille de l’échantillon, les pays, les périodes, la collecte et l’analyse des données ainsi que les principaux résultats."
+          },
+          "evidence_synthesis": {
+            "title": "Synthèse fondée sur des preuves",
+            "description": "Rédigez une revue structurée qui distingue les constats appuyés par des citations des interprétations de l’IA clairement signalées."
+          },
+          "admin_console": {
+            "title": "Console d’administration et de super-administration",
+            "description": "Donnez aux administrateurs autorisés des outils pour gérer les utilisateurs, les invitations, les paramètres, les audits et l’utilisation."
+          },
+          "citation_map": {
+            "title": "Carte des liens de citation",
+            "description": "Explorez les liens de citation entre les sources et repérez les publications les plus citées ou faisant le lien dans un projet."
+          },
+          "research_gaps": {
+            "title": "Rapports sur les lacunes de recherche",
+            "description": "Faites ressortir les méthodes, lieux, périodes, populations et thèmes peu étudiés, avec les preuves correspondantes."
+          },
+          "source_chat": {
+            "title": "Dialoguer avec vos sources",
+            "description": "Objectif supplémentaire : posez des questions sur les sources d’un projet et obtenez des réponses étayées par des passages cités."
+          },
+          "paper_discovery": {
+            "title": "Découverte d’articles scientifiques",
+            "description": "Recherchez dans OpenAlex et Semantic Scholar, consultez les notices et ajoutez les publications pertinentes à un projet."
+          },
+          "exports": {
+            "title": "Exports de recherche",
+            "description": "Exportez des références en BibTeX ou RIS, ou une synthèse dans Word avec des citations APA 7, MLA 9 ou Harvard."
+          },
+          "project_sharing": {
+            "title": "Projets partagés",
+            "description": "Invitez des collaborateurs à participer à un projet comme lecteurs ou éditeurs."
+          },
+          "public_syntheses": {
+            "title": "Pages de synthèse publiques",
+            "description": "Publiez une page de synthèse en lecture seule contenant de courts extraits et des liens vers les sources d’origine."
+          },
+          "usage_quotas": {
+            "title": "Quotas d’utilisation",
+            "description": "Suivez les limites personnelles liées aux requêtes d’IA, aux importations, au stockage et aux autres ressources plafonnées."
+          },
+          "source_hunting": {
+            "title": "Assistant de recherche de sources",
+            "description": "Générez des recherches suggérées à partir d’une question et de thèmes, suivez les citations et cherchez des articles liés à une lacune."
+          },
+          "image_ocr": {
+            "title": "Sources image et OCR",
+            "description": "Ajoutez des images de pages dans l’ordre pour l’OCR ; les PDF numérisés peuvent suivre le même processus."
+          },
+          "web_and_pasted_sources": {
+            "title": "Liens web et texte collé",
+            "description": "Ajoutez des articles web, rapports, liens DOI ou arXiv, liens directs vers des PDF et textes copiés d’autres sources."
+          }
+        }
+      },
+      "how_it_works": {
+        "title": "Comment fonctionne Skimr | Preuves vérifiables",
+        "description": "Découvrez comment Skimr rassemble les sources, organise les preuves et vous aide à rédiger une revue de littérature vérifiable.",
+        "heading": "Comment fonctionne Skimr",
+        "intro": "Passez d’un ensemble de sources à une vue structurée des preuves, en gardant chaque affirmation reliée à son origine.",
+        "steps": {
+          "1": {
+            "title": "Ajoutez des sources à un projet",
+            "description": "Importez des PDF, ajoutez des images de pages, collez du texte, insérez des liens web ou recherchez des publications scientifiques."
+          },
+          "2": {
+            "title": "Traitez et organisez les documents",
+            "description": "Le texte et les métadonnées sont préparés pour la recherche, tandis que les références et les sections restent associées aux sources."
+          },
+          "3": {
+            "title": "Explorez les tendances et les comparaisons",
+            "description": "Recherchez des passages, regroupez les thèmes, comparez les méthodes et examinez les liens de citation."
+          },
+          "4": {
+            "title": "Rédigez avec des preuves traçables",
+            "description": "Rédigez une synthèse qui distingue les constats vérifiés des interprétations de l’IA et relie les affirmations aux sources."
+          }
+        }
+      },
+      "about": {
+        "title": "À propos de Skimr | Recherche et preuves",
+        "description": "Skimr est un espace de recherche qui aide à organiser les sources universitaires et à rédiger des revues de littérature étayées par des preuves.",
+        "heading": "À propos de Skimr",
+        "intro": "Skimr aide les étudiants, chercheurs, assistants de recherche et analystes des politiques publiques à organiser leurs sources et à comprendre les liens entre les résultats.",
+        "evidence_heading": "Gardez les preuves visibles",
+        "evidence_description": "Un constat doit renvoyer au passage dont il est issu. Une interprétation de l’IA doit être signalée et étayée par des constats, et non présentée comme un fait tiré d’une source."
+      },
+      "contact": {
+        "title": "Contacter Skimr | Questions et retours",
+        "description": "Contactez Skimr pour poser une question ou partager un avis sur la recherche fondée sur les preuves.",
+        "heading": "Contacter l’équipe Skimr",
+        "intro": "Une question ou un avis sur Skimr ? Contactez l’équipe à partir de cette page.",
+        "form_unavailable": "L’envoi sécurisé des messages est en cours de préparation. Le formulaire sera disponible une fois la configuration terminée.",
+        "form_legend": "Votre message",
+        "name_label": "Nom",
+        "email_label": "Adresse e-mail",
+        "message_label": "Message",
+        "submit": "Envoyer le message"
+      },
+      "privacy": {
+        "title": "Confidentialité | Skimr",
+        "description": "Découvrez comment Skimr protège les sources privées, supprime les métadonnées des images et utilise l’OCR de secours de Gemini.",
+        "heading": "Confidentialité",
+        "intro": "Skimr est conçu pour travailler sur des sources de recherche dans des projets privés. Cette page résume les pratiques de traitement des sources décrites dans les spécifications du produit.",
+        "private_sources_heading": "Vos sources restent dans votre projet",
+        "private_sources_description": "Les fichiers importés, les textes OCR et les instantanés de pages web sont stockés à titre privé pour la recherche. Ils sont accessibles uniquement au propriétaire du projet et aux membres invités, sauf si vous choisissez de publier une synthèse.",
+        "images_heading": "Métadonnées de localisation des images",
+        "images_description": "Les images de pages importées sont réencodées pour supprimer leurs métadonnées, y compris les informations de localisation, avant leur stockage.",
+        "gemini_heading": "Traitement avec l’offre gratuite de Gemini",
+        "gemini_description": "Lorsque la fiabilité de l’OCR est faible, un nombre limité de pages peut être envoyé à l’offre gratuite de Gemini de Google comme solution de secours pour l’OCR. Google peut utiliser les requêtes de l’offre gratuite pour améliorer ses produits. N’importez pas de travaux confidentiels ou non publiés pour ce traitement."
+      },
+      "terms": {
+        "title": "Conditions d’utilisation | Skimr",
+        "description": "Consultez les règles essentielles pour importer des documents de recherche et garder vos sources privées dans Skimr.",
+        "heading": "Conditions d’utilisation",
+        "intro": "N’utilisez Skimr qu’avec des documents auxquels vous êtes autorisé à accéder et que vous avez le droit d’importer.",
+        "rights_heading": "Droits relatifs aux documents importés",
+        "rights_description": "Il vous incombe de vérifier que vous avez le droit d’accéder à chaque source et de l’importer, et de respecter les obligations applicables en matière de droit d’auteur, de licence et d’établissement.",
+        "private_sources_heading": "Sources de recherche privées",
+        "private_sources_description": "Les sources sont stockées à titre privé pour la recherche et ne sont visibles que par le propriétaire du projet et les membres invités. N’importez pas de documents que vous n’êtes pas autorisé à partager avec le service.",
+        "public_synthesis_heading": "Lorsque vous publiez une synthèse",
+        "public_synthesis_description": "Une synthèse publique est en lecture seule et peut être indexée. Elle peut contenir de courts extraits de sources, de deux phrases au maximum chacun, avec des liens vers les originaux ; elle n’affiche pas le texte intégral, les images ni les instantanés des sources."
+      },
+      "cookies": {
+        "title": "Préférences et cookies | Skimr",
+        "description": "Découvrez comment Skimr utilise votre préférence de thème et le cookie d’authentification du tableau de bord.",
+        "heading": "Cookies et stockage dans le navigateur",
+        "intro": "Skimr utilise le stockage du navigateur pour les préférences et un cookie d’authentification essentiel pour les sessions connectées.",
+        "theme_heading": "Préférence de thème",
+        "theme_description": "Le site public stocke votre préférence de thème clair, sombre ou système dans localStorage. Cette préférence n’est pas un cookie.",
+        "authentication_heading": "Cookie d’authentification",
+        "authentication_description": "Lorsque vous vous connectez, le tableau de bord utilise un cookie de renouvellement sécurisé, HTTP-only et SameSite=Strict, illisible par JavaScript. Il est limité aux routes d’authentification et sert à maintenir votre session."
+      }
     },
     "error": {
       "title": "Page introuvable — Skimr",

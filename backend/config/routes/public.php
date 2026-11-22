@@ -6,6 +6,7 @@ use App\Public\Http\LocaleMiddleware;
 use App\Public\Http\PageController;
 use App\Public\Http\PublicController;
 use App\Public\Http\TrailingSlashMiddleware;
+use App\Public\Seo\PublicPageMap;
 use App\Public\Seo\RobotsController;
 use App\Public\Seo\SitemapController;
 use Psr\Container\ContainerInterface;
@@ -36,7 +37,7 @@ return static function (App $app): void {
     // Not static: Slim binds group callbacks to the container.
     $public = $app->group('/{lang:(?:en|fr|es)}', function (RouteCollectorProxy $group): void {
         $group->get('/', [PublicController::class, 'home']);
-        $group->get('/{page:(?:features|how-it-works|about|privacy|terms|cookies)}', [PageController::class, 'show']);
+        $group->get('/{page:' . PublicPageMap::routePattern() . '}', [PageController::class, 'show']);
         $group->get('/{path:.*}', [PublicController::class, 'notFound']);
     });
 

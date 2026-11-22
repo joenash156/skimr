@@ -1,0 +1,10 @@
+<footer>
+    {% if page_urls is defined %}
+        <nav aria-label="{{ trans('public.footer_navigation') }}">
+            {% for page in ['features', 'how_it_works', 'about', 'contact', 'privacy', 'terms', 'cookies'] %}
+                <a href="{{ page_urls[page] }}">{{ trans('public.navigation.' ~ page) }}</a>
+            {% endfor %}
+        </nav>
+    {% endif %}
+    <p>{{ trans('public.footer.copyright', {year: 'now'|date('Y')}) }}</p>
+</footer>

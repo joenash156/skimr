@@ -1,0 +1,332 @@
+{
+  "public": {
+    "meta": {
+      "title": "Skimr — research grounded in evidence",
+      "description": "Organize research and build literature reviews where every finding traces back to its source."
+    },
+    "skip_to_content": "Skip to content",
+    "home_link": "Skimr home",
+    "main_navigation": "Main",
+    "mobile_navigation": "Mobile",
+    "language": "Language",
+    "language_names": {
+      "en": "English",
+      "fr": "Français",
+      "es": "Español"
+    },
+    "footer_navigation": "Footer",
+    "login": "Log in",
+    "signup": "Sign up",
+    "menu": "Menu",
+    "theme": {
+      "toggle": "Toggle theme"
+    },
+    "navigation": {
+      "home": "Home",
+      "features": "Features",
+      "how_it_works": "How it works",
+      "about": "About",
+      "contact": "Contact",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "cookies": "Cookies"
+    },
+    "home": {
+      "title": "Skimr — evidence-led literature reviews",
+      "description": "Organize research and build literature reviews where every finding traces back to its source.",
+      "eyebrow": "A research workspace built around evidence",
+      "heading": "Research, organized around evidence.",
+      "intro": "Bring your sources together, see how findings relate, and build a literature review you can trace back to the original passages.",
+      "primary_cta": "Get started",
+      "secondary_cta": "See how it works",
+      "how_it_works": {
+        "heading": "From source collection to a clearer review",
+        "steps": {
+          "1": {
+            "title": "Bring your sources together",
+            "description": "Start with the research sources you already have, in the formats that suit your work."
+          },
+          "2": {
+            "title": "Explore the evidence",
+            "description": "Search passages, compare methods, and organize related findings into themes."
+          },
+          "3": {
+            "title": "Build a review you can verify",
+            "description": "Draft a structured synthesis that keeps source-backed findings distinct from AI interpretations."
+          }
+        }
+      },
+      "sources": {
+        "heading": "Five ways to add sources",
+        "intro": "Start with PDFs or bring in other material alongside them.",
+        "items": {
+          "pdf": {
+            "title": "PDFs",
+            "description": "Upload research papers and extract their text and structure."
+          },
+          "images": {
+            "title": "Photos and scans",
+            "description": "Add page images for OCR, with location metadata removed from uploaded images."
+          },
+          "links": {
+            "title": "Web links",
+            "description": "Add article, report, DOI, arXiv, or direct PDF links."
+          },
+          "text": {
+            "title": "Pasted text",
+            "description": "Add notes or text from a source that cannot be imported as a link."
+          },
+          "discovery": {
+            "title": "Find sources",
+            "description": "Search scholarly works and add relevant papers to a project."
+          }
+        }
+      },
+      "highlights": {
+        "heading": "See the connections across your sources",
+        "link": "Explore all features",
+        "items": {
+          "search": {
+            "title": "Search by meaning",
+            "description": "Find relevant passages across a project's sources with semantic search."
+          },
+          "themes": {
+            "title": "Organize themes",
+            "description": "Group related sources into themes and review the passages behind them."
+          },
+          "methods": {
+            "title": "Compare methods",
+            "description": "Compare study designs, samples, countries, periods, and findings."
+          },
+          "synthesis": {
+            "title": "Draft with evidence",
+            "description": "Build a structured synthesis with links from findings to supporting sources."
+          },
+          "citations": {
+            "title": "Map citations",
+            "description": "Explore citation relationships between works in a project."
+          },
+          "gaps": {
+            "title": "Explore research gaps",
+            "description": "Review underexplored areas with the evidence and coverage behind each gap."
+          }
+        }
+      },
+      "evidence": {
+        "heading": "Know what the evidence says",
+        "intro": "AI output is separated into two kinds of statements, so the source of each claim stays visible.",
+        "finding": {
+          "title": "Finding",
+          "description": "A statement grounded in a source passage, shown with its quote and citation."
+        },
+        "interpretation": {
+          "title": "AI interpretation",
+          "description": "A conclusion drawn across findings, clearly labelled and linked to supporting evidence."
+        }
+      },
+      "faq": {
+        "heading": "Frequently asked questions",
+        "items": {
+          "evidence": {
+            "question": "Can I trace a finding back to its source?",
+            "answer": "Yes. Findings are linked to their supporting passage and citation; AI interpretations are labelled separately and link to findings."
+          },
+          "sources": {
+            "question": "Do I need to start with PDFs?",
+            "answer": "No. You can also add page images, web links, pasted text, or papers found through search."
+          },
+          "privacy": {
+            "question": "Who can see my sources?",
+            "answer": "Sources are private to the project owner and invited project members unless you choose to publish a synthesis."
+          },
+          "languages": {
+            "question": "Which languages does Skimr support?",
+            "answer": "The interface is designed for English, French, and Spanish. Source quotations remain in their original language."
+          }
+        }
+      },
+      "cta": {
+        "heading": "Make your next literature review easier to verify",
+        "description": "Bring your sources into one workspace and keep the evidence close to every finding."
+      }
+    },
+    "pages": {
+      "features": {
+        "title": "Research features | Skimr",
+        "description": "Explore Skimr features for processing sources, searching evidence, comparing studies, and building literature reviews.",
+        "heading": "Tools for evidence-led research",
+        "intro": "Skimr brings source processing, evidence exploration, and literature review drafting into one research workspace.",
+        "tier_note": "Feature tiers describe the product roadmap; availability may vary as capabilities are released.",
+        "tiers": {
+          "core": "Core",
+          "extended": "Extended",
+          "stretch": "Stretch goal"
+        },
+        "items": {
+          "source_processing": {
+            "title": "Source processing",
+            "description": "Turn source text into structured metadata, sections, references, chunks, and embeddings for project search."
+          },
+          "semantic_search": {
+            "title": "Semantic search",
+            "description": "Search a project's sources by meaning and find relevant passages with their source and page."
+          },
+          "theme_clustering": {
+            "title": "Theme clustering",
+            "description": "Group related sources into themes, review representative quotes, and rename or merge clusters."
+          },
+          "methods_comparison": {
+            "title": "Methods and findings comparison",
+            "description": "Compare study design, sample size, countries, periods, data collection, analysis, and key findings."
+          },
+          "evidence_synthesis": {
+            "title": "Evidence-backed synthesis",
+            "description": "Draft a structured review that separates quote-backed findings from clearly labelled AI interpretations."
+          },
+          "admin_console": {
+            "title": "Admin and super-admin console",
+            "description": "Give authorized administrators tools to manage users, invitations, settings, audit activity, and usage."
+          },
+          "citation_map": {
+            "title": "Citation relationship map",
+            "description": "Explore citation links among sources and identify highly cited or bridging works in a project."
+          },
+          "research_gaps": {
+            "title": "Research gap reports",
+            "description": "Surface underexplored methods, places, periods, populations, and themes with supporting evidence."
+          },
+          "source_chat": {
+            "title": "Chat with your sources",
+            "description": "A stretch goal: ask questions about a project's sources and receive answers grounded in cited passages."
+          },
+          "paper_discovery": {
+            "title": "Scholarly paper discovery",
+            "description": "Search OpenAlex and Semantic Scholar, review scholarly records, and add relevant works to a project."
+          },
+          "exports": {
+            "title": "Research exports",
+            "description": "Export references as BibTeX or RIS, or export a synthesis to Word with APA 7, MLA 9, or Harvard citations."
+          },
+          "project_sharing": {
+            "title": "Shared projects",
+            "description": "Invite collaborators to work in a project as a viewer or editor."
+          },
+          "public_syntheses": {
+            "title": "Public synthesis pages",
+            "description": "Choose to publish a read-only synthesis page with short quotes and links to original sources."
+          },
+          "usage_quotas": {
+            "title": "Usage quotas",
+            "description": "Track personal usage limits for AI requests, uploads, storage, and other capped resources."
+          },
+          "source_hunting": {
+            "title": "Source-hunting assistant",
+            "description": "Generate suggested searches from a research question and themes, follow citations, and search for papers related to a gap."
+          },
+          "image_ocr": {
+            "title": "Image sources and OCR",
+            "description": "Add ordered page images for OCR; scanned PDFs can use the same OCR path."
+          },
+          "web_and_pasted_sources": {
+            "title": "Web links and pasted text",
+            "description": "Add web articles, reports, DOI or arXiv links, direct PDF links, and text pasted from other sources."
+          }
+        }
+      },
+      "how_it_works": {
+        "title": "How Skimr works | Evidence-led research",
+        "description": "See how Skimr brings research sources together, organizes evidence, and helps you draft a traceable literature review.",
+        "heading": "How Skimr works",
+        "intro": "Move from a collection of sources to a structured view of the evidence, while keeping each claim connected to its origin.",
+        "steps": {
+          "1": {
+            "title": "Add sources to a project",
+            "description": "Upload PDFs, add page images, paste text, include web links, or find scholarly works."
+          },
+          "2": {
+            "title": "Process and organize the material",
+            "description": "Text and metadata are prepared for searching, while source references and sections stay attached."
+          },
+          "3": {
+            "title": "Explore patterns and comparisons",
+            "description": "Search passages, group themes, compare methods, and examine citation relationships."
+          },
+          "4": {
+            "title": "Draft with traceable evidence",
+            "description": "Build a synthesis that keeps verified findings distinct from AI interpretations and links claims to sources."
+          }
+        }
+      },
+      "about": {
+        "title": "About Skimr | Research, grounded in evidence",
+        "description": "Skimr is a research workspace for organizing academic sources and building evidence-backed literature reviews.",
+        "heading": "About Skimr",
+        "intro": "Skimr helps students, researchers, research assistants, and policy analysts organize sources and understand how findings relate.",
+        "evidence_heading": "Keep the evidence in view",
+        "evidence_description": "A finding should lead back to the passage it came from. An AI interpretation should be labelled and supported by findings, not presented as a source fact."
+      },
+      "contact": {
+        "title": "Contact Skimr | Questions and feedback",
+        "description": "Contact Skimr with questions or feedback about organizing research and building evidence-led literature reviews.",
+        "heading": "Contact the Skimr team",
+        "intro": "Have a question or feedback about Skimr? Use this page to get in touch with the team.",
+        "form_unavailable": "The secure contact form is not configured yet. Please try again later.",
+        "form_ready": "Complete the fields and security check to send your message.",
+        "sending": "Sending your message...",
+        "success": "Thanks, your message has been sent. We’ll reply by email.",
+        "network_error": "We could not send your message. Please try again.",
+        "turnstile_required": "Complete the security check before sending your message.",
+        "javascript_required": "Enable JavaScript to send a message.",
+        "form_legend": "Your message",
+        "name_label": "Name",
+        "email_label": "Email address",
+        "message_label": "Message",
+        "submit": "Send message"
+      },
+      "privacy": {
+        "title": "Privacy policy | Skimr",
+        "description": "Learn how Skimr handles private research sources, image metadata, and the Gemini free-tier OCR fallback.",
+        "heading": "Privacy",
+        "intro": "Skimr is designed to help you work with research sources in private projects. This page summarizes the source-handling practices in the product specification.",
+        "private_sources_heading": "Your sources stay within your project",
+        "private_sources_description": "Uploaded files, OCR text, and web snapshots are stored privately for research. They are available only to the project owner and invited project members unless you choose to publish a synthesis.",
+        "images_heading": "Image location metadata",
+        "images_description": "Uploaded page images are re-encoded to remove metadata, including location information, before they are stored.",
+        "gemini_heading": "Gemini free-tier processing",
+        "gemini_description": "When OCR confidence is low, a limited number of pages may be sent to Google's Gemini free tier as an OCR fallback. Google may use free-tier requests to improve its products. Do not upload confidential or unpublished work for this fallback."
+      },
+      "terms": {
+        "title": "Terms of use | Skimr",
+        "description": "Read the basic rules for uploading research material and keeping sources private in Skimr.",
+        "heading": "Terms of use",
+        "intro": "Use Skimr only with material you are entitled to use and upload.",
+        "rights_heading": "Your right to use uploaded material",
+        "rights_description": "You are responsible for ensuring that you have the right to access and upload each source, and for following any applicable copyright, licence, and institutional requirements.",
+        "private_sources_heading": "Private research sources",
+        "private_sources_description": "Sources are stored privately for research and are visible only to the project owner and invited members. Do not upload material you are not permitted to share with the service.",
+        "public_synthesis_heading": "When you publish a synthesis",
+        "public_synthesis_description": "A public synthesis is read-only and may be indexed. It can contain short source quotations of at most two sentences each, with links to the originals; it does not display full source text, images, or snapshots."
+      },
+      "cookies": {
+        "title": "Cookies | Skimr",
+        "description": "Learn about Skimr's theme preference storage and the authentication cookie used in the dashboard.",
+        "heading": "Cookies and browser storage",
+        "intro": "Skimr uses browser storage for preferences and an essential authentication cookie for signed-in sessions.",
+        "theme_heading": "Theme preference",
+        "theme_description": "The public site stores your light, dark, or system theme preference in localStorage. This preference is not a cookie.",
+        "authentication_heading": "Authentication cookie",
+        "authentication_description": "When you sign in, the dashboard uses a secure, HTTP-only, SameSite=Strict refresh cookie so JavaScript cannot read the token. It is limited to authentication routes and is used to maintain your session."
+      }
+    },
+    "error": {
+      "title": "Page not found — Skimr",
+      "description": "The requested page could not be found.",
+      "heading": "Page not found",
+      "message": "The page may have moved or may no longer be available.",
+      "home_link": "Return to the home page"
+    },
+    "footer": {
+      "copyright": "© {year} Skimr"
+    }
+  }
+}

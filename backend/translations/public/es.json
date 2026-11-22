@@ -1,0 +1,332 @@
+{
+  "public": {
+    "meta": {
+      "title": "Skimr — investigación basada en evidencias",
+      "description": "Organiza tu investigación y crea revisiones en las que cada hallazgo remite a su fuente."
+    },
+    "skip_to_content": "Ir al contenido",
+    "home_link": "Inicio de Skimr",
+    "main_navigation": "Navegación principal",
+    "mobile_navigation": "Navegación móvil",
+    "language": "Idioma",
+    "footer_navigation": "Navegación del pie de página",
+    "language_names": {
+      "en": "English",
+      "fr": "Français",
+      "es": "Español"
+    },
+    "login": "Iniciar sesión",
+    "signup": "Crear cuenta",
+    "menu": "Menú",
+    "theme": {
+      "toggle": "Cambiar el tema"
+    },
+    "navigation": {
+      "home": "Inicio",
+      "features": "Funciones",
+      "how_it_works": "Cómo funciona",
+      "about": "Acerca de",
+      "contact": "Contacto",
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "cookies": "Cookies"
+    },
+    "home": {
+      "title": "Skimr — investigación basada en evidencias",
+      "description": "Organiza tu investigación y crea revisiones en las que cada hallazgo remite a su fuente.",
+      "eyebrow": "Un espacio de investigación basado en evidencias",
+      "heading": "Investigación organizada en torno a las evidencias.",
+      "intro": "Reúne tus fuentes, relaciona sus hallazgos y redacta una revisión bibliográfica que puedas rastrear hasta los pasajes originales.",
+      "primary_cta": "Empezar",
+      "secondary_cta": "Ver cómo funciona",
+      "how_it_works": {
+        "heading": "De las fuentes a una revisión más clara",
+        "steps": {
+          "1": {
+            "title": "Reúne tus fuentes",
+            "description": "Empieza con las fuentes de investigación que ya tienes, en los formatos que mejor se adapten a tu trabajo."
+          },
+          "2": {
+            "title": "Explora las evidencias",
+            "description": "Busca pasajes, compara métodos y organiza los hallazgos relacionados por temas."
+          },
+          "3": {
+            "title": "Redacta una revisión verificable",
+            "description": "Prepara una síntesis estructurada que distinga los hallazgos respaldados por fuentes de las interpretaciones de la IA."
+          }
+        }
+      },
+      "sources": {
+        "heading": "Cinco formas de añadir fuentes",
+        "intro": "Empieza con archivos PDF o añade otros materiales a tu proyecto.",
+        "items": {
+          "pdf": {
+            "title": "PDF",
+            "description": "Sube artículos de investigación y extrae su texto y estructura."
+          },
+          "images": {
+            "title": "Fotos y escaneos",
+            "description": "Añade imágenes de páginas para el OCR; se eliminan los metadatos de ubicación de las imágenes subidas."
+          },
+          "links": {
+            "title": "Enlaces web",
+            "description": "Añade artículos, informes, DOI, enlaces de arXiv o enlaces directos a PDF."
+          },
+          "text": {
+            "title": "Texto pegado",
+            "description": "Añade notas o texto de una fuente que no se pueda importar mediante un enlace."
+          },
+          "discovery": {
+            "title": "Buscar fuentes",
+            "description": "Busca publicaciones académicas y añade artículos pertinentes a un proyecto."
+          }
+        }
+      },
+      "highlights": {
+        "heading": "Descubre las conexiones entre tus fuentes",
+        "link": "Explorar todas las funciones",
+        "items": {
+          "search": {
+            "title": "Buscar por significado",
+            "description": "Encuentra pasajes relevantes en las fuentes de un proyecto mediante búsqueda semántica."
+          },
+          "themes": {
+            "title": "Organizar temas",
+            "description": "Agrupa fuentes relacionadas por temas y consulta los pasajes que las respaldan."
+          },
+          "methods": {
+            "title": "Comparar métodos",
+            "description": "Compara diseños de estudio, muestras, países, periodos y hallazgos."
+          },
+          "synthesis": {
+            "title": "Redactar con evidencias",
+            "description": "Crea una síntesis estructurada que vincule los hallazgos con las fuentes que los respaldan."
+          },
+          "citations": {
+            "title": "Mapear citas",
+            "description": "Explora las relaciones de citación entre las publicaciones de un proyecto."
+          },
+          "gaps": {
+            "title": "Explorar vacíos de investigación",
+            "description": "Examina áreas poco estudiadas junto con las evidencias y la cobertura disponibles."
+          }
+        }
+      },
+      "evidence": {
+        "heading": "Distingue los hallazgos de las interpretaciones",
+        "intro": "Los hallazgos de las fuentes y las interpretaciones de la IA se presentan por separado para que el origen de cada afirmación siga visible.",
+        "finding": {
+          "title": "Hallazgo",
+          "description": "Una afirmación respaldada por un pasaje de una fuente, mostrada con su cita."
+        },
+        "interpretation": {
+          "title": "Interpretación de la IA",
+          "description": "Una conclusión extraída de varios hallazgos, claramente identificada y vinculada a las evidencias correspondientes."
+        }
+      },
+      "faq": {
+        "heading": "Preguntas frecuentes",
+        "items": {
+          "evidence": {
+            "question": "¿Puedo rastrear un hallazgo hasta su fuente?",
+            "answer": "Sí. Cada hallazgo se vincula con el pasaje y la cita que lo respaldan; las interpretaciones de la IA se identifican por separado y se enlazan con los hallazgos."
+          },
+          "sources": {
+            "question": "¿Tengo que empezar con archivos PDF?",
+            "answer": "No. También puedes añadir imágenes de páginas, enlaces web, texto pegado o artículos encontrados mediante la búsqueda."
+          },
+          "privacy": {
+            "question": "¿Quién puede ver mis fuentes?",
+            "answer": "Tus fuentes son privadas para el propietario del proyecto y los miembros invitados, salvo que decidas publicar una síntesis."
+          },
+          "languages": {
+            "question": "¿Qué idiomas admite Skimr?",
+            "answer": "La interfaz está diseñada para inglés, francés y español. Las citas de las fuentes se mantienen en su idioma original."
+          }
+        }
+      },
+      "cta": {
+        "heading": "Haz que tu próxima revisión bibliográfica sea más fácil de verificar",
+        "description": "Reúne tus fuentes en un espacio de trabajo y mantén las evidencias junto a cada hallazgo."
+      }
+    },
+    "pages": {
+      "features": {
+        "title": "Funciones de investigación | Skimr",
+        "description": "Descubre las funciones de Skimr para procesar fuentes, explorar evidencias, comparar estudios y redactar revisiones bibliográficas.",
+        "heading": "Herramientas para investigar con evidencias",
+        "intro": "Skimr reúne el procesamiento de fuentes, la exploración de evidencias y la redacción de revisiones bibliográficas en un solo espacio de investigación.",
+        "tier_note": "Los niveles describen la hoja de ruta del producto; la disponibilidad puede variar según se publiquen las funciones.",
+        "tiers": {
+          "core": "Esencial",
+          "extended": "Ampliada",
+          "stretch": "Objetivo adicional"
+        },
+        "items": {
+          "source_processing": {
+            "title": "Procesamiento de fuentes",
+            "description": "Convierte el texto de las fuentes en metadatos, secciones, referencias, fragmentos y vectores para buscar en el proyecto."
+          },
+          "semantic_search": {
+            "title": "Búsqueda semántica",
+            "description": "Busca por significado en las fuentes de un proyecto y encuentra pasajes relevantes con su fuente y página."
+          },
+          "theme_clustering": {
+            "title": "Agrupación por temas",
+            "description": "Agrupa fuentes relacionadas por temas, revisa citas representativas y cambia el nombre o combina grupos."
+          },
+          "methods_comparison": {
+            "title": "Comparación de métodos y hallazgos",
+            "description": "Compara el diseño del estudio, el tamaño de la muestra, los países, los periodos, la recogida y el análisis de datos y los hallazgos principales."
+          },
+          "evidence_synthesis": {
+            "title": "Síntesis respaldada por evidencias",
+            "description": "Redacta una revisión estructurada que separe los hallazgos respaldados por citas de las interpretaciones de la IA claramente identificadas."
+          },
+          "admin_console": {
+            "title": "Consola de administración y superadministración",
+            "description": "Ofrece a los administradores autorizados herramientas para gestionar usuarios, invitaciones, ajustes, auditorías y uso."
+          },
+          "citation_map": {
+            "title": "Mapa de relaciones de citación",
+            "description": "Explora los vínculos de citación entre las fuentes e identifica publicaciones muy citadas o que conectan trabajos dentro de un proyecto."
+          },
+          "research_gaps": {
+            "title": "Informes sobre vacíos de investigación",
+            "description": "Detecta métodos, lugares, periodos, poblaciones y temas poco estudiados, junto con las evidencias que los respaldan."
+          },
+          "source_chat": {
+            "title": "Conversar con tus fuentes",
+            "description": "Objetivo adicional: haz preguntas sobre las fuentes de un proyecto y recibe respuestas basadas en pasajes citados."
+          },
+          "paper_discovery": {
+            "title": "Descubrimiento de artículos académicos",
+            "description": "Busca en OpenAlex y Semantic Scholar, consulta los registros académicos y añade trabajos pertinentes a un proyecto."
+          },
+          "exports": {
+            "title": "Exportaciones de investigación",
+            "description": "Exporta referencias en BibTeX o RIS, o una síntesis a Word con citas APA 7, MLA 9 o Harvard."
+          },
+          "project_sharing": {
+            "title": "Proyectos compartidos",
+            "description": "Invita a colaboradores a trabajar en un proyecto como lectores o editores."
+          },
+          "public_syntheses": {
+            "title": "Páginas de síntesis públicas",
+            "description": "Publica una página de síntesis de solo lectura con citas breves y enlaces a las fuentes originales."
+          },
+          "usage_quotas": {
+            "title": "Cuotas de uso",
+            "description": "Controla tus límites personales para solicitudes de IA, subidas, almacenamiento y otros recursos sujetos a cuotas."
+          },
+          "source_hunting": {
+            "title": "Asistente para buscar fuentes",
+            "description": "Genera búsquedas sugeridas a partir de una pregunta y temas, sigue las citas y busca artículos relacionados con un vacío."
+          },
+          "image_ocr": {
+            "title": "Fuentes de imagen y OCR",
+            "description": "Añade imágenes de páginas en orden para el OCR; los PDF escaneados pueden usar el mismo proceso."
+          },
+          "web_and_pasted_sources": {
+            "title": "Enlaces web y texto pegado",
+            "description": "Añade artículos web, informes, enlaces DOI o arXiv, enlaces directos a PDF y texto copiado de otras fuentes."
+          }
+        }
+      },
+      "how_it_works": {
+        "title": "Cómo funciona Skimr | Evidencias verificables",
+        "description": "Descubre cómo Skimr reúne fuentes de investigación, organiza evidencias y te ayuda a redactar una revisión bibliográfica trazable.",
+        "heading": "Cómo funciona Skimr",
+        "intro": "Pasa de una colección de fuentes a una visión estructurada de las evidencias, manteniendo cada afirmación vinculada con su origen.",
+        "steps": {
+          "1": {
+            "title": "Añade fuentes a un proyecto",
+            "description": "Sube PDF, añade imágenes de páginas, pega texto, incluye enlaces web o busca publicaciones académicas."
+          },
+          "2": {
+            "title": "Procesa y organiza el material",
+            "description": "El texto y los metadatos se preparan para las búsquedas, mientras las referencias y secciones permanecen vinculadas a las fuentes."
+          },
+          "3": {
+            "title": "Explora patrones y comparaciones",
+            "description": "Busca pasajes, agrupa temas, compara métodos y examina las relaciones de citación."
+          },
+          "4": {
+            "title": "Redacta con evidencias trazables",
+            "description": "Crea una síntesis que distinga los hallazgos verificados de las interpretaciones de la IA y vincule las afirmaciones con sus fuentes."
+          }
+        }
+      },
+      "about": {
+        "title": "Acerca de Skimr | Investigación y evidencias",
+        "description": "Skimr es un espacio de investigación para organizar fuentes académicas y crear revisiones bibliográficas respaldadas por evidencias.",
+        "heading": "Acerca de Skimr",
+        "intro": "Skimr ayuda a estudiantes, investigadores, asistentes de investigación y analistas de políticas a organizar fuentes y entender cómo se relacionan los hallazgos.",
+        "evidence_heading": "Mantén las evidencias a la vista",
+        "evidence_description": "Un hallazgo debe remitir al pasaje del que procede. Una interpretación de la IA debe identificarse y respaldarse con hallazgos, no presentarse como un hecho de una fuente."
+      },
+      "contact": {
+        "title": "Contacta con Skimr | Preguntas y comentarios",
+        "description": "Contacta con Skimr para resolver dudas o compartir comentarios sobre la investigación basada en evidencias.",
+        "heading": "Contacta con el equipo de Skimr",
+        "intro": "¿Tienes una pregunta o un comentario sobre Skimr? Ponte en contacto con el equipo desde esta página.",
+        "form_unavailable": "El formulario seguro aún no está configurado. Inténtalo de nuevo más tarde.",
+        "form_ready": "Completa los campos y la verificación de seguridad para enviar el mensaje.",
+        "sending": "Enviando el mensaje…",
+        "success": "Gracias, hemos enviado tu mensaje. Te responderemos por correo electrónico.",
+        "network_error": "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+        "turnstile_required": "Completa la verificación de seguridad antes de enviar el mensaje.",
+        "javascript_required": "Activa JavaScript para enviar un mensaje.",
+        "form_legend": "Tu mensaje",
+        "name_label": "Nombre",
+        "email_label": "Correo electrónico",
+        "message_label": "Mensaje",
+        "submit": "Enviar mensaje"
+      },
+      "privacy": {
+        "title": "Privacidad | Skimr",
+        "description": "Conoce cómo Skimr gestiona fuentes privadas, metadatos de imágenes y la alternativa de OCR de Gemini gratuita.",
+        "heading": "Privacidad",
+        "intro": "Skimr está diseñado para trabajar con fuentes de investigación en proyectos privados. Esta página resume las prácticas de gestión de fuentes descritas en la especificación del producto.",
+        "private_sources_heading": "Tus fuentes permanecen en tu proyecto",
+        "private_sources_description": "Los archivos subidos, el texto OCR y las capturas web se almacenan de forma privada para la investigación. Solo pueden acceder el propietario del proyecto y los miembros invitados, salvo que decidas publicar una síntesis.",
+        "images_heading": "Metadatos de ubicación de las imágenes",
+        "images_description": "Las imágenes de páginas subidas se vuelven a codificar para eliminar sus metadatos, incluida la información de ubicación, antes de almacenarlas.",
+        "gemini_heading": "Procesamiento con el nivel gratuito de Gemini",
+        "gemini_description": "Cuando la confianza del OCR es baja, un número limitado de páginas puede enviarse al nivel gratuito de Gemini de Google como alternativa de OCR. Google puede utilizar las solicitudes del nivel gratuito para mejorar sus productos. No subas trabajos confidenciales o inéditos para este proceso."
+      },
+      "terms": {
+        "title": "Términos de uso | Skimr",
+        "description": "Consulta las reglas básicas para subir material de investigación y mantener tus fuentes privadas en Skimr.",
+        "heading": "Términos de uso",
+        "intro": "Utiliza Skimr solo con material al que tengas derecho a acceder y que puedas subir.",
+        "rights_heading": "Derechos sobre el material subido",
+        "rights_description": "Es tu responsabilidad asegurarte de que tienes derecho a acceder a cada fuente y subirla, y de cumplir los requisitos aplicables de derechos de autor, licencias e instituciones.",
+        "private_sources_heading": "Fuentes de investigación privadas",
+        "private_sources_description": "Las fuentes se almacenan de forma privada para la investigación y solo son visibles para el propietario del proyecto y los miembros invitados. No subas material que no tengas permiso para compartir con el servicio.",
+        "public_synthesis_heading": "Al publicar una síntesis",
+        "public_synthesis_description": "Una síntesis pública es de solo lectura y puede indexarse. Puede incluir citas breves de las fuentes, de un máximo de dos frases cada una, con enlaces a los originales; no muestra el texto completo, imágenes ni capturas de las fuentes."
+      },
+      "cookies": {
+        "title": "Preferencias y cookies | Skimr",
+        "description": "Descubre cómo Skimr utiliza la preferencia de tema y la cookie de autenticación del panel.",
+        "heading": "Cookies y almacenamiento del navegador",
+        "intro": "Skimr utiliza el almacenamiento del navegador para las preferencias y una cookie de autenticación esencial para las sesiones iniciadas.",
+        "theme_heading": "Preferencia de tema",
+        "theme_description": "El sitio público guarda tu preferencia de tema claro, oscuro o del sistema en localStorage. Esta preferencia no es una cookie.",
+        "authentication_heading": "Cookie de autenticación",
+        "authentication_description": "Al iniciar sesión, el panel usa una cookie de renovación segura, HTTP-only y SameSite=Strict, que JavaScript no puede leer. Está limitada a las rutas de autenticación y mantiene tu sesión."
+      }
+    },
+    "error": {
+      "title": "Página no encontrada — Skimr",
+      "description": "No se encontró la página solicitada.",
+      "heading": "Página no encontrada",
+      "message": "Es posible que la página se haya movido o ya no esté disponible.",
+      "home_link": "Volver al inicio"
+    },
+    "footer": {
+      "copyright": "© {year} Skimr"
+    }
+  }
+}

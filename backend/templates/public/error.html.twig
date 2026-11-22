@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ trans('public.error.title') }}{% endblock %}
+{% block description %}{{ trans('public.error.description') }}{% endblock %}
+{% block content %}
+    <section aria-labelledby="error-title">
+        <h1 id="error-title">{{ trans('public.error.heading') }}</h1>
+        <p>{{ trans('public.error.message') }}</p>
+        <a href="/{{ locale }}/">{{ trans('public.error.home_link') }}</a>
+    </section>
+{% endblock %}

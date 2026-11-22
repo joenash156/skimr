@@ -1,0 +1,12 @@
+{
+  "name": "skimr-public-assets",
+  "private": true,
+  "scripts": {
+    "build:public": "tailwindcss -i ./src/Public/site.css -o ./public/assets/site.css --minify",
+    "build:public:js": "node -e \"require('node:fs').copyFileSync('node_modules/@alpinejs/csp/dist/cdn.min.js', 'public/assets/alpine-csp.min.js')\""
+  },
+  "devDependencies": {
+    "@alpinejs/csp": "3.17.5",
+    "@tailwindcss/cli": "4.3.5"
+  }
+}

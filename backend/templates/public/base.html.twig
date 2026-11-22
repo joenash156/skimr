@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="{{ locale }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% if metadata is defined %}{{ metadata.title }}{% else %}{{ trans('public.meta.title') }}{% endif %}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{% if metadata is defined %}{{ metadata.description }}{% else %}{{ trans('public.meta.description') }}{% endif %}{% endblock %}">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+    <script nonce="{{ csp_nonce }}">let t=null;try{t=localStorage.getItem('theme');}catch{}document.documentElement.classList.toggle('dark',t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches));</script>
+    <link rel="preload" href="/assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <link rel="manifest" href="/assets/manifest.webmanifest">
+    <link rel="stylesheet" href="/assets/fonts.css">
+    <link rel="stylesheet" href="/assets/site-shell.css">
+    {% block canonical %}
+        {% if metadata is defined %}
+            <link rel="canonical" href="{{ metadata.canonical }}">
+        {% else %}
+            <link rel="canonical" href="{{ site_url }}/{{ locale }}/">
+        {% endif %}
+    {% endblock %}
+    {% block alternates %}
+        {% if metadata is defined %}
+            {% for alternate in metadata.alternates %}
+                <link rel="alternate" hreflang="{{ alternate.locale }}" href="{{ alternate.url }}">
+            {% endfor %}
+        {% else %}
+            <link rel="alternate" hreflang="en" href="{{ site_url }}/en/">
+            <link rel="alternate" hreflang="fr" href="{{ site_url }}/fr/">
+            <link rel="alternate" hreflang="es" href="{{ site_url }}/es/">
+            <link rel="alternate" hreflang="x-default" href="{{ site_url }}/en/">
+        {% endif %}
+    {% endblock %}
+    {% block og %}
+        {% if metadata is defined %}
+            <meta property="og:title" content="{{ metadata.title }}">
+            <meta property="og:description" content="{{ metadata.description }}">
+            <meta property="og:type" content="website">
+            <meta property="og:url" content="{{ metadata.canonical }}">
+            <meta property="og:image" content="{{ metadata.og_image }}">
+            <meta property="og:image:width" content="1200">
+            <meta property="og:image:height" content="630">
+            <meta property="og:image:alt" content="{{ metadata.title }}">
+            <meta property="og:locale" content="{{ metadata.og_locale }}">
+            <meta name="twitter:card" content="summary_large_image">
+        {% endif %}
+    {% endblock %}
+    {% block jsonld %}
+        {% if jsonld is defined %}
+            <script type="application/ld+json">{{ jsonld|raw }}</script>
+        {% endif %}
+    {% endblock %}
+</head>
+<body>
+    <a class="skip-link" href="#main">{{ trans('public.skip_to_content') }}</a>
+    {% include 'partials/header.html.twig' %}
+    <main id="main">
+        {% block content %}{% endblock %}
+    </main>
+    {% include 'partials/footer.html.twig' %}
+    <script src="/assets/site.js" defer></script>
+    <script src="/assets/alpine-csp.min.js" defer></script>
+</body>
+</html>

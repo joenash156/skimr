@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ trans('public.home.title') }}{% endblock %}
+{% block description %}{{ trans('public.home.description') }}{% endblock %}
+{% block canonical %}<link rel="canonical" href="{{ site_url }}/{{ locale }}/">{% endblock %}
+{% block alternates %}
+    <link rel="alternate" hreflang="en" href="{{ site_url }}/en/">
+    <link rel="alternate" hreflang="fr" href="{{ site_url }}/fr/">
+    <link rel="alternate" hreflang="es" href="{{ site_url }}/es/">
+    <link rel="alternate" hreflang="x-default" href="{{ site_url }}/en/">
+{% endblock %}
+{% block og %}
+    <meta property="og:title" content="{{ trans('public.home.title') }}">
+    <meta property="og:description" content="{{ trans('public.home.description') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ site_url }}/{{ locale }}/">
+    <meta property="og:image" content="{{ site_url }}/assets/og-default.svg">
+    <meta property="og:locale" content="{{ locale }}">
+    <meta name="twitter:card" content="summary_large_image">
+{% endblock %}
+
+{% block content %}
+    <section aria-labelledby="home-title">
+        <h1 id="home-title">{{ trans('public.home.heading') }}</h1>
+    </section>
+{% endblock %}

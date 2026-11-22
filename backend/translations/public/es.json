@@ -1,0 +1,37 @@
+{
+  "public": {
+    "meta": {
+      "title": "Skimr — investigación basada en evidencias",
+      "description": "Organiza tu investigación y crea revisiones en las que cada hallazgo remite a su fuente."
+    },
+    "skip_to_content": "Ir al contenido",
+    "home_link": "Inicio de Skimr",
+    "main_navigation": "Navegación principal",
+    "mobile_navigation": "Navegación móvil",
+    "language": "Idioma",
+    "login": "Iniciar sesión",
+    "signup": "Crear cuenta",
+    "menu": "Menú",
+    "theme": {
+      "toggle": "Cambiar el tema"
+    },
+    "navigation": {
+      "home": "Inicio"
+    },
+    "home": {
+      "title": "Skimr — investigación basada en evidencias",
+      "description": "Organiza tu investigación y crea revisiones en las que cada hallazgo remite a su fuente.",
+      "heading": "Investigación organizada en torno a las evidencias."
+    },
+    "error": {
+      "title": "Página no encontrada — Skimr",
+      "description": "No se encontró la página solicitada.",
+      "heading": "Página no encontrada",
+      "message": "Es posible que la página se haya movido o ya no esté disponible.",
+      "home_link": "Volver al inicio"
+    },
+    "footer": {
+      "copyright": "© {year} Skimr"
+    }
+  }
+}

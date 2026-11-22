@@ -1,0 +1,37 @@
+{
+  "public": {
+    "meta": {
+      "title": "Skimr — la recherche fondée sur des preuves",
+      "description": "Organisez vos recherches et rédigez des revues où chaque résultat renvoie à sa source."
+    },
+    "skip_to_content": "Aller au contenu",
+    "home_link": "Accueil Skimr",
+    "main_navigation": "Navigation principale",
+    "mobile_navigation": "Navigation mobile",
+    "language": "Langue",
+    "login": "Se connecter",
+    "signup": "Créer un compte",
+    "menu": "Menu",
+    "theme": {
+      "toggle": "Changer de thème"
+    },
+    "navigation": {
+      "home": "Accueil"
+    },
+    "home": {
+      "title": "Skimr — la recherche fondée sur des preuves",
+      "description": "Organisez vos recherches et rédigez des revues où chaque résultat renvoie à sa source.",
+      "heading": "Une recherche organisée autour des preuves."
+    },
+    "error": {
+      "title": "Page introuvable — Skimr",
+      "description": "La page demandée est introuvable.",
+      "heading": "Page introuvable",
+      "message": "Cette page a peut-être été déplacée ou n’est plus disponible.",
+      "home_link": "Retour à l’accueil"
+    },
+    "footer": {
+      "copyright": "© {year} Skimr"
+    }
+  }
+}

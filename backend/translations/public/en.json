@@ -1,0 +1,37 @@
+{
+  "public": {
+    "meta": {
+      "title": "Skimr — research grounded in evidence",
+      "description": "Organize research and build literature reviews where every finding traces back to its source."
+    },
+    "skip_to_content": "Skip to content",
+    "home_link": "Skimr home",
+    "main_navigation": "Main",
+    "mobile_navigation": "Mobile",
+    "language": "Language",
+    "login": "Log in",
+    "signup": "Sign up",
+    "menu": "Menu",
+    "theme": {
+      "toggle": "Toggle theme"
+    },
+    "navigation": {
+      "home": "Home"
+    },
+    "home": {
+      "title": "Skimr — research grounded in evidence",
+      "description": "Organize research and build literature reviews where every finding traces back to its source.",
+      "heading": "Research, organized around evidence."
+    },
+    "error": {
+      "title": "Page not found — Skimr",
+      "description": "The requested page could not be found.",
+      "heading": "Page not found",
+      "message": "The page may have moved or may no longer be available.",
+      "home_link": "Return to the home page"
+    },
+    "footer": {
+      "copyright": "© {year} Skimr"
+    }
+  }
+}

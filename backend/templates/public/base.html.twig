@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="{{ locale }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ trans('public.meta.title') }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ trans('public.meta.description') }}{% endblock %}">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+    <script nonce="{{ csp_nonce }}">let t=null;try{t=localStorage.getItem('theme');}catch{}document.documentElement.classList.toggle('dark',t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches));</script>
+    <link rel="preload" href="/assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <link rel="manifest" href="/assets/manifest.webmanifest">
+    <link rel="stylesheet" href="/assets/fonts.css">
+    {% block canonical %}<link rel="canonical" href="{{ site_url }}/{{ locale }}/">{% endblock %}
+    {% block alternates %}
+        <link rel="alternate" hreflang="en" href="{{ site_url }}/en/">
+        <link rel="alternate" hreflang="fr" href="{{ site_url }}/fr/">
+        <link rel="alternate" hreflang="es" href="{{ site_url }}/es/">
+        <link rel="alternate" hreflang="x-default" href="{{ site_url }}/en/">
+    {% endblock %}
+    {% block og %}{% endblock %}
+    {% block jsonld %}{% endblock %}
+</head>
+<body>
+    <a class="skip-link" href="#main">{{ trans('public.skip_to_content') }}</a>
+    {% include 'partials/header.html.twig' %}
+    <main id="main">
+        {% block content %}{% endblock %}
+    </main>
+    {% include 'partials/footer.html.twig' %}
+    <script src="/assets/site.js" defer></script>
+    <script src="/assets/alpine-csp.min.js" defer></script>
+</body>
+</html>

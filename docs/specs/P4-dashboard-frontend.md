@@ -13,7 +13,7 @@ You are a senior frontend engineer building the dashboard of **Skimr**, a resear
 1. Follow the spec exactly. If this brief and the spec disagree, **the spec wins**. Tell me about the conflict.
 2. Use **only** the libraries in spec section 8. Ask before adding anything.
 3. Edit files **only inside `frontend/`** (except `src/features/admin/`, which is P5's) and `shared/design-tokens.css`.
-4. **API types come from `openapi-typescript`** (`npm run api:types`). Never hand-write API types. If an endpoint is missing, work against the mock (`npm run mock`) and tell me what to ask P1 or P2 for.
+4. **API types come from `openapi-typescript`** (`pnpm api:types`). Never hand-write API types. If an endpoint is missing, work against the mock (`pnpm mock`) and tell me what to ask P1 or P2 for.
 5. **Tokens:**
     - the access token lives in memory only (`lib/auth/tokenStore.ts`); never in localStorage, sessionStorage or URLs
     - call `POST /api/v1/auth/refresh` on load, with `withCredentials` and `X-Requested-With: skimr`
@@ -90,10 +90,10 @@ frontend/src/
     <script nonce="__CSP_NONCE__">/* read localStorage.theme, set class="dark" */</script>
     ```
 
-    This is the **only** inline script allowed. Everything else goes in bundled modules. Vite's dev server (port 5173) doesn't send the CSP, so test this against the build served by PHP: `npm run build`, then http://localhost:8080/app/.
-- **CI runs these scripts as soon as `frontend/package.json` exists** (Node 20, inside `frontend/`): `npm ci`, `npm run lint`, `npm run typecheck`, `npm run i18n:check`, `npm test -- --run`, `npm run build`, `npm audit --audit-level=high`. **Define every one of these scripts** and commit `package-lock.json`.
-- **Mock API:** `npm run mock` in the **repository root** (not `frontend/`) serves `docs/api/openapi.yaml` on http://localhost:4010. The mock's paths have no `/api/v1` prefix (`http://localhost:4010/auth/login`), so point the Vite proxy at it with a rewrite while you work against mocks.
-- **The contract has every auth and `/me` endpoint already** (OpenAPI v0). Run `npm run api:types` against it. Notable details:
+    This is the **only** inline script allowed. Everything else goes in bundled modules. Vite's dev server (port 5173) doesn't send the CSP, so test this against the build served by PHP: `pnpm build`, then http://localhost:8080/app/.
+- **CI runs these scripts as soon as `frontend/package.json` exists** (Node 20, inside `frontend/`): `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm i18n:check`, `pnpm test --run`, `pnpm build`, `pnpm audit --audit-level high`. **Define every one of these scripts** and commit `pnpm-lock.yaml`.
+- **Mock API:** `pnpm mock` in the **repository root** (not `frontend/`) serves `docs/api/openapi.yaml` on http://localhost:4010. The mock's paths have no `/api/v1` prefix (`http://localhost:4010/auth/login`), so point the Vite proxy at it with a rewrite while you work against mocks.
+- **The contract has every auth and `/me` endpoint already** (OpenAPI v0). Run `pnpm api:types` against it. Notable details:
     - `GET /me` returns a `features` object (`upload_images`, `add_link`, `paste_text`, `discover`, `chat`). Use it for the "Add source" menu flags in B2.
     - An account locked after 5 failed logins returns **429** with code `ACCOUNT_LOCKED` (plus `Retry-After`); other rate limits return 429 `RATE_LIMITED`.
     - Error bodies include `request_id`. Show it in error toasts ("Reference: ...") so users can report it.
@@ -134,8 +134,8 @@ frontend/src/
 4. **Tooling and scripts** (CI needs `lint`, `typecheck`, `i18n:check`, `test` and `build`; see 3a):
     - ESLint with `react/no-danger` and `@typescript-eslint/no-explicit-any` as errors
     - Prettier, Vitest
-    - `npm run api:types` = `openapi-typescript ../docs/api/openapi.yaml -o src/lib/api/schema.ts`
-    - `npm run i18n:check` fails when a key exists in `en` but is missing from `fr` or `es`
+    - `pnpm api:types` = `openapi-typescript ../docs/api/openapi.yaml -o src/lib/api/schema.ts`
+    - `pnpm i18n:check` fails when a key exists in `en` but is missing from `fr` or `es`
 5. **`lib/api/client.ts`:**
     - axios with base `/api/v1`, `withCredentials`, and the `X-Requested-With` header
     - a request interceptor adds `Authorization: Bearer`
@@ -146,8 +146,8 @@ frontend/src/
 
 **Acceptance:**
 
-- [ ] `npm run dev` shows a stub shell in light and dark mode.
-- [ ] `npm run build` outputs to `backend/public/app`.
+- [ ] `pnpm dev` shows a stub shell in light and dark mode.
+- [ ] `pnpm build` outputs to `backend/public/app`.
 - [ ] A Vitest test proves that 3 simultaneous 401s trigger exactly **one** refresh call.
 
 ---

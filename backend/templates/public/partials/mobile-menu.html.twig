@@ -1,19 +1,38 @@
+{% import 'macros/icons.html.twig' as ui %}
 <nav id="mobile-menu" class="mobile-menu" x-show="open" x-cloak
+     x-transition:enter="motion-enter" x-transition:enter-start="motion-from" x-transition:enter-end="motion-to" x-transition:leave="motion-leave" x-transition:leave-start="motion-to" x-transition:leave-end="motion-from"
      aria-label="{{ trans('public.mobile_navigation') }}">
-    <div class="container mobile-menu__inner">
-        <a class="mobile-menu__link" href="/{{ locale }}/">{{ trans('public.navigation.home') }}</a>
-        {% if page_urls is defined %}
-            {% for page in ['features', 'how_it_works', 'about', 'contact'] %}
-                <a class="mobile-menu__link" href="{{ page_urls[page] }}"
-                   {% if page_key is defined and page_key == page %}aria-current="page"{% endif %}>
-                    {{ trans('public.navigation.' ~ page) }}
-                </a>
-            {% endfor %}
-        {% endif %}
-        {% include 'partials/language-switcher.html.twig' with {variant: 'full'} %}
+    <div class="wrap mobile-menu__inner">
+        <div class="mobile-menu__links">
+            <a class="mobile-menu__link anim-host" href="/{{ locale }}/"
+               {% if page_key is not defined %}aria-current="page"{% endif %}>
+                {{ ui.icon('home', 'icon icon--draw') }} {{ trans('public.navigation.home') }}
+            </a>
+            {% if page_urls is defined %}
+                {% for page, icon in {features: 'grid', how_it_works: 'workflow', about: 'info', contact: 'mail'} %}
+                    <a class="mobile-menu__link anim-host" href="{{ page_urls[page] }}"
+                       {% if page_key is defined and page_key == page %}aria-current="page"{% endif %}>
+                        {{ ui.icon(icon, 'icon icon--draw') }} {{ trans('public.navigation.' ~ page) }}
+                    </a>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        {# Compact rows: label on the left, the same small controls as the desktop header on the right. #}
+        <div class="mobile-menu__panel">
+            <div class="menu-row">
+                <span class="menu-row__label" aria-hidden="true">{{ trans('public.theme.legend') }}</span>
+                {% include 'partials/theme-switch.html.twig' with {variant: 'compact', uid: 'm'} %}
+            </div>
+            <div class="menu-row menu-row--wrap">
+                <span class="menu-row__label" aria-hidden="true">{{ trans('public.language') }}</span>
+                {% include 'partials/languages.html.twig' with {variant: 'list', uid: 'm'} %}
+            </div>
+        </div>
+
         <div class="mobile-menu__actions">
-            <a class="btn btn--secondary" href="/app/login">{{ trans('public.login') }}</a>
-            <a class="btn btn--primary" href="/app/register">{{ trans('public.signup') }}</a>
+            <a class="btn btn--secondary btn--pill" href="/app/login">{{ ui.icon('login') }} {{ trans('public.login') }}</a>
+            <a class="btn btn--primary btn--pill" href="/app/register">{{ trans('public.get_started') }}</a>
         </div>
     </div>
 </nav>

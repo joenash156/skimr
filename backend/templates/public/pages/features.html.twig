@@ -1,18 +1,46 @@
+{% import 'macros/icons.html.twig' as ui %}
+{% set p = 'public.pages.features.' %}
+{% set icons = {
+    source_processing: 'file', semantic_search: 'search', theme_clustering: 'layers',
+    methods_comparison: 'columns', evidence_synthesis: 'pen', admin_console: 'grid',
+    usage_quotas: 'check', citation_map: 'network', research_gaps: 'compass',
+    paper_discovery: 'search', exports: 'arrow-up-right', project_sharing: 'link',
+    public_syntheses: 'globe', source_hunting: 'compass', image_ocr: 'image',
+    web_and_pasted_sources: 'clipboard', source_chat: 'quote',
+} %}
 <section aria-labelledby="page-title">
-    <header class="page-header">
-        <h1 id="page-title">{{ trans('public.pages.features.heading') }}</h1>
-        <p class="lead">{{ trans('public.pages.features.intro') }}</p>
-    </header>
-    <ul class="grid grid--3 feature-list">
-        {% for feature in features %}
-            <li>
-                <article id="feature-{{ feature.id|lower }}" class="card card--plain feature">
-                    <span class="badge badge--{{ feature.tier }}">{{ trans('public.pages.features.tiers.' ~ feature.tier) }}</span>
-                    <h2 class="card__title">{{ trans('public.pages.features.items.' ~ feature.key ~ '.title') }}</h2>
-                    <p>{{ trans('public.pages.features.items.' ~ feature.key ~ '.description') }}</p>
-                </article>
-            </li>
-        {% endfor %}
-    </ul>
-    <p class="note">{{ trans('public.pages.features.tier_note') }}</p>
+    {% include 'partials/page-hero.html.twig' with {
+        kicker: trans('public.navigation.features'),
+        title: trans(p ~ 'heading'),
+        lead: trans(p ~ 'intro'),
+    } %}
+
+    {% for tier in ['core', 'extended', 'stretch'] %}
+        {% set tier_features = features|filter(f => f.tier == tier) %}
+        {% if tier_features is not empty %}
+            <div class="section{{ loop.index is even ? ' section--surface' : '' }} section--compact">
+                <div class="wrap tier">
+                    <div class="tier__head">
+                        <span class="badge badge--{{ tier }}">{{ trans(p ~ 'tiers.' ~ tier) }}</span>
+                        <p class="tier__intro">{{ trans(p ~ 'tier_intros.' ~ tier) }}</p>
+                    </div>
+                    <ul class="ruled-grid feature-list">
+                        {% for feature in tier_features %}
+                            <li class="ruled-grid__cell anim-host">
+                                <article id="feature-{{ feature.id|lower }}" class="feature">
+                                    <span class="ruled-grid__icon">{{ ui.icon(icons[feature.key] ?? 'check', 'icon icon--draw') }}</span>
+                                    <h2 class="card__title">{{ trans(p ~ 'items.' ~ feature.key ~ '.title') }}</h2>
+                                    <p>{{ trans(p ~ 'items.' ~ feature.key ~ '.description') }}</p>
+                                </article>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <div class="wrap">
+        <p class="note note--center">{{ trans(p ~ 'tier_note') }}</p>
+    </div>
 </section>

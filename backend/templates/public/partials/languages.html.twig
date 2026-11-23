@@ -1,0 +1,52 @@
+{#
+ # Language switcher with national flags. Links go to the same page in the other
+ # language (metadata.alternates), so the visitor never lands back on the home page.
+ #   variant: 'menu' (header dropdown) or 'list' (phone menu, footer)
+ #   uid:     unique per instance (SVG ids, element ids)
+ #}
+{% import 'macros/icons.html.twig' as ui %}
+{% import 'macros/flags.html.twig' as flags %}
+{% set variant = variant|default('list') %}
+{% set languages = [] %}
+{% if metadata is defined %}
+    {% for alternate in metadata.alternates|filter(a => a.locale != 'x-default') %}
+        {% set languages = languages|merge([{code: alternate.locale, url: alternate.url}]) %}
+    {% endfor %}
+{% else %}
+    {% set languages = [{code: 'en', url: '/en/'}, {code: 'fr', url: '/fr/'}, {code: 'es', url: '/es/'}] %}
+{% endif %}
+
+{% if variant == 'menu' %}
+    <div class="lang-menu" x-data="dropdown" x-on:keydown.escape="close" x-on:click.outside="close">
+        <button class="lang-menu__button" type="button" x-on:click="toggle"
+                x-bind:aria-expanded="open" aria-expanded="false" aria-controls="lang-menu-{{ uid }}"
+                aria-label="{{ trans('public.language') }}: {{ trans('public.language_names.' ~ locale) }}">
+            {{ flags.flag(locale, uid ~ 'b') }}
+            <span class="lang-menu__code">{{ locale|upper }}</span>
+            {{ ui.icon('chevron-down', 'icon lang-menu__chevron') }}
+        </button>
+        <ul id="lang-menu-{{ uid }}" class="lang-menu__list" x-show="open" x-cloak
+            x-transition:enter="motion-enter" x-transition:enter-start="motion-from" x-transition:enter-end="motion-to" x-transition:leave="motion-leave" x-transition:leave-start="motion-to" x-transition:leave-end="motion-from">
+            {% for language in languages %}
+                <li>
+                    <a class="lang-menu__item" href="{{ language.url }}" lang="{{ language.code }}" hreflang="{{ language.code }}"
+                       {% if locale == language.code %}aria-current="page"{% endif %}>
+                        {{ flags.flag(language.code, uid) }}
+                        <span>{{ trans('public.language_names.' ~ language.code) }}</span>
+                        {% if locale == language.code %}{{ ui.icon('check', 'icon lang-menu__check') }}{% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+    <div class="lang-list" role="group" aria-label="{{ trans('public.language') }}">
+        {% for language in languages %}
+            <a class="lang-list__item" href="{{ language.url }}" lang="{{ language.code }}" hreflang="{{ language.code }}"
+               {% if locale == language.code %}aria-current="page"{% endif %}>
+                {{ flags.flag(language.code, uid) }}
+                <span>{{ trans('public.language_names.' ~ language.code) }}</span>
+            </a>
+        {% endfor %}
+    </div>
+{% endif %}

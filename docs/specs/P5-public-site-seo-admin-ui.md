@@ -105,6 +105,7 @@ P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1
     - Contract: `POST /api/v1/contact` is in `docs/api/openapi.yaml` (request, 201 response, errors). Match it exactly; `composer contract` checks the route exists there.
 - **Admin UI:** you need `recharts` from P4's `frontend/package.json` (P4 adds it in B0); don't edit their `package.json`. `shared/design-tokens.css` is P4's, and you're the required second reviewer.
 - **Local checks before every PR** (in `backend/`): `composer test`, `composer stan`, `composer cs`, `composer contract` (the last fails if an `/api/v1` route is missing from `docs/api/openapi.yaml`; your public HTML pages are not checked).
+- **Home hero carousel (admin screen, B4).** The slides come from `App\Public\Hero\HeroSlides`, which reads the settings key `public.hero_slides` (JSON list, at most 6): `{"image_url": "https://res.cloudinary.com/<cloud>/image/upload/skimr/site/hero/<id>.jpg", "heading": {"en","fr","es"}, "alt": {"en","fr","es"}}`. Only Cloudinary or `/assets/` images are shown; a missing language falls back to English; with nothing stored, the four default slides (`public/assets/hero/`) are used. Your B4 super-admin settings screen adds, edits, reorders and removes them through P2's `/admin/settings` API.
 - **Integration branch is `dev`.** Branch from it; open PRs into it.
 
 ---
@@ -123,7 +124,7 @@ P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1
     - header: logo, nav, language switcher, theme toggle, and **Log in / Sign up buttons linking to `/app/login` and `/app/register`**
     - footer
     - mobile menu (Alpine.js)
-3. **Tailwind CLI build** of `public/assets/site.css` from `shared/design-tokens.css`: add `npm run build:public` in `backend/package.json`, purged to under 30 KB gzipped.
+3. **Tailwind CLI build** of `public/assets/site.css` from `shared/design-tokens.css`: add `pnpm build:public` in `backend/package.json`, purged to under 30 KB gzipped.
 4. **Locale and URLs:**
     - `src/Public/Twig/TransExtension` (wraps a `Translator` pointed at `translations/public/`; see 3a)
     - `LocaleMiddleware`: `/{lang}` accepts only en, fr and es; anything else is a 404. It sets the `locale` request attribute.

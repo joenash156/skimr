@@ -1,0 +1,53 @@
+{#
+ # Shared layout for the legal pages (privacy, terms, cookies): a sticky table of
+ # contents, a summary box, numbered sections with anchors, and related pages.
+ #   page:     page key, e.g. 'privacy' (translations under public.pages.<page>.)
+ #   sections: list of section keys; each has <key>_heading and <key>_description
+ #}
+{% import 'macros/icons.html.twig' as ui %}
+{% set p = 'public.pages.' ~ page ~ '.' %}
+<section aria-labelledby="page-title">
+    {% include 'partials/page-hero.html.twig' with {
+        kicker: trans('public.navigation.' ~ page),
+        title: trans(p ~ 'heading'),
+    } %}
+
+    <div class="section section--tight-top">
+        <div class="wrap legal">
+            <nav class="legal__toc" aria-labelledby="toc-title">
+                <p id="toc-title" class="legal__toc-title">{{ trans('public.pages.common.on_this_page') }}</p>
+                <ol>
+                    {% for section in sections %}
+                        <li><a href="#{{ section|replace({'_': '-'}) }}">{{ trans(p ~ section ~ '_heading') }}</a></li>
+                    {% endfor %}
+                </ol>
+            </nav>
+
+            <article class="legal__body">
+                <div class="legal__summary">
+                    <p class="legal__summary-label">{{ trans('public.pages.common.summary') }}</p>
+                    <p>{{ trans(p ~ 'intro') }}</p>
+                </div>
+
+                {% for section in sections %}
+                    <section class="legal__section" id="{{ section|replace({'_': '-'}) }}" aria-labelledby="{{ section|replace({'_': '-'}) }}-title">
+                        <h2 id="{{ section|replace({'_': '-'}) }}-title">
+                            <span class="legal__number" aria-hidden="true">{{ '%02d'|format(loop.index) }}</span>
+                            {{ trans(p ~ section ~ '_heading') }}
+                        </h2>
+                        <p>{{ trans(p ~ section ~ '_description') }}</p>
+                    </section>
+                {% endfor %}
+
+                <div class="legal__related">
+                    <p class="legal__toc-title">{{ trans('public.pages.common.related') }}</p>
+                    <ul class="link-list">
+                        {% for other in ['privacy', 'terms', 'cookies', 'contact']|filter(o => o != page) %}
+                            <li><a class="text-link anim-host" href="{{ page_urls[other] }}">{{ trans('public.navigation.' ~ other) }} {{ ui.icon('arrow-up-right', 'icon btn__arrow') }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>

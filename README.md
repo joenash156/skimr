@@ -30,7 +30,7 @@ You only need the tools for the part you work on, but everyone should be able to
 | PHP | 8.2 or newer, **latest patch only** — at least 8.2.36 / 8.3.37 / 8.4.28 / 8.5.13 (Nov 2026 security release). Laragon, XAMPP, or a plain PHP zip | everyone | `php -v` |
 | Composer | 2.x | everyone | `composer --version` |
 | MySQL | 8.0 | everyone | `mysql --version` |
-| Node.js | 20 LTS or newer | P4, P5 (and `npm run mock`) | `node -v` |
+| Node.js + pnpm | Node 20 LTS or newer, pnpm 10 (`npm install -g pnpm`) | P4, P5 (and `pnpm mock`) | `node -v`, `pnpm -v` |
 | Python | **3.11** (not 3.12+: some ML packages lag behind) | P3 | `py -3.11 --version` |
 | Docker Desktop | any recent | P3 | `docker --version` |
 
@@ -111,8 +111,8 @@ Open http://localhost:8080/api/v1/health. You should see `{"data":{"status":"ok"
 The public website (http://localhost:8080/en/) needs its stylesheet built once, and again after CSS or template changes (needs Node.js):
 
 ```powershell
-npm ci                  # in backend/, first time only
-npm run build:public    # writes public/assets/site.css (git-ignored; deploy builds it too)
+pnpm install           # in backend/, first time only (pnpm 10: npm install -g pnpm)
+pnpm build:public    # writes public/assets/site.css (git-ignored; deploy builds it too)
 ```
 
 Useful commands (run in `backend/`):
@@ -132,7 +132,7 @@ Useful commands (run in `backend/`):
 Frontend work against endpoints that aren't built yet uses mocks generated from the contract:
 
 ```powershell
-npm run mock        # in the repository root
+pnpm mock        # in the repository root
 ```
 
 ### 5. Frontend (React), at http://localhost:5173/app/

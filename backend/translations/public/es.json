@@ -6,6 +6,7 @@
     },
     "skip_to_content": "Ir al contenido",
     "home_link": "Inicio de Skimr",
+    "slogan": "Un espacio de investigación basado en evidencias",
     "main_navigation": "Navegación principal",
     "mobile_navigation": "Navegación móvil",
     "language": "Idioma",
@@ -16,10 +17,13 @@
       "es": "Español"
     },
     "login": "Iniciar sesión",
-    "signup": "Crear cuenta",
+    "get_started": "Empezar",
     "menu": "Menú",
     "theme": {
-      "toggle": "Cambiar el tema"
+      "legend": "Tema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
     },
     "navigation": {
       "home": "Inicio",
@@ -34,7 +38,6 @@
     "home": {
       "title": "Skimr — investigación basada en evidencias",
       "description": "Organiza tu investigación y crea revisiones en las que cada hallazgo remite a su fuente.",
-      "eyebrow": "Un espacio de investigación basado en evidencias",
       "heading": "Investigación organizada en torno a las evidencias.",
       "intro": "Reúne tus fuentes, relaciona sus hallazgos y redacta una revisión bibliográfica que puedas rastrear hasta los pasajes originales.",
       "demo": {
@@ -164,6 +167,37 @@
       "cta": {
         "heading": "Haz que tu próxima revisión bibliográfica sea más fácil de verificar",
         "description": "Reúne tus fuentes en un espacio de trabajo y mantén las evidencias junto a cada hallazgo."
+      },
+      "kickers": {
+        "how": "Cómo funciona",
+        "sources": "Fuentes",
+        "features": "Funciones",
+        "evidence": "Evidencia",
+        "faq": "Preguntas frecuentes"
+      },
+      "slides": {
+        "1": {
+          "heading": "Investigación organizada en torno a las evidencias.",
+          "alt": "Un libro abierto sobre un escritorio de madera"
+        },
+        "2": {
+          "heading": "Cada hallazgo remite a su fuente.",
+          "alt": "Una persona toma notas junto a un portátil"
+        },
+        "3": {
+          "heading": "De una pila de artículos a una revisión clara.",
+          "alt": "Páginas impresas que cubren una pared"
+        },
+        "4": {
+          "heading": "Descubre cómo se conectan tus fuentes.",
+          "alt": "Lectura en un lector electrónico al aire libre"
+        }
+      },
+      "carousel": {
+        "label": "Destacado",
+        "slide": "Mostrar diapositiva {number} de {total}",
+        "pause": "Pausar la presentación",
+        "play": "Reproducir la presentación"
       }
     },
     "pages": {
@@ -247,6 +281,11 @@
             "title": "Enlaces web y texto pegado",
             "description": "Añade artículos web, informes, enlaces DOI o arXiv, enlaces directos a PDF y texto copiado de otras fuentes."
           }
+        },
+        "tier_intros": {
+          "core": "La base de cada proyecto.",
+          "extended": "Herramientas para profundizar en tus fuentes.",
+          "stretch": "Previsto para versiones posteriores."
         }
       },
       "how_it_works": {
@@ -271,7 +310,8 @@
             "title": "Redacta con evidencias trazables",
             "description": "Crea una síntesis que distinga los hallazgos verificados de las interpretaciones de la IA y vincule las afirmaciones con sus fuentes."
           }
-        }
+        },
+        "cta_heading": "¿Listo para empezar tu primer proyecto?"
       },
       "about": {
         "title": "Acerca de Skimr | Investigación y evidencias",
@@ -279,7 +319,56 @@
         "heading": "Acerca de Skimr",
         "intro": "Skimr ayuda a estudiantes, investigadores, asistentes de investigación y analistas de políticas a organizar fuentes y entender cómo se relacionan los hallazgos.",
         "evidence_heading": "Mantén las evidencias a la vista",
-        "evidence_description": "Un hallazgo debe remitir al pasaje del que procede. Una interpretación de la IA debe identificarse y respaldarse con hallazgos, no presentarse como un hecho de una fuente."
+        "evidence_description": "Un hallazgo debe remitir al pasaje del que procede. Una interpretación de la IA debe identificarse y respaldarse con hallazgos, no presentarse como un hecho de una fuente.",
+        "mission_label": "Nuestra misión",
+        "mission": "Hacer que las revisiones de literatura sean más rápidas de elaborar y más fáciles de verificar, manteniendo cada afirmación conectada con el pasaje del que procede.",
+        "audience_heading": "Pensado para quienes trabajan con evidencias",
+        "audience": {
+          "students": {
+            "title": "Estudiantes",
+            "description": "Prepara una tesis o una revisión de curso sin perder de vista de dónde viene cada idea."
+          },
+          "researchers": {
+            "title": "Investigadores",
+            "description": "Mapea un campo rápidamente, compara métodos entre estudios y detecta lo que aún no se ha explorado."
+          },
+          "assistants": {
+            "title": "Asistentes de investigación",
+            "description": "Organiza listas de lectura extensas para un equipo y entrega hallazgos que se pueden comprobar."
+          },
+          "analysts": {
+            "title": "Analistas de políticas",
+            "description": "Elabora informes sólidos, con cada afirmación vinculada a una fuente publicada."
+          }
+        },
+        "principles_heading": "Nuestros principios",
+        "principles": {
+          "privacy": {
+            "title": "Privado por defecto",
+            "description": "Tus fuentes permanecen en tu proyecto. Solo tú y las personas que invites pueden verlas, salvo que decidas publicar una síntesis."
+          },
+          "languages": {
+            "title": "Pensado para varios idiomas",
+            "description": "La interfaz funciona en inglés, francés y español, y las citas siempre se mantienen en su idioma original."
+          }
+        },
+        "facts": {
+          "languages": {
+            "value": "3",
+            "label": "idiomas de interfaz"
+          },
+          "sources": {
+            "value": "5",
+            "label": "formas de añadir fuentes"
+          },
+          "rule": {
+            "value": "1",
+            "label": "regla: cada hallazgo remite a su fuente"
+          }
+        },
+        "cta_heading": "¿Preguntas sobre Skimr?",
+        "cta_description": "Cuéntanos en qué estás trabajando y te responderemos por correo electrónico.",
+        "cta_button": "Contactar con el equipo"
       },
       "contact": {
         "title": "Contacta con Skimr | Preguntas y comentarios",
@@ -297,7 +386,26 @@
         "name_label": "Nombre",
         "email_label": "Correo electrónico",
         "message_label": "Mensaje",
-        "submit": "Enviar mensaje"
+        "submit": "Enviar mensaje",
+        "topics_heading": "Cómo podemos ayudarte",
+        "topics": {
+          "questions": {
+            "title": "Preguntas sobre el producto",
+            "description": "Cómo gestiona Skimr las fuentes, los idiomas, las exportaciones y las evidencias."
+          },
+          "feedback": {
+            "title": "Comentarios e ideas",
+            "description": "Cuéntanos qué facilitaría tu trabajo de investigación."
+          },
+          "account": {
+            "title": "Ayuda con tu cuenta",
+            "description": "¿Problemas para iniciar sesión o verificar tu correo? Indica la dirección que usas en Skimr."
+          }
+        },
+        "reply_note": "Respondemos por correo electrónico a la dirección que indiques. Tu mensaje solo se usa para responderte.",
+        "privacy_link": "Consultar nuestra política de privacidad",
+        "faq_link": "Ver las preguntas frecuentes",
+        "form_heading": "Envíanos un mensaje"
       },
       "privacy": {
         "title": "Privacidad | Skimr",
@@ -332,6 +440,12 @@
         "theme_description": "El sitio público guarda tu preferencia de tema claro, oscuro o del sistema en localStorage. Esta preferencia no es una cookie.",
         "authentication_heading": "Cookie de autenticación",
         "authentication_description": "Al iniciar sesión, el panel usa una cookie de renovación segura, HTTP-only y SameSite=Strict, que JavaScript no puede leer. Está limitada a las rutas de autenticación y mantiene tu sesión."
+      },
+      "common": {
+        "on_this_page": "En esta página",
+        "related": "Páginas relacionadas",
+        "summary": "En resumen",
+        "breadcrumb": "Ruta de navegación"
       }
     },
     "error": {

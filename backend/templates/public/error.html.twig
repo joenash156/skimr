@@ -4,7 +4,7 @@
 {% block title %}{{ trans('public.error.title') }}{% endblock %}
 {% block description %}{{ trans('public.error.description') }}{% endblock %}
 {% block content %}
-    <section class="container error-page" aria-labelledby="error-title">
+    <section class="wrap error-page" aria-labelledby="error-title">
         <p class="error-page__code" aria-hidden="true">{{ status }}</p>
         <h1 id="error-title">{{ trans('public.error.heading') }}</h1>
         <p class="lead">{{ trans('public.error.message') }}</p>

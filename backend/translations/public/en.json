@@ -6,6 +6,7 @@
     },
     "skip_to_content": "Skip to content",
     "home_link": "Skimr home",
+    "slogan": "A research workspace built around evidence",
     "main_navigation": "Main",
     "mobile_navigation": "Mobile",
     "language": "Language",
@@ -16,10 +17,13 @@
     },
     "footer_navigation": "Footer",
     "login": "Log in",
-    "signup": "Sign up",
+    "get_started": "Get started",
     "menu": "Menu",
     "theme": {
-      "toggle": "Toggle theme"
+      "legend": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
     },
     "navigation": {
       "home": "Home",
@@ -34,7 +38,6 @@
     "home": {
       "title": "Skimr — evidence-led literature reviews",
       "description": "Organize research and build literature reviews where every finding traces back to its source.",
-      "eyebrow": "A research workspace built around evidence",
       "heading": "Research, organized around evidence.",
       "intro": "Bring your sources together, see how findings relate, and build a literature review you can trace back to the original passages.",
       "demo": {
@@ -164,6 +167,37 @@
       "cta": {
         "heading": "Make your next literature review easier to verify",
         "description": "Bring your sources into one workspace and keep the evidence close to every finding."
+      },
+      "kickers": {
+        "how": "How it works",
+        "sources": "Sources",
+        "features": "Features",
+        "evidence": "Evidence",
+        "faq": "FAQ"
+      },
+      "slides": {
+        "1": {
+          "heading": "Research, organized around evidence.",
+          "alt": "An open book on a wooden desk"
+        },
+        "2": {
+          "heading": "Every finding traces back to its source.",
+          "alt": "A person writing notes beside a laptop"
+        },
+        "3": {
+          "heading": "From a pile of papers to a clear review.",
+          "alt": "Printed pages covering a wall"
+        },
+        "4": {
+          "heading": "See how your sources connect.",
+          "alt": "Reading on an e-reader outdoors"
+        }
+      },
+      "carousel": {
+        "label": "Featured",
+        "slide": "Show slide {number} of {total}",
+        "pause": "Pause slideshow",
+        "play": "Play slideshow"
       }
     },
     "pages": {
@@ -247,6 +281,11 @@
             "title": "Web links and pasted text",
             "description": "Add web articles, reports, DOI or arXiv links, direct PDF links, and text pasted from other sources."
           }
+        },
+        "tier_intros": {
+          "core": "The foundations of every project.",
+          "extended": "Tools that go deeper into your sources.",
+          "stretch": "Planned for later releases."
         }
       },
       "how_it_works": {
@@ -271,7 +310,8 @@
             "title": "Draft with traceable evidence",
             "description": "Build a synthesis that keeps verified findings distinct from AI interpretations and links claims to sources."
           }
-        }
+        },
+        "cta_heading": "Ready to start your first project?"
       },
       "about": {
         "title": "About Skimr | Research, grounded in evidence",
@@ -279,7 +319,56 @@
         "heading": "About Skimr",
         "intro": "Skimr helps students, researchers, research assistants, and policy analysts organize sources and understand how findings relate.",
         "evidence_heading": "Keep the evidence in view",
-        "evidence_description": "A finding should lead back to the passage it came from. An AI interpretation should be labelled and supported by findings, not presented as a source fact."
+        "evidence_description": "A finding should lead back to the passage it came from. An AI interpretation should be labelled and supported by findings, not presented as a source fact.",
+        "mission_label": "Our mission",
+        "mission": "Make literature reviews faster to build and easier to trust, by keeping every claim connected to the passage it came from.",
+        "audience_heading": "Built for people who work with evidence",
+        "audience": {
+          "students": {
+            "title": "Students",
+            "description": "Plan a thesis or coursework review without losing track of where each idea came from."
+          },
+          "researchers": {
+            "title": "Researchers",
+            "description": "Map a field quickly, compare methods across studies and spot what is still unexplored."
+          },
+          "assistants": {
+            "title": "Research assistants",
+            "description": "Organise long reading lists for a team and hand over findings that can be checked."
+          },
+          "analysts": {
+            "title": "Policy analysts",
+            "description": "Build briefings on solid ground, with every statement traceable to a published source."
+          }
+        },
+        "principles_heading": "What we stand for",
+        "principles": {
+          "privacy": {
+            "title": "Private by default",
+            "description": "Your sources stay in your project. Only you and the people you invite can see them, unless you choose to publish a synthesis."
+          },
+          "languages": {
+            "title": "Built for more than one language",
+            "description": "The interface works in English, French and Spanish, and quotations always stay in their original language."
+          }
+        },
+        "facts": {
+          "languages": {
+            "value": "3",
+            "label": "interface languages"
+          },
+          "sources": {
+            "value": "5",
+            "label": "ways to add sources"
+          },
+          "rule": {
+            "value": "1",
+            "label": "rule: every finding traces back to its source"
+          }
+        },
+        "cta_heading": "Questions about Skimr?",
+        "cta_description": "Tell us what you are working on, and we will get back to you by email.",
+        "cta_button": "Contact the team"
       },
       "contact": {
         "title": "Contact Skimr | Questions and feedback",
@@ -297,7 +386,26 @@
         "name_label": "Name",
         "email_label": "Email address",
         "message_label": "Message",
-        "submit": "Send message"
+        "submit": "Send message",
+        "topics_heading": "How we can help",
+        "topics": {
+          "questions": {
+            "title": "Product questions",
+            "description": "How Skimr handles sources, languages, exports and evidence."
+          },
+          "feedback": {
+            "title": "Feedback and ideas",
+            "description": "Tell us what would make your research workflow easier."
+          },
+          "account": {
+            "title": "Account help",
+            "description": "Trouble signing in or verifying your email? Mention the address you use for Skimr."
+          }
+        },
+        "reply_note": "We reply by email to the address you provide. Your message is used only to answer you.",
+        "privacy_link": "Read our privacy notice",
+        "faq_link": "Browse frequently asked questions",
+        "form_heading": "Send us a message"
       },
       "privacy": {
         "title": "Privacy policy | Skimr",
@@ -332,6 +440,12 @@
         "theme_description": "The public site stores your light, dark, or system theme preference in localStorage. This preference is not a cookie.",
         "authentication_heading": "Authentication cookie",
         "authentication_description": "When you sign in, the dashboard uses a secure, HTTP-only, SameSite=Strict refresh cookie so JavaScript cannot read the token. It is limited to authentication routes and is used to maintain your session."
+      },
+      "common": {
+        "on_this_page": "On this page",
+        "related": "Related pages",
+        "summary": "In short",
+        "breadcrumb": "Breadcrumb"
       }
     },
     "error": {

@@ -1,57 +1,93 @@
 {% import 'macros/icons.html.twig' as ui %}
-<section class="contact" aria-labelledby="contact-title">
-    <header class="page-header">
-        <h1 id="contact-title">{{ trans('public.pages.contact.heading') }}</h1>
-        <p class="lead">{{ trans('public.pages.contact.intro') }}</p>
-    </header>
+{% set p = 'public.pages.contact.' %}
+<section class="contact" aria-labelledby="page-title">
+    {% include 'partials/page-hero.html.twig' with {
+        kicker: trans('public.navigation.contact'),
+        title: trans(p ~ 'heading'),
+        lead: trans(p ~ 'intro'),
+    } %}
 
-    <div class="card contact__card">
-        <form class="form"
-              method="post"
-              data-contact-form
-              data-endpoint="/api/v1/contact"
-              data-locale="{{ locale }}"
-              data-sending-message="{{ trans('public.pages.contact.sending') }}"
-              data-network-error="{{ trans('public.pages.contact.network_error') }}"
-              data-turnstile-required="{{ trans('public.pages.contact.turnstile_required') }}"
-              aria-describedby="contact-form-status"
-              novalidate>
-            <fieldset class="form__fields" data-contact-fields disabled>
-                <legend class="visually-hidden">{{ trans('public.pages.contact.form_legend') }}</legend>
-                <div class="field">
-                    <label class="field__label" for="contact-name">{{ trans('public.pages.contact.name_label') }}</label>
-                    <input class="input" id="contact-name" name="name" type="text" maxlength="100" autocomplete="name"
-                           aria-describedby="contact-name-error" required>
-                    <p id="contact-name-error" class="field__error" hidden></p>
+    <div class="section section--tight-top">
+        <div class="wrap contact__layout">
+            {# Left: what to write to us about, and how the message is handled. #}
+            <aside class="contact__aside" aria-labelledby="contact-topics">
+                <h2 id="contact-topics" class="contact__aside-title">{{ trans(p ~ 'topics_heading') }}</h2>
+                <ul class="topic-list">
+                    {% for key, icon in {questions: 'info', feedback: 'pen', account: 'login'} %}
+                        <li class="topic">
+                            <span class="topic__icon">{{ ui.icon(icon) }}</span>
+                            <div>
+                                <h3 class="topic__title">{{ trans(p ~ 'topics.' ~ key ~ '.title') }}</h3>
+                                <p>{{ trans(p ~ 'topics.' ~ key ~ '.description') }}</p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="contact__note">
+                    <p>{{ trans(p ~ 'reply_note') }}</p>
+                    <ul class="link-list">
+                        <li><a class="text-link anim-host" href="{{ page_urls.privacy }}">{{ trans(p ~ 'privacy_link') }} {{ ui.icon('arrow-up-right', 'icon btn__arrow') }}</a></li>
+                        <li><a class="text-link anim-host" href="/{{ locale }}/#home-faq-title">{{ trans(p ~ 'faq_link') }} {{ ui.icon('arrow-up-right', 'icon btn__arrow') }}</a></li>
+                    </ul>
                 </div>
-                <div class="field">
-                    <label class="field__label" for="contact-email">{{ trans('public.pages.contact.email_label') }}</label>
-                    <input class="input" id="contact-email" name="email" type="email" maxlength="254" autocomplete="email"
-                           aria-describedby="contact-email-error" required>
-                    <p id="contact-email-error" class="field__error" hidden></p>
-                </div>
-                <div class="field">
-                    <label class="field__label" for="contact-message">{{ trans('public.pages.contact.message_label') }}</label>
-                    <textarea class="input input--textarea" id="contact-message" name="message" minlength="10" maxlength="5000" rows="6"
-                              aria-describedby="contact-message-error" required></textarea>
-                    <p id="contact-message-error" class="field__error" hidden></p>
-                </div>
-                {% if turnstile_site_key %}
-                    <div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}" data-action="contact" data-theme="auto"></div>
-                {% endif %}
-                <div class="form__footer">
-                    <button class="btn btn--primary" type="submit">
-                        {{ ui.icon('mail') }} {{ trans('public.pages.contact.submit') }}
-                    </button>
-                    <p id="contact-form-status" class="form__status" role="status" aria-live="polite">
-                        {{ turnstile_site_key ? trans('public.pages.contact.form_ready') : trans('public.pages.contact.form_unavailable') }}
-                    </p>
-                </div>
-            </fieldset>
-        </form>
+            </aside>
+
+            {# Right: the form. Field names and ids are what contact.js and the API expect. #}
+            <div class="card contact__card">
+                <h2 class="contact__form-title">{{ trans(p ~ 'form_heading') }}</h2>
+                <form class="form"
+                      method="post"
+                      data-contact-form
+                      data-endpoint="/api/v1/contact"
+                      data-locale="{{ locale }}"
+                      data-sending-message="{{ trans(p ~ 'sending') }}"
+                      data-network-error="{{ trans(p ~ 'network_error') }}"
+                      data-turnstile-required="{{ trans(p ~ 'turnstile_required') }}"
+                      aria-describedby="contact-form-status"
+                      novalidate>
+                    <fieldset class="form__fields" data-contact-fields disabled>
+                        <legend class="visually-hidden">{{ trans(p ~ 'form_legend') }}</legend>
+                        <div class="form__row">
+                            <div class="field">
+                                <label class="field__label" for="contact-name">{{ trans(p ~ 'name_label') }}</label>
+                                <input class="input" id="contact-name" name="name" type="text" maxlength="100" autocomplete="name"
+                                       aria-describedby="contact-name-error" required>
+                                <p id="contact-name-error" class="field__error" hidden></p>
+                            </div>
+                            <div class="field">
+                                <label class="field__label" for="contact-email">{{ trans(p ~ 'email_label') }}</label>
+                                <input class="input" id="contact-email" name="email" type="email" maxlength="254" autocomplete="email"
+                                       aria-describedby="contact-email-error" required>
+                                <p id="contact-email-error" class="field__error" hidden></p>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="field__top">
+                                <label class="field__label" for="contact-message">{{ trans(p ~ 'message_label') }}</label>
+                                <span class="field__counter" data-counter-for="contact-message" aria-hidden="true">0 / 5000</span>
+                            </div>
+                            <textarea class="input input--textarea" id="contact-message" name="message" minlength="10" maxlength="5000" rows="7"
+                                      aria-describedby="contact-message-error" required></textarea>
+                            <p id="contact-message-error" class="field__error" hidden></p>
+                        </div>
+                        {% if turnstile_site_key %}
+                            <div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}" data-action="contact" data-theme="auto"></div>
+                        {% endif %}
+                        <div class="form__footer">
+                            <button class="btn btn--primary btn--pill anim-host" type="submit">
+                                {{ trans(p ~ 'submit') }} {{ ui.icon('arrow-right', 'icon btn__arrow') }}
+                            </button>
+                            <p id="contact-form-status" class="form__status" role="status" aria-live="polite">
+                                {{ turnstile_site_key ? trans(p ~ 'form_ready') : trans(p ~ 'form_unavailable') }}
+                            </p>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <noscript><p class="note">{{ trans('public.pages.contact.javascript_required') }}</p></noscript>
+    <noscript><div class="wrap"><p class="note">{{ trans(p ~ 'javascript_required') }}</p></div></noscript>
     {% if turnstile_site_key %}
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
         <script src="/assets/contact.js" defer></script>

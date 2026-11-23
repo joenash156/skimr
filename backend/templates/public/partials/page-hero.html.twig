@@ -1,0 +1,20 @@
+{#
+ # The header band at the top of every inner page.
+ #   kicker: small label above the title (usually the page's nav name)
+ #   title:  the page <h1> (id "page-title" for aria-labelledby)
+ #   lead:   one-sentence introduction
+ #}
+<header class="page-hero">
+    <div class="page-hero__grid" aria-hidden="true"></div>
+    <div class="wrap page-hero__inner">
+        <nav class="breadcrumb" aria-label="{{ trans('public.pages.common.breadcrumb') }}">
+            <a href="/{{ locale }}/">Skimr</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{{ kicker }}</span>
+        </nav>
+        <h1 id="page-title" class="page-hero__title">{{ title }}</h1>
+        {% if lead is defined and lead %}
+            <p class="page-hero__lead">{{ lead }}</p>
+        {% endif %}
+    </div>
+</header>

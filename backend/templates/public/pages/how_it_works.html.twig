@@ -1,20 +1,63 @@
+{% import 'macros/icons.html.twig' as ui %}
+{% set p = 'public.pages.how_it_works.' %}
 <section aria-labelledby="page-title">
-    <header class="page-header">
-        <h1 id="page-title">{{ trans('public.pages.how_it_works.heading') }}</h1>
-        <p class="lead">{{ trans('public.pages.how_it_works.intro') }}</p>
-    </header>
-    <ol class="timeline">
-        {% for step in 1..4 %}
-            <li class="timeline__item">
-                <span class="step__number" aria-hidden="true">{{ step }}</span>
+    {% include 'partials/page-hero.html.twig' with {
+        kicker: trans('public.navigation.how_it_works'),
+        title: trans(p ~ 'heading'),
+        lead: trans(p ~ 'intro'),
+    } %}
+
+    <div class="section">
+        <div class="wrap">
+            <ol class="flow">
+                {% for step, icon in {1: 'file', 2: 'layers', 3: 'search', 4: 'pen'} %}
+                    <li class="flow__step anim-host">
+                        <div class="flow__marker">
+                            <span class="flow__icon">{{ ui.icon(icon, 'icon icon--draw') }}</span>
+                        </div>
+                        <div class="flow__body">
+                            <span class="flow__number">{{ '%02d'|format(step) }}</span>
+                            <h2 class="flow__title">{{ trans(p ~ 'steps.' ~ step ~ '.title') }}</h2>
+                            <p>{{ trans(p ~ 'steps.' ~ step ~ '.description') }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+
+    {# The evidence rule, the same two blocks as on the home page. #}
+    <div class="section section--surface">
+        <div class="wrap">
+            <div class="section__head">
+                <p class="kicker">{{ trans('public.home.kickers.evidence') }}</p>
+                <h2 class="section__title">{{ trans('public.home.evidence.heading') }}</h2>
+                <p class="section__intro">{{ trans('public.home.evidence.intro') }}</p>
+            </div>
+            <div class="grid grid--2">
+                <article class="finding finding--card">
+                    <p class="finding__label">{{ ui.icon('quote') }} {{ trans('public.home.evidence.finding.title') }}</p>
+                    <p>{{ trans('public.home.evidence.finding.description') }}</p>
+                </article>
+                <article class="interpretation interpretation--card">
+                    <p class="interpretation__label">{{ ui.icon('sparkle') }} {{ trans('public.home.evidence.interpretation.title') }}</p>
+                    <p>{{ trans('public.home.evidence.interpretation.description') }}</p>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <div class="section section--tight">
+        <div class="wrap">
+            <div class="cta">
                 <div>
-                    <h2 class="step__title">{{ trans('public.pages.how_it_works.steps.' ~ step ~ '.title') }}</h2>
-                    <p>{{ trans('public.pages.how_it_works.steps.' ~ step ~ '.description') }}</p>
+                    <h2 class="cta__title">{{ trans(p ~ 'cta_heading') }}</h2>
+                    <p>{{ trans('public.home.cta.description') }}</p>
                 </div>
-            </li>
-        {% endfor %}
-    </ol>
-    <div class="actions">
-        <a class="btn btn--primary" href="/app/register">{{ trans('public.home.primary_cta') }}</a>
+                <a class="btn btn--light btn--lg btn--pill anim-host" href="/app/register">
+                    {{ trans('public.get_started') }} {{ ui.icon('arrow-right', 'icon btn__arrow') }}
+                </a>
+            </div>
+        </div>
     </div>
 </section>

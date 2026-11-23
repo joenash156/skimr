@@ -13,6 +13,19 @@
 
     fields.disabled = false;
 
+    // Live "120 / 5000" counter under the message label.
+    const counter = form.querySelector('[data-counter-for="contact-message"]');
+    const messageBox = form.elements.namedItem('message');
+    const updateCounter = () => {
+        if (counter instanceof HTMLElement && messageBox instanceof HTMLTextAreaElement) {
+            counter.textContent = `${messageBox.value.length} / ${messageBox.maxLength}`;
+            counter.classList.toggle('is-near-limit', messageBox.value.length > messageBox.maxLength * 0.9);
+        }
+    };
+    form.addEventListener('input', updateCounter);
+    form.addEventListener('reset', () => setTimeout(updateCounter, 0));
+    updateCounter();
+
     const fieldNames = ['name', 'email', 'message'];
     const clearErrors = () => {
         for (const name of fieldNames) {

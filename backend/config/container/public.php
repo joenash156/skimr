@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Public\Contact\ContactController;
 use App\Public\Contact\ContactMessageRepository;
 use App\Public\Contact\ContactMessageService;
+use App\Public\Hero\HeroSlides;
 use App\Public\Http\PublicErrorRenderer;
 use App\Public\Seo\JsonLd;
 use App\Public\Seo\MetaBuilder;
@@ -15,6 +16,7 @@ use App\Public\Twig\TransExtension;
 use App\Shared\Clock\Clock;
 use App\Shared\Http\JsonResponder;
 use App\Shared\Mail\Mailer;
+use App\Shared\Settings\SettingsRepository;
 use App\Shared\Translator;
 use Cloudinary\Cloudinary;
 use Psr\Container\ContainerInterface;
@@ -49,6 +51,13 @@ return [
     },
 
     ContactMessageRepository::class => autowire(),
+
+    // Home-page carousel: admin-managed slides from settings, else the defaults.
+    HeroSlides::class => static fn (ContainerInterface $container): HeroSlides => new HeroSlides(
+        $container->get(SettingsRepository::class),
+        $container->get(Translator::class . '.public'),
+        $container->get(LoggerInterface::class),
+    ),
 
     MetaBuilder::class => static function (ContainerInterface $container): MetaBuilder {
         $settings = $container->get('settings');

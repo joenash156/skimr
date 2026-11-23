@@ -1,0 +1,58 @@
+{{ app_name }}
+{% if template == 'verify_email' %}
+Confirmez votre adresse e-mail
+
+Bonjour {{ first_name }},
+Confirmez votre adresse e-mail pour activer votre compte Skimr. Ce lien expire dans {{ expires_hours }} heures.
+{{ link }}
+{% elseif template == 'reset_password' %}
+Réinitialisez votre mot de passe
+
+Bonjour {{ first_name }},
+Nous avons reçu une demande de réinitialisation de votre mot de passe Skimr. Ce lien expire dans {{ expires_minutes }} minutes.
+{{ link }}
+Si vous n’êtes pas à l’origine de cette demande, ignorez ce message.
+{% elseif template == 'new_sign_in' %}
+Nouvelle connexion à votre compte
+
+Bonjour {{ first_name }},
+Un nouvel appareil s’est connecté à votre compte Skimr le {{ at }}.
+Adresse IP : {{ ip }}
+Appareil : {{ user_agent }}
+Si vous n’êtes pas à l’origine de cette connexion, réinitialisez votre mot de passe et vérifiez la sécurité de votre compte.
+{% elseif template == 'password_changed' %}
+Votre mot de passe a été modifié
+
+Bonjour {{ first_name }},
+Votre mot de passe Skimr a été modifié le {{ at }}. Si vous n’êtes pas à l’origine de cette modification, sécurisez immédiatement votre compte.
+{% elseif template == 'suspicious_activity' %}
+Alerte de sécurité
+
+Bonjour {{ first_name }},
+Nous avons détecté une activité inhabituelle sur votre compte Skimr le {{ at }} et avons fermé toutes vos sessions. Connectez-vous et vérifiez la sécurité de votre compte.
+{% elseif template == 'email_change_requested' %}
+Demande de changement d’adresse e-mail
+
+Bonjour {{ first_name }},
+Une demande effectuée le {{ at }} vise à remplacer l’adresse e-mail de votre compte Skimr par {{ new_email }}. Le changement ne sera appliqué qu’après confirmation de cette adresse.
+Si vous n’êtes pas à l’origine de cette demande, sécurisez immédiatement votre compte.
+{% elseif template == 'email_changed' %}
+Votre adresse e-mail a été modifiée
+
+Bonjour {{ first_name }},
+L’adresse e-mail de votre compte Skimr a été remplacée par {{ new_email }} le {{ at }}. Si vous n’êtes pas à l’origine de ce changement, sécurisez immédiatement votre compte.
+{% elseif template == 'contact_message' %}
+Nouveau message de contact
+
+De : {{ name }} ({{ email }})
+Reçu le : {{ at }}
+
+{{ message }}
+{% endif %}
+
+{% if template == 'contact_message' %}
+Ce message a été envoyé depuis le formulaire de contact de Skimr.
+{% else %}
+Vous recevez ce message pour protéger ou gérer votre compte Skimr.
+Paramètres des notifications : {{ notification_settings_url }}
+{% endif %}

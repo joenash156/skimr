@@ -37,6 +37,22 @@
       "eyebrow": "A research workspace built around evidence",
       "heading": "Research, organized around evidence.",
       "intro": "Bring your sources together, see how findings relate, and build a literature review you can trace back to the original passages.",
+      "demo": {
+        "caption": "Example synthesis",
+        "theme": "Theme: Remote work and wellbeing",
+        "finding_1": {
+          "quote": "Employees working remotely three or more days a week reported lower commute-related stress.",
+          "source": "Okafor & Lind, 2023 · p. 6"
+        },
+        "finding_2": {
+          "quote": "Flexible schedules were associated with fewer reported sick days over twelve months.",
+          "source": "Martín et al., 2022 · p. 11"
+        },
+        "interpretation": {
+          "text": "Across these studies, flexible work appears to support wellbeing, although most samples come from office-based roles.",
+          "support": "Supported by 2 findings"
+        }
+      },
       "primary_cta": "Get started",
       "secondary_cta": "See how it works",
       "how_it_works": {

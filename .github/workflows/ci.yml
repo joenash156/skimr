@@ -33,6 +33,7 @@ jobs:
           filters: |
             backend:
               - 'backend/**'
+              - 'shared/**'
               - 'docs/api/openapi.yaml'
               - '.github/workflows/ci.yml'
             frontend:
@@ -109,6 +110,12 @@ jobs:
           composer migrate
       - name: Dependency audit
         run: composer audit
+      - name: Public site CSS builds (Tailwind CLI)
+        if: hashFiles('backend/package.json') != ''
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build:public
+          npm audit --audit-level=high
 
   frontend:
     name: Frontend (React)

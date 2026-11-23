@@ -33,6 +33,11 @@ if [ "$SKIP_FRONTEND" = false ] && [ -f "$ROOT/frontend/package.json" ]; then
   (cd "$ROOT/frontend" && npm ci && npm run build)
 fi
 
+if [ -f "$ROOT/backend/package.json" ]; then
+  echo "==> Build the public site CSS (Tailwind CLI)"
+  (cd "$ROOT/backend" && npm ci && npm run build:public)
+fi
+
 echo "==> Copy backend/ to deploy/build/htdocs"
 rm -rf "$BUILD"
 mkdir -p "$TARGET"

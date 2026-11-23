@@ -1,49 +1,57 @@
-<section class="contact-page" aria-labelledby="contact-title">
-    <h1 id="contact-title">{{ trans('public.pages.contact.heading') }}</h1>
-    <p>{{ trans('public.pages.contact.intro') }}</p>
-    <p id="contact-form-status" role="status" aria-live="polite">
-        {{ turnstile_site_key ? trans('public.pages.contact.form_ready') : trans('public.pages.contact.form_unavailable') }}
-    </p>
+{% import 'macros/icons.html.twig' as ui %}
+<section class="contact" aria-labelledby="contact-title">
+    <header class="page-header">
+        <h1 id="contact-title">{{ trans('public.pages.contact.heading') }}</h1>
+        <p class="lead">{{ trans('public.pages.contact.intro') }}</p>
+    </header>
 
-    <form class="contact-form"
-          method="post"
-          data-contact-form
-          data-endpoint="/api/v1/contact"
-          data-locale="{{ locale }}"
-          data-sending-message="{{ trans('public.pages.contact.sending') }}"
-          data-network-error="{{ trans('public.pages.contact.network_error') }}"
-          data-turnstile-required="{{ trans('public.pages.contact.turnstile_required') }}"
-          aria-describedby="contact-form-status">
-        <fieldset data-contact-fields disabled>
-            <legend>{{ trans('public.pages.contact.form_legend') }}</legend>
-            <div class="contact-field">
-                <label for="contact-name">{{ trans('public.pages.contact.name_label') }}</label>
-                <input id="contact-name" name="name" type="text" maxlength="100" autocomplete="name"
-                       aria-describedby="contact-name-error" required>
-                <p id="contact-name-error" class="contact-error" hidden></p>
-            </div>
-            <div class="contact-field">
-                <label for="contact-email">{{ trans('public.pages.contact.email_label') }}</label>
-                <input id="contact-email" name="email" type="email" maxlength="254" autocomplete="email"
-                       aria-describedby="contact-email-error" required>
-                <p id="contact-email-error" class="contact-error" hidden></p>
-            </div>
-            <div class="contact-field">
-                <label for="contact-message">{{ trans('public.pages.contact.message_label') }}</label>
-                <textarea id="contact-message" name="message" minlength="10" maxlength="5000" rows="6"
-                          aria-describedby="contact-message-error" required></textarea>
-                <p id="contact-message-error" class="contact-error" hidden></p>
-            </div>
-            <button class="contact-submit" type="submit">
-                {{ trans('public.pages.contact.submit') }}
-            </button>
-        </fieldset>
-        {% if turnstile_site_key %}
-            <div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}" data-action="contact"></div>
-        {% endif %}
-    </form>
+    <div class="card contact__card">
+        <form class="form"
+              method="post"
+              data-contact-form
+              data-endpoint="/api/v1/contact"
+              data-locale="{{ locale }}"
+              data-sending-message="{{ trans('public.pages.contact.sending') }}"
+              data-network-error="{{ trans('public.pages.contact.network_error') }}"
+              data-turnstile-required="{{ trans('public.pages.contact.turnstile_required') }}"
+              aria-describedby="contact-form-status"
+              novalidate>
+            <fieldset class="form__fields" data-contact-fields disabled>
+                <legend class="visually-hidden">{{ trans('public.pages.contact.form_legend') }}</legend>
+                <div class="field">
+                    <label class="field__label" for="contact-name">{{ trans('public.pages.contact.name_label') }}</label>
+                    <input class="input" id="contact-name" name="name" type="text" maxlength="100" autocomplete="name"
+                           aria-describedby="contact-name-error" required>
+                    <p id="contact-name-error" class="field__error" hidden></p>
+                </div>
+                <div class="field">
+                    <label class="field__label" for="contact-email">{{ trans('public.pages.contact.email_label') }}</label>
+                    <input class="input" id="contact-email" name="email" type="email" maxlength="254" autocomplete="email"
+                           aria-describedby="contact-email-error" required>
+                    <p id="contact-email-error" class="field__error" hidden></p>
+                </div>
+                <div class="field">
+                    <label class="field__label" for="contact-message">{{ trans('public.pages.contact.message_label') }}</label>
+                    <textarea class="input input--textarea" id="contact-message" name="message" minlength="10" maxlength="5000" rows="6"
+                              aria-describedby="contact-message-error" required></textarea>
+                    <p id="contact-message-error" class="field__error" hidden></p>
+                </div>
+                {% if turnstile_site_key %}
+                    <div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}" data-action="contact" data-theme="auto"></div>
+                {% endif %}
+                <div class="form__footer">
+                    <button class="btn btn--primary" type="submit">
+                        {{ ui.icon('mail') }} {{ trans('public.pages.contact.submit') }}
+                    </button>
+                    <p id="contact-form-status" class="form__status" role="status" aria-live="polite">
+                        {{ turnstile_site_key ? trans('public.pages.contact.form_ready') : trans('public.pages.contact.form_unavailable') }}
+                    </p>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 
-    <noscript>{{ trans('public.pages.contact.javascript_required') }}</noscript>
+    <noscript><p class="note">{{ trans('public.pages.contact.javascript_required') }}</p></noscript>
     {% if turnstile_site_key %}
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
         <script src="/assets/contact.js" defer></script>

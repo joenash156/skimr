@@ -108,6 +108,13 @@ composer start
 
 Open http://localhost:8080/api/v1/health. You should see `{"data":{"status":"ok",...}}`.
 
+The public website (http://localhost:8080/en/) needs its stylesheet built once, and again after CSS or template changes (needs Node.js):
+
+```powershell
+npm ci                  # in backend/, first time only
+npm run build:public    # writes public/assets/site.css (git-ignored; deploy builds it too)
+```
+
 Useful commands (run in `backend/`):
 
 | Command | What it does |

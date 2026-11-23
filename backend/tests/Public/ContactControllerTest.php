@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace App\Tests\Public;
 
+use App\Public\Contact\ContactMessage;
+use App\Public\Contact\ContactMessageRepository;
+use App\Public\Contact\ContactMessageService;
 use App\Security\Turnstile\TurnstileVerifier;
+use App\Shared\Clock\Clock;
+use App\Shared\Clock\FrozenClock;
 use App\Shared\Mail\Mailer;
 use App\Tests\DatabaseTestCase;
 use App\Tests\Support\FakeTurnstile;
 use App\Tests\Support\SpyMailer;
+use Psr\Log\NullLogger;
 
 final class ContactControllerTest extends DatabaseTestCase
 {
@@ -18,17 +24,8 @@ final class ContactControllerTest extends DatabaseTestCase
     {
         $this->mailer = new SpyMailer();
         parent::setUp();
-        $this->db()->executeStatement(<<<'SQL'
-            CREATE TEMPORARY TABLE contact_messages (
-                id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
-                name VARCHAR(100) NOT NULL,
-                email VARCHAR(254) NOT NULL,
-                message TEXT NOT NULL,
-                ip VARBINARY(16) NULL,
-                created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-                PRIMARY KEY (id)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-            SQL);
+        // The real table, created by the migration that composer test runs first.
+        $this->db()->executeStatement('DELETE FROM contact_messages');
     }
 
     /**
@@ -41,12 +38,13 @@ final class ContactControllerTest extends DatabaseTestCase
 
         return [
             'settings' => $settings,
+            Clock::class => new FrozenClock('2026-11-22 09:30:00'),
             Mailer::class => $this->mailer,
             TurnstileVerifier::class => FakeTurnstile::verifier(),
         ];
     }
 
-    public function testStoresMessageAndSendsLocalizedTeamEmail(): void
+    public function testStoresMessageAndEmailsTheTeamInEnglish(): void
     {
         $response = $this->request('POST', '/api/v1/contact', [], [
             'name' => 'Ama Mensah',
@@ -72,11 +70,13 @@ final class ContactControllerTest extends DatabaseTestCase
         self::assertSame([[
             'template' => 'contact_message',
             'to' => 'team@example.test',
-            'locale' => 'fr',
+            'locale' => 'en',
             'vars' => [
                 'name' => 'Ama Mensah',
                 'email' => 'ama@example.com',
                 'message' => 'Does Skimr support reviews in French?',
+                'locale' => 'fr',
+                'at' => '2026-11-22T09:30:00+00:00',
             ],
             'optional' => false,
         ]], $this->mailer->sent);
@@ -134,5 +134,21 @@ final class ContactControllerTest extends DatabaseTestCase
         self::assertNotSame('', $limited->getHeaderLine('Retry-After'));
         self::assertSame(3, (int) $this->db()->fetchOne('SELECT COUNT(*) FROM contact_messages'));
         self::assertCount(3, $this->mailer->sent);
+    }
+
+    public function testStillStoresTheMessageWhenNoTeamInboxIsConfigured(): void
+    {
+        $service = new ContactMessageService(
+            $this->service(ContactMessageRepository::class),
+            $this->mailer,
+            new FrozenClock('2026-11-22 09:30:00'),
+            new NullLogger(),
+            null,
+        );
+
+        $service->send(new ContactMessage('Ama Mensah', 'ama@example.com', 'Does Skimr support French?', null), 'en');
+
+        self::assertSame(1, (int) $this->db()->fetchOne('SELECT COUNT(*) FROM contact_messages'));
+        self::assertSame([], $this->mailer->sent);
     }
 }

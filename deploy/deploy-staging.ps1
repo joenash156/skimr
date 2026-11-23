@@ -60,6 +60,14 @@ if (-not $SkipFrontend -and (Test-Path (Join-Path $root "frontend/package.json")
     }
 }
 
+if (Test-Path (Join-Path $root "backend/package.json")) {
+    Invoke-Step "Build the public site CSS" {
+        Push-Location (Join-Path $root "backend")
+        try { npm ci; if ($LASTEXITCODE -eq 0) { npm run build:public } } finally { Pop-Location }
+        if ($LASTEXITCODE -ne 0) { throw "Public CSS build failed." }
+    }
+}
+
 Invoke-Step "Copy backend/ to deploy/build/htdocs" {
     if (Test-Path $build) { Remove-Item -Recurse -Force $build }
     New-Item -ItemType Directory -Force $target | Out-Null

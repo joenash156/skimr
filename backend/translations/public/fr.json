@@ -37,6 +37,22 @@
       "eyebrow": "Un espace de recherche fondé sur les preuves",
       "heading": "Une recherche organisée autour des preuves.",
       "intro": "Rassemblez vos sources, mettez leurs résultats en relation et rédigez une revue de littérature dont chaque affirmation renvoie au passage d’origine.",
+      "demo": {
+        "caption": "Exemple de synthèse",
+        "theme": "Thème : télétravail et bien-être",
+        "finding_1": {
+          "quote": "Les salariés en télétravail trois jours ou plus par semaine ont signalé moins de stress lié aux trajets.",
+          "source": "Okafor & Lind, 2023 · p. 6"
+        },
+        "finding_2": {
+          "quote": "Les horaires flexibles étaient associés à moins de jours d'arrêt maladie déclarés sur douze mois.",
+          "source": "Martín et al., 2022 · p. 11"
+        },
+        "interpretation": {
+          "text": "D'après ces études, le travail flexible semble favoriser le bien-être, même si la plupart des échantillons portent sur des emplois de bureau.",
+          "support": "Appuyée par 2 constats"
+        }
+      },
       "primary_cta": "Commencer",
       "secondary_cta": "Voir le fonctionnement",
       "how_it_works": {

@@ -1,12 +1,20 @@
 <section aria-labelledby="page-title">
-    <h1 id="page-title">{{ trans('public.pages.how_it_works.heading') }}</h1>
-    <p>{{ trans('public.pages.how_it_works.intro') }}</p>
-    <ol>
+    <header class="page-header">
+        <h1 id="page-title">{{ trans('public.pages.how_it_works.heading') }}</h1>
+        <p class="lead">{{ trans('public.pages.how_it_works.intro') }}</p>
+    </header>
+    <ol class="timeline">
         {% for step in 1..4 %}
-            <li>
-                <h2>{{ trans('public.pages.how_it_works.steps.' ~ step ~ '.title') }}</h2>
-                <p>{{ trans('public.pages.how_it_works.steps.' ~ step ~ '.description') }}</p>
+            <li class="timeline__item">
+                <span class="step__number" aria-hidden="true">{{ step }}</span>
+                <div>
+                    <h2 class="step__title">{{ trans('public.pages.how_it_works.steps.' ~ step ~ '.title') }}</h2>
+                    <p>{{ trans('public.pages.how_it_works.steps.' ~ step ~ '.description') }}</p>
+                </div>
             </li>
         {% endfor %}
     </ol>
+    <div class="actions">
+        <a class="btn btn--primary" href="/app/register">{{ trans('public.home.primary_cta') }}</a>
+    </div>
 </section>

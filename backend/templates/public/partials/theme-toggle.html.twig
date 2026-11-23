@@ -1,0 +1,7 @@
+{% import 'macros/icons.html.twig' as ui %}
+{# The no-flash script in base.html.twig has already applied the theme; this only switches it. #}
+<button class="icon-btn theme-toggle" type="button" x-data="themeToggle" x-on:click="toggle"
+        aria-label="{{ trans('public.theme.toggle') }}" title="{{ trans('public.theme.toggle') }}">
+    {{ ui.icon('moon', 'icon theme-toggle__dark') }}
+    {{ ui.icon('sun', 'icon theme-toggle__light') }}
+</button>

@@ -12,11 +12,13 @@ use App\Public\Seo\OgImageBuilder;
 use App\Public\Seo\RobotsController;
 use App\Public\Seo\SitemapController;
 use App\Public\Twig\TransExtension;
+use App\Shared\Clock\Clock;
 use App\Shared\Http\JsonResponder;
 use App\Shared\Mail\Mailer;
 use App\Shared\Translator;
 use Cloudinary\Cloudinary;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Slim\Views\Twig;
 
 use function DI\autowire;
@@ -40,6 +42,8 @@ return [
         return new ContactMessageService(
             $container->get(ContactMessageRepository::class),
             $container->get(Mailer::class),
+            $container->get(Clock::class),
+            $container->get(LoggerInterface::class),
             $teamInbox,
         );
     },
@@ -95,9 +99,13 @@ return [
 
     Twig::class . '.public' => static function (ContainerInterface $container): Twig {
         $settings = $container->get('settings');
+        // Compiled templates are cached outside local development. auto_reload recompiles
+        // a template when its file changes, so a deploy never serves stale pages.
+        $local = in_array($settings['app']['env'], ['local', 'testing'], true);
         $twig = Twig::create($settings['paths']['templates'] . '/public', [
             'autoescape' => 'html',
-            'cache' => false,
+            'cache' => $local ? false : $settings['paths']['var'] . '/cache/twig-public',
+            'auto_reload' => true,
             'strict_variables' => true,
         ]);
         $twig->addExtension(new TransExtension($container->get(Translator::class . '.public')));

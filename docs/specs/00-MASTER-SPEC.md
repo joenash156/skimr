@@ -509,7 +509,7 @@ Use only the libraries listed here. To add one, open a pull request that also up
 | Google OAuth | `league/oauth2-google` ^4 |
 | Validation | `respect/validation` ^2 |
 | HTTP client | `guzzlehttp/guzzle` ^7 |
-| Cloudinary | `cloudinary/cloudinary_php` ^2 |
+| Cloudinary | `cloudinary/cloudinary_php` ^3 |
 | Email | `resend/resend-php` ^1 |
 | Word export | `phpoffice/phpword` ^1 |
 | Markdown (guides) | `league/commonmark` ^2 (raw HTML escaped) |
@@ -787,7 +787,7 @@ The handler runs only after all eight pass. P1 owns the chain. Nobody bypasses i
 | Bots and spam | Turnstile on register, login, forgot password and contact. The server checks the `success`, `hostname` and `action` fields, and each token works once. |
 | Secret leakage | `.env` is in `.gitignore`; `.env.example` holds placeholder values only. GitHub secret scanning and push protection are on. Any leaked key is rotated the same day. |
 | Information leakage | `APP_DEBUG=false` in production. Errors return a request id, never a stack trace. Logs never contain passwords, tokens or full JWTs. |
-| Vulnerable dependencies | `composer audit`, `npm audit --audit-level=high` and `pip-audit` run in CI and block the merge. |
+| Vulnerable dependencies | `composer audit`, `pnpm audit --audit-level high` and `pip-audit` run in CI and block the merge. |
 | Abuse of AI quota | Per-user and global quotas (6.6); `429` with `Retry-After`. |
 
 ### 11.3 HTTP security headers (set by middleware)
@@ -947,7 +947,7 @@ Every word a user sees comes from a translation file. English is the source lang
 - Dates and numbers use `Intl.DateTimeFormat` and `Intl.NumberFormat` with the active locale. Times are stored in UTC and shown in the user's time zone.
 - Language is chosen in this order: (1) the logged-in user's `locale`, (2) the language in the URL on public pages, (3) the `Accept-Language` header, (4) English.
 - The switcher updates `users.locale` (via `PATCH /me`) and the URL.
-- CI fails if any key exists in `en` but is missing from `fr` or `es` (script: `npm run i18n:check`).
+- CI fails if any key exists in `en` but is missing from `fr` or `es` (script: `pnpm i18n:check`).
 - **Translation quality:** machine translation is allowed for a first draft. A team member who reads the language reviews it before release. Until then, those strings are listed in `docs/i18n-review.md`.
 - French and Spanish strings run about 20–30% longer than English. Buttons and table headers must not break; test every screen in French.
 
@@ -957,7 +957,7 @@ The look is quiet and professional: deep black, white and teal, with flat surfac
 
 **Banned:**
 
-- gradients
+- gradients, except on the public home hero: the photo wash that fades into the page colour and one soft accent glow (approved by P1)
 - glassmorphism
 - glows
 - emoji in the UI
@@ -975,13 +975,19 @@ One token file, `shared/design-tokens.css`, feeds both the Twig site and the Rea
 | --border | #E2E6E6 | #262A2A | 1 px borders, dividers |
 | --text | #0A0A0A | #F5F7F7 | Body text |
 | --text-muted | #525A5A | #A3ABAB | Secondary text, labels |
-| --primary | #0F766E | #2DD4BF | Buttons, links, active nav, focus |
+| --primary | #0F766E | #2DD4BF | Accent: focus rings, inline links, AI interpretation border, small highlights |
 | --primary-hover | #115E59 | #5EEAD4 | Hover |
 | --primary-fg | #FFFFFF | #050505 | Text on primary buttons |
 | --primary-subtle | #E6F4F2 | #0B2A27 | Selected rows, the AI interpretation box background |
 | --success | #15803D | #4ADE80 | Ready, verified |
 | --warning | #B45309 | #FBBF24 | Quota near its limit |
 | --danger | #B91C1C | #F87171 | Errors, destructive actions |
+| --inverse | #0A0A0A | #F5F7F7 | **Main actions** (Sign up, Get started, submit), CTA band, selected states |
+| --inverse-hover | #2A2D2D | #D4D9D9 | Hover on `--inverse` |
+| --inverse-fg | #FFFFFF | #050505 | Text on `--inverse` |
+| --text-subtle | #7A8282 | #6F7878 | Hints, captions (large text only) |
+
+**Black and white lead; teal is the accent.** Main buttons use `--inverse` (black in light mode, white in dark). Teal (`--primary`) is kept for focus rings, links in running text, AI interpretations and small highlights, never large areas.
 
 Every text and background pair must reach WCAG 2.2 AA contrast: 4.5:1 for normal text, 3:1 for large text and UI elements. Teal #0F766E on white is about 5.5:1, which passes.
 
@@ -1262,7 +1268,7 @@ skimr/
 **TypeScript:**
 
 - `strict: true` and no `any`.
-- API types are generated from `openapi.yaml` (`npm run api:types`, using `openapi-typescript`), never hand-written.
+- API types are generated from `openapi.yaml` (`pnpm api:types`, using `openapi-typescript`), never hand-written.
 - Server data is fetched only through React Query hooks inside each feature (e.g. `useProjects()`).
 - Components are written as functions, with one component per file.
 

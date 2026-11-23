@@ -1,6 +1,85 @@
-<section class="prose" aria-labelledby="page-title">
-    <h1 id="page-title">{{ trans('public.pages.about.heading') }}</h1>
-    <p>{{ trans('public.pages.about.intro') }}</p>
-    <h2>{{ trans('public.pages.about.evidence_heading') }}</h2>
-    <p>{{ trans('public.pages.about.evidence_description') }}</p>
+{% import 'macros/icons.html.twig' as ui %}
+{% set p = 'public.pages.about.' %}
+<section aria-labelledby="page-title">
+    {% include 'partials/page-hero.html.twig' with {
+        kicker: trans('public.navigation.about'),
+        title: trans(p ~ 'heading'),
+        lead: trans(p ~ 'intro'),
+    } %}
+
+    {# Mission + three facts from the product itself (no invented numbers). #}
+    <div class="section">
+        <div class="wrap about-mission">
+            <div>
+                <p class="kicker">{{ trans(p ~ 'mission_label') }}</p>
+                <p class="about-mission__statement">{{ trans(p ~ 'mission') }}</p>
+            </div>
+            <dl class="stats">
+                {% for fact in ['languages', 'sources', 'rule'] %}
+                    <div class="stats__item">
+                        <dt class="stats__label">{{ trans(p ~ 'facts.' ~ fact ~ '.label') }}</dt>
+                        <dd class="stats__value">{{ trans(p ~ 'facts.' ~ fact ~ '.value') }}</dd>
+                    </div>
+                {% endfor %}
+            </dl>
+        </div>
+    </div>
+
+    <div class="section section--surface">
+        <div class="wrap">
+            <div class="section__head">
+                <h2 class="section__title">{{ trans(p ~ 'audience_heading') }}</h2>
+            </div>
+            {% set audience = {students: 'pen', researchers: 'search', assistants: 'layers', analysts: 'columns'} %}
+            <ul class="grid grid--4">
+                {% for key, icon in audience %}
+                    <li class="card card--hover anim-host">
+                        <span class="card__icon">{{ ui.icon(icon, 'icon icon--draw') }}</span>
+                        <h3 class="card__title">{{ trans(p ~ 'audience.' ~ key ~ '.title') }}</h3>
+                        <p>{{ trans(p ~ 'audience.' ~ key ~ '.description') }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="wrap split">
+            <div class="section__head">
+                <h2 class="section__title">{{ trans(p ~ 'principles_heading') }}</h2>
+            </div>
+            <ol class="principles">
+                <li class="principle">
+                    <span class="principle__icon">{{ ui.icon('quote') }}</span>
+                    <div>
+                        <h3 class="principle__title">{{ trans(p ~ 'evidence_heading') }}</h3>
+                        <p>{{ trans(p ~ 'evidence_description') }}</p>
+                    </div>
+                </li>
+                {% for key, icon in {privacy: 'check', languages: 'globe'} %}
+                    <li class="principle">
+                        <span class="principle__icon">{{ ui.icon(icon) }}</span>
+                        <div>
+                            <h3 class="principle__title">{{ trans(p ~ 'principles.' ~ key ~ '.title') }}</h3>
+                            <p>{{ trans(p ~ 'principles.' ~ key ~ '.description') }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+
+    <div class="section section--tight">
+        <div class="wrap">
+            <div class="cta">
+                <div>
+                    <h2 class="cta__title">{{ trans(p ~ 'cta_heading') }}</h2>
+                    <p>{{ trans(p ~ 'cta_description') }}</p>
+                </div>
+                <a class="btn btn--light btn--lg btn--pill anim-host" href="{{ page_urls.contact }}">
+                    {{ trans(p ~ 'cta_button') }} {{ ui.icon('arrow-right', 'icon btn__arrow') }}
+                </a>
+            </div>
+        </div>
+    </div>
 </section>

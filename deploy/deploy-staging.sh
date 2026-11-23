@@ -30,12 +30,12 @@ fi
 
 if [ "$SKIP_FRONTEND" = false ] && [ -f "$ROOT/frontend/package.json" ]; then
   echo "==> Build the dashboard"
-  (cd "$ROOT/frontend" && npm ci && npm run build)
+  (cd "$ROOT/frontend" && pnpm install --frozen-lockfile && pnpm build)
 fi
 
 if [ -f "$ROOT/backend/package.json" ]; then
   echo "==> Build the public site CSS (Tailwind CLI)"
-  (cd "$ROOT/backend" && npm ci && npm run build:public)
+  (cd "$ROOT/backend" && pnpm install --frozen-lockfile && pnpm build:public)
 fi
 
 echo "==> Copy backend/ to deploy/build/htdocs"

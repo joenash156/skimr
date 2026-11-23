@@ -6,6 +6,7 @@
     },
     "skip_to_content": "Aller au contenu",
     "home_link": "Accueil Skimr",
+    "slogan": "Un espace de recherche fondé sur les preuves",
     "main_navigation": "Navigation principale",
     "mobile_navigation": "Navigation mobile",
     "language": "Langue",
@@ -16,10 +17,13 @@
       "es": "Español"
     },
     "login": "Se connecter",
-    "signup": "Créer un compte",
+    "get_started": "Commencer",
     "menu": "Menu",
     "theme": {
-      "toggle": "Changer de thème"
+      "legend": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
     },
     "navigation": {
       "home": "Accueil",
@@ -34,7 +38,6 @@
     "home": {
       "title": "Skimr — la recherche fondée sur des preuves",
       "description": "Organisez vos recherches et rédigez des revues où chaque résultat renvoie à sa source.",
-      "eyebrow": "Un espace de recherche fondé sur les preuves",
       "heading": "Une recherche organisée autour des preuves.",
       "intro": "Rassemblez vos sources, mettez leurs résultats en relation et rédigez une revue de littérature dont chaque affirmation renvoie au passage d’origine.",
       "demo": {
@@ -164,6 +167,37 @@
       "cta": {
         "heading": "Rendez votre prochaine revue de littérature plus facile à vérifier",
         "description": "Rassemblez vos sources dans un espace de travail et gardez les preuves associées à chaque constat."
+      },
+      "kickers": {
+        "how": "Fonctionnement",
+        "sources": "Sources",
+        "features": "Fonctionnalités",
+        "evidence": "Preuves",
+        "faq": "FAQ"
+      },
+      "slides": {
+        "1": {
+          "heading": "Une recherche organisée autour des preuves.",
+          "alt": "Un livre ouvert sur un bureau en bois"
+        },
+        "2": {
+          "heading": "Chaque constat renvoie à sa source.",
+          "alt": "Une personne prend des notes à côté d'un ordinateur portable"
+        },
+        "3": {
+          "heading": "D'une pile d'articles à une revue claire.",
+          "alt": "Des pages imprimées couvrant un mur"
+        },
+        "4": {
+          "heading": "Voyez comment vos sources se répondent.",
+          "alt": "Lecture sur une liseuse en plein air"
+        }
+      },
+      "carousel": {
+        "label": "À la une",
+        "slide": "Afficher la diapositive {number} sur {total}",
+        "pause": "Mettre le diaporama en pause",
+        "play": "Lire le diaporama"
       }
     },
     "pages": {
@@ -247,6 +281,11 @@
             "title": "Liens web et texte collé",
             "description": "Ajoutez des articles web, rapports, liens DOI ou arXiv, liens directs vers des PDF et textes copiés d’autres sources."
           }
+        },
+        "tier_intros": {
+          "core": "Les fondations de chaque projet.",
+          "extended": "Des outils pour aller plus loin dans vos sources.",
+          "stretch": "Prévu pour des versions ultérieures."
         }
       },
       "how_it_works": {
@@ -271,7 +310,8 @@
             "title": "Rédigez avec des preuves traçables",
             "description": "Rédigez une synthèse qui distingue les constats vérifiés des interprétations de l’IA et relie les affirmations aux sources."
           }
-        }
+        },
+        "cta_heading": "Prêt à lancer votre premier projet ?"
       },
       "about": {
         "title": "À propos de Skimr | Recherche et preuves",
@@ -279,7 +319,56 @@
         "heading": "À propos de Skimr",
         "intro": "Skimr aide les étudiants, chercheurs, assistants de recherche et analystes des politiques publiques à organiser leurs sources et à comprendre les liens entre les résultats.",
         "evidence_heading": "Gardez les preuves visibles",
-        "evidence_description": "Un constat doit renvoyer au passage dont il est issu. Une interprétation de l’IA doit être signalée et étayée par des constats, et non présentée comme un fait tiré d’une source."
+        "evidence_description": "Un constat doit renvoyer au passage dont il est issu. Une interprétation de l’IA doit être signalée et étayée par des constats, et non présentée comme un fait tiré d’une source.",
+        "mission_label": "Notre mission",
+        "mission": "Rendre les revues de littérature plus rapides à construire et plus faciles à vérifier, en reliant chaque affirmation au passage dont elle provient.",
+        "audience_heading": "Conçu pour celles et ceux qui travaillent avec des preuves",
+        "audience": {
+          "students": {
+            "title": "Étudiants",
+            "description": "Préparez un mémoire ou une revue de cours sans perdre la trace de l'origine de chaque idée."
+          },
+          "researchers": {
+            "title": "Chercheurs",
+            "description": "Cartographiez rapidement un domaine, comparez les méthodes des études et repérez ce qui reste inexploré."
+          },
+          "assistants": {
+            "title": "Assistants de recherche",
+            "description": "Organisez de longues listes de lecture pour une équipe et transmettez des constats vérifiables."
+          },
+          "analysts": {
+            "title": "Analystes de politiques publiques",
+            "description": "Construisez des notes solides, où chaque affirmation renvoie à une source publiée."
+          }
+        },
+        "principles_heading": "Nos principes",
+        "principles": {
+          "privacy": {
+            "title": "Privé par défaut",
+            "description": "Vos sources restent dans votre projet. Seuls vous et les personnes invitées peuvent les voir, sauf si vous publiez une synthèse."
+          },
+          "languages": {
+            "title": "Pensé pour plusieurs langues",
+            "description": "L'interface fonctionne en anglais, en français et en espagnol, et les citations restent toujours dans leur langue d'origine."
+          }
+        },
+        "facts": {
+          "languages": {
+            "value": "3",
+            "label": "langues d'interface"
+          },
+          "sources": {
+            "value": "5",
+            "label": "façons d'ajouter des sources"
+          },
+          "rule": {
+            "value": "1",
+            "label": "règle : chaque constat renvoie à sa source"
+          }
+        },
+        "cta_heading": "Des questions sur Skimr ?",
+        "cta_description": "Dites-nous sur quoi vous travaillez, et nous vous répondrons par e-mail.",
+        "cta_button": "Contacter l'équipe"
       },
       "contact": {
         "title": "Contacter Skimr | Questions et retours",
@@ -297,7 +386,26 @@
         "name_label": "Nom",
         "email_label": "Adresse e-mail",
         "message_label": "Message",
-        "submit": "Envoyer le message"
+        "submit": "Envoyer le message",
+        "topics_heading": "Comment nous pouvons vous aider",
+        "topics": {
+          "questions": {
+            "title": "Questions sur le produit",
+            "description": "La gestion des sources, des langues, des exports et des preuves dans Skimr."
+          },
+          "feedback": {
+            "title": "Avis et idées",
+            "description": "Dites-nous ce qui faciliterait votre travail de recherche."
+          },
+          "account": {
+            "title": "Aide pour votre compte",
+            "description": "Un problème de connexion ou de vérification d'e-mail ? Indiquez l'adresse que vous utilisez pour Skimr."
+          }
+        },
+        "reply_note": "Nous répondons par e-mail à l'adresse indiquée. Votre message sert uniquement à vous répondre.",
+        "privacy_link": "Lire notre politique de confidentialité",
+        "faq_link": "Consulter les questions fréquentes",
+        "form_heading": "Envoyez-nous un message"
       },
       "privacy": {
         "title": "Confidentialité | Skimr",
@@ -332,6 +440,12 @@
         "theme_description": "Le site public stocke votre préférence de thème clair, sombre ou système dans localStorage. Cette préférence n’est pas un cookie.",
         "authentication_heading": "Cookie d’authentification",
         "authentication_description": "Lorsque vous vous connectez, le tableau de bord utilise un cookie de renouvellement sécurisé, HTTP-only et SameSite=Strict, illisible par JavaScript. Il est limité aux routes d’authentification et sert à maintenir votre session."
+      },
+      "common": {
+        "on_this_page": "Sur cette page",
+        "related": "Pages associées",
+        "summary": "En bref",
+        "breadcrumb": "Fil d'Ariane"
       }
     },
     "error": {

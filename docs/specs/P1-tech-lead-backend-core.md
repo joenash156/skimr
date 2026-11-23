@@ -116,10 +116,10 @@ The system extracts the text, makes it searchable by meaning, clusters it into t
     - info, servers, the `bearerAuth` scheme
     - schemas for `Error`, `Pagination`, `User`
     - **every auth endpoint** from spec 10.2
-    - add `npm run mock` in a root `package.json`, running `npx @stoplight/prism-cli mock docs/api/openapi.yaml -p 4010` (a dev tool only)
+    - add `pnpm mock` in a root `package.json`, running `pnpm dlx @stoplight/prism-cli mock docs/api/openapi.yaml -p 4010` (a dev tool only)
 10. **`.github/workflows/ci.yml`**, with jobs that run only when their folder changed:
     - **backend:** `composer validate`, `cs --dry-run`, `stan`, `test`, `composer audit`
-    - **frontend:** lint, typecheck, test, build, `npm audit --audit-level=high`
+    - **frontend:** lint, typecheck, test, build, `pnpm audit --audit-level high`
     - **ai-service:** ruff, mypy, pytest, pip-audit
 11. **Repo files:** `CODEOWNERS` (folder → owner, as spec 18), `pull_request_template.md` (with the spec 20 definition-of-done checklist), and issue templates (bug, task).
 12. **`deploy/deploy-staging.ps1`** (and a `.sh` version):

@@ -1,0 +1,22 @@
+{#
+ # Light / Dark / System as a radio group (arrow keys move between options; screen
+ # readers hear "Theme, Dark, selected, 2 of 3"). Icons animate on hover and when chosen.
+ #   variant: 'compact' (icons only, header/footer) or 'full' (icon + label, phone menu)
+ #   uid:     unique per instance, so each group has its own radio name
+ #}
+{% import 'macros/icons.html.twig' as ui %}
+{% set variant = variant|default('compact') %}
+{% set options = {light: 'sun', dark: 'moon', system: 'monitor'} %}
+<fieldset class="theme-switch theme-switch--{{ variant }}" x-data="themeSwitch">
+    <legend class="{{ variant == 'full' ? 'menu-label' : 'visually-hidden' }}">{{ trans('public.theme.legend') }}</legend>
+    <div class="theme-switch__track">
+        {% for value, icon in options %}
+            <label class="theme-switch__option anim-host" title="{{ trans('public.theme.' ~ value) }}">
+                <input class="visually-hidden" type="radio" name="theme-{{ uid }}" value="{{ value }}"
+                       {% if value == 'system' %}checked{% endif %} x-on:change="pick">
+                {{ ui.icon(icon, 'icon icon--draw') }}
+                <span class="{{ variant == 'full' ? 'theme-switch__label' : 'visually-hidden' }}">{{ trans('public.theme.' ~ value) }}</span>
+            </label>
+        {% endfor %}
+    </div>
+</fieldset>

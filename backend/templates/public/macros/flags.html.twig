@@ -1,0 +1,25 @@
+{#
+ # National flags for the language switcher: en = United Kingdom, fr = France,
+ # es = Spain (simplified, without the coat of arms, as flags are at icon size).
+ # `uid` keeps SVG ids unique when a flag appears several times on one page.
+ #}
+{% macro flag(code, uid = '') %}
+{%- set id = 'f-' ~ code ~ uid -%}
+<svg class="flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" aria-hidden="true" focusable="false">
+{%- if code == 'fr' -%}
+    <rect width="10" height="20" fill="#002654"/><rect x="10" width="10" height="20" fill="#ffffff"/><rect x="20" width="10" height="20" fill="#ce1126"/>
+{%- elseif code == 'es' -%}
+    <rect width="30" height="20" fill="#aa151b"/><rect y="5" width="30" height="10" fill="#f1bf00"/>
+{%- else -%}
+    <clipPath id="{{ id }}-s"><rect width="30" height="20"/></clipPath>
+    <clipPath id="{{ id }}-t"><path d="M15 10h15v10zv10H0zH0V0zV0h15z"/></clipPath>
+    <g clip-path="url(#{{ id }}-s)">
+        <rect width="30" height="20" fill="#012169"/>
+        <path d="M0 0l30 20M30 0 0 20" stroke="#ffffff" stroke-width="4"/>
+        <path d="M0 0l30 20M30 0 0 20" clip-path="url(#{{ id }}-t)" stroke="#c8102e" stroke-width="2.4"/>
+        <path d="M15 0v20M0 10h30" stroke="#ffffff" stroke-width="6"/>
+        <path d="M15 0v20M0 10h30" stroke="#c8102e" stroke-width="3.6"/>
+    </g>
+{%- endif -%}
+</svg>
+{%- endmacro %}

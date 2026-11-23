@@ -56,14 +56,14 @@ if (-not $DryRun -and -not $winscp) { throw "WinSCP not found. Install it from h
 if (-not $SkipFrontend -and (Test-Path (Join-Path $root "frontend/package.json"))) {
     Invoke-Step "Build the dashboard" {
         Push-Location (Join-Path $root "frontend")
-        try { npm ci; if ($LASTEXITCODE -eq 0) { npm run build } } finally { Pop-Location }
+        try { pnpm install --frozen-lockfile; if ($LASTEXITCODE -eq 0) { pnpm build } } finally { Pop-Location }
     }
 }
 
 if (Test-Path (Join-Path $root "backend/package.json")) {
     Invoke-Step "Build the public site CSS" {
         Push-Location (Join-Path $root "backend")
-        try { npm ci; if ($LASTEXITCODE -eq 0) { npm run build:public } } finally { Pop-Location }
+        try { pnpm install --frozen-lockfile; if ($LASTEXITCODE -eq 0) { pnpm build:public } } finally { Pop-Location }
         if ($LASTEXITCODE -ne 0) { throw "Public CSS build failed." }
     }
 }

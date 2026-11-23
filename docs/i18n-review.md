@@ -13,3 +13,6 @@ When you review a file, tick it and write your name and the date. When you add m
 | `backend/translations/api/auth.{fr,es}.json` | `auth.errors.*` (5 keys), `auth.messages.reset_link_sent` | P1, B1 (machine draft) | [ ] | [ ] |
 | `backend/translations/api/auth.{fr,es}.json` | `auth.messages.email_change_sent` | P1, B2 (machine draft) | [ ] | [ ] |
 | `backend/translations/public/{fr,es}.json` | `public.home.demo.*` (hero example synthesis, 8 keys) | P1, polish of P5 B2 (machine draft) | [ ] | [ ] |
+| `backend/translations/public/{fr,es}.json` | `public.slogan` (moved from `home.eyebrow`), `public.theme.{legend,light,dark,system}`, `public.home.kickers.*` (5 keys) | P1, public UI v2 (machine draft) | [ ] | [ ] |
+| `backend/translations/public/{fr,es}.json` | `public.get_started`, `public.home.slides.*` (default carousel headings and alt text), `public.home.carousel.*` | P1, hero carousel (machine draft) | [ ] | [ ] |
+| `backend/translations/public/{fr,es}.json` | `public.pages.common.*`, `public.pages.about.*` (mission, audience, principles, facts, CTA), `public.pages.contact.*` (topics, reply note, links, form heading), `public.pages.features.tier_intros.*`, `public.pages.how_it_works.cta_heading` | P1, inner pages redesign (machine draft) | [ ] | [ ] |

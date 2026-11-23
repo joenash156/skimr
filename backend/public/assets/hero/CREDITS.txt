@@ -1,0 +1,5 @@
+Default hero carousel photos (replaced by admin-managed slides later). Source: Lorem Picsum, Unsplash License (https://unsplash.com/license).
+slide-1.jpg  picsum id 24  Alejandro Escamilla  https://unsplash.com/photos/cZhUxIQjILg
+slide-2.jpg  picsum id 4  Alejandro Escamilla  https://unsplash.com/photos/y83Je1OC6Wc
+slide-3.jpg  picsum id 1073  Patrick Tomasso  https://unsplash.com/photos/Oaqk7qqNh_c
+slide-4.jpg  picsum id 367  James Tarbotton  https://unsplash.com/photos/gm18kqu9TxQ

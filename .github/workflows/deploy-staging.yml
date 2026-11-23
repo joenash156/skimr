@@ -60,6 +60,10 @@ jobs:
           coverage: none
           tools: composer:v2
 
+      - name: Set up pnpm (version from the root package.json)
+        if: hashFiles('frontend/package.json', 'backend/package.json') != ''
+        uses: pnpm/action-setup@v4
+
       - name: Set up Node (public site CSS, and the dashboard once it exists)
         if: hashFiles('frontend/package.json', 'backend/package.json') != ''
         uses: actions/setup-node@v4

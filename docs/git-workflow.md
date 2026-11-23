@@ -83,7 +83,7 @@ Then start the next task from step 1. Don't keep working on a merged branch.
 - Keep branches short: under 3 days, one task or a few small related ones.
 - Rebase on `dev` every morning (step 3).
 - **Shared files** change only in a small PR of their own, made by their owner: `composer.json`, `package.json`, the lock files, `docs/api/openapi.yaml`, `shared/design-tokens.css` and `docs/specs/*`. If you need a library or an endpoint change, ask the owner.
-- Never hand-edit `composer.lock` or `package-lock.json`. If one conflicts, take `dev`'s version, then re-run `composer install` or `npm install`.
+- Never hand-edit `composer.lock` or `pnpm-lock.yaml`. If one conflicts, take `dev`'s version, then re-run `composer install` or `pnpm install`.
 
 ## Resolving a conflict during a rebase
 

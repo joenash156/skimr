@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Public\Http;
 
+use App\Public\Hero\HeroSlides;
 use App\Public\Seo\JsonLd;
 use App\Public\Seo\MetaBuilder;
 use App\Public\Seo\PublicPageMap;
@@ -18,6 +19,7 @@ final class PublicController
     public function __construct(
         private readonly MetaBuilder $metaBuilder,
         private readonly JsonLd $jsonLd,
+        private readonly HeroSlides $heroSlides,
     ) {
     }
 
@@ -46,6 +48,7 @@ final class PublicController
             'metadata' => $this->metaBuilder->forHome($locale),
             'jsonld' => $this->jsonLd->forHome($locale),
             'page_urls' => PublicPageMap::urlsForLocale($locale),
+            'slides' => $this->heroSlides->forLocale($locale),
         ])->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 

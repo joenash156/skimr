@@ -54,7 +54,7 @@ The Python AI service extracts and analyses them. PHP is the hub: it owns MySQL,
 
 **Don't touch:** `src/Auth`, `Security`, `Shared`, `Users` (P1; ask them), `ai-service/` (P3), `frontend/` (P4/P5), public templates (P5).
 
-**Stack:** PHP 8.2+, Slim 4, Doctrine DBAL 4 + Migrations, cloudinary/cloudinary_php 2, resend/resend-php, guzzle 7, phpoffice/phpword 1, ramsey/uuid, PHP's GD extension, PHPUnit.
+**Stack:** PHP 8.2+, Slim 4, Doctrine DBAL 4 + Migrations, cloudinary/cloudinary_php 3, resend/resend-php, guzzle 7, phpoffice/phpword 1, ramsey/uuid, PHP's GD extension, PHPUnit.
 
 ## 3. Contracts
 
@@ -110,6 +110,7 @@ P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1
 - **More auth email templates** (B2): `email_change_requested` (to the old address: `first_name`, `new_email`, `at`) and `email_changed` (to the old address once confirmed: same variables). The confirmation link itself reuses `verify_email`.
 - **Route groups:** the callback you pass to `$app->group(...)` must **not** be `static`. Slim binds it to the container, and a static closure fails with "bindToContainer(): Return value must be of type callable". See `config/routes/me.php`.
 - **Local checks before every PR** (in `backend/`): `composer test`, `composer stan`, `composer cs`, `composer contract`. CI runs the same, plus `composer audit`. **`composer contract` fails if you add an `/api/v1` route without describing it in `docs/api/openapi.yaml` in the same PR** (P1 rejects such PRs anyway).
+- **Hero carousel setting (for P5's B4 screen).** Accept and store the settings key `public.hero_slides` through `/admin/settings` with `SettingsRepository::set()`. Shape and rules are in `App\Public\Hero\HeroSlides` (P1): a list of at most 6 `{image_url, heading{en,fr,es}, alt{en,fr,es}}`. Upload hero images to Cloudinary under `skimr/site/hero/` (public delivery, spec 16) and validate the same URL rule server-side before saving.
 - **Integration branch is `dev`.** Branch from it; open PRs into it.
 
 ---

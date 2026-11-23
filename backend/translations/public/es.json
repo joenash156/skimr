@@ -1,7 +1,7 @@
 {
   "public": {
     "meta": {
-      "title": "Skimr — investigación basada en evidencias",
+      "title": "Skimr | investigación basada en evidencias",
       "description": "Organiza tu investigación y crea revisiones en las que cada hallazgo remite a su fuente."
     },
     "skip_to_content": "Ir al contenido",
@@ -36,7 +36,7 @@
       "cookies": "Cookies"
     },
     "home": {
-      "title": "Skimr — investigación basada en evidencias",
+      "title": "Skimr | investigación basada en evidencias",
       "description": "Organiza tu investigación y crea revisiones en las que cada hallazgo remite a su fuente.",
       "heading": "Investigación organizada en torno a las evidencias.",
       "intro": "Reúne tus fuentes, relaciona sus hallazgos y redacta una revisión bibliográfica que puedas rastrear hasta los pasajes originales.",
@@ -449,7 +449,7 @@
       }
     },
     "error": {
-      "title": "Página no encontrada — Skimr",
+      "title": "Página no encontrada | Skimr",
       "description": "No se encontró la página solicitada.",
       "heading": "Página no encontrada",
       "message": "Es posible que la página se haya movido o ya no esté disponible.",

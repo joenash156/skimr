@@ -1,7 +1,7 @@
 {
   "public": {
     "meta": {
-      "title": "Skimr — research grounded in evidence",
+      "title": "Skimr | research grounded in evidence",
       "description": "Organize research and build literature reviews where every finding traces back to its source."
     },
     "skip_to_content": "Skip to content",
@@ -36,7 +36,7 @@
       "cookies": "Cookies"
     },
     "home": {
-      "title": "Skimr — evidence-led literature reviews",
+      "title": "Skimr | evidence-led literature reviews",
       "description": "Organize research and build literature reviews where every finding traces back to its source.",
       "heading": "Research, organized around evidence.",
       "intro": "Bring your sources together, see how findings relate, and build a literature review you can trace back to the original passages.",
@@ -449,7 +449,7 @@
       }
     },
     "error": {
-      "title": "Page not found — Skimr",
+      "title": "Page not found | Skimr",
       "description": "The requested page could not be found.",
       "heading": "Page not found",
       "message": "The page may have moved or may no longer be available.",

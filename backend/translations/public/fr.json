@@ -1,7 +1,7 @@
 {
   "public": {
     "meta": {
-      "title": "Skimr — la recherche fondée sur des preuves",
+      "title": "Skimr | la recherche fondée sur des preuves",
       "description": "Organisez vos recherches et rédigez des revues où chaque résultat renvoie à sa source."
     },
     "skip_to_content": "Aller au contenu",
@@ -36,7 +36,7 @@
       "cookies": "Cookies"
     },
     "home": {
-      "title": "Skimr — la recherche fondée sur des preuves",
+      "title": "Skimr | la recherche fondée sur des preuves",
       "description": "Organisez vos recherches et rédigez des revues où chaque résultat renvoie à sa source.",
       "heading": "Une recherche organisée autour des preuves.",
       "intro": "Rassemblez vos sources, mettez leurs résultats en relation et rédigez une revue de littérature dont chaque affirmation renvoie au passage d’origine.",
@@ -449,7 +449,7 @@
       }
     },
     "error": {
-      "title": "Page introuvable — Skimr",
+      "title": "Page introuvable | Skimr",
       "description": "La page demandée est introuvable.",
       "heading": "Page introuvable",
       "message": "Cette page a peut-être été déplacée ou n’est plus disponible.",

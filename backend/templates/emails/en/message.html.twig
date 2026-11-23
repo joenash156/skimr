@@ -1,0 +1,44 @@
+{% extends "en/layout.html.twig" %}
+
+{% block content %}
+    {% if template == 'verify_email' %}
+        <h1 style="font-size:24px;line-height:1.3;">Verify your email address</h1>
+        <p>Hello {{ first_name }},</p>
+        <p>Verify your email address to activate your Skimr account. This link expires in {{ expires_hours }} hours.</p>
+        <p><a href="{{ link }}" style="display:inline-block;padding:12px 20px;background-color:#087f8c;color:#ffffff;text-decoration:none;border-radius:4px;">Verify email</a></p>
+    {% elseif template == 'reset_password' %}
+        <h1 style="font-size:24px;line-height:1.3;">Reset your password</h1>
+        <p>Hello {{ first_name }},</p>
+        <p>We received a request to reset your Skimr password. This link expires in {{ expires_minutes }} minutes.</p>
+        <p><a href="{{ link }}" style="display:inline-block;padding:12px 20px;background-color:#087f8c;color:#ffffff;text-decoration:none;border-radius:4px;">Reset password</a></p>
+        <p>If you did not request this, you can ignore this message.</p>
+    {% elseif template == 'new_sign_in' %}
+        <h1 style="font-size:24px;line-height:1.3;">New sign-in to your account</h1>
+        <p>Hello {{ first_name }},</p>
+        <p>A new device signed in to your Skimr account at {{ at }}.</p>
+        <p>IP address: {{ ip }}<br>Device: {{ user_agent }}</p>
+        <p>If this was not you, reset your password and review your account security.</p>
+    {% elseif template == 'password_changed' %}
+        <h1 style="font-size:24px;line-height:1.3;">Your password was changed</h1>
+        <p>Hello {{ first_name }},</p>
+        <p>Your Skimr password was changed at {{ at }}. If you did not make this change, secure your account immediately.</p>
+    {% elseif template == 'suspicious_activity' %}
+        <h1 style="font-size:24px;line-height:1.3;">Security alert</h1>
+        <p>Hello {{ first_name }},</p>
+        <p>We detected unusual activity on your Skimr account at {{ at }} and signed you out everywhere. Please sign in and review your account security.</p>
+    {% elseif template == 'email_change_requested' %}
+        <h1 style="font-size:24px;line-height:1.3;">Email change requested</h1>
+        <p>Hello {{ first_name }},</p>
+        <p>A request was made at {{ at }} to change the email address on your Skimr account to {{ new_email }}. The change will take effect only after that address is confirmed.</p>
+        <p>If you did not make this request, secure your account immediately.</p>
+    {% elseif template == 'email_changed' %}
+        <h1 style="font-size:24px;line-height:1.3;">Your email address was changed</h1>
+        <p>Hello {{ first_name }},</p>
+        <p>Your Skimr account email address was changed to {{ new_email }} at {{ at }}. If you did not make this change, secure your account immediately.</p>
+    {% elseif template == 'contact_message' %}
+        <h1 style="font-size:24px;line-height:1.3;">New contact message</h1>
+        <p><strong>From:</strong> {{ name }} ({{ email }})<br><strong>Received:</strong> {{ at }}<br><strong>Visitor language:</strong> {{ locale }}</p>
+        <p style="white-space:normal;">{{ message|e|nl2br }}</p>
+    {% endif %}
+{% endblock %}
+

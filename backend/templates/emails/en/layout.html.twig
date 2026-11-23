@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ app_name }}</title>
+</head>
+<body style="margin:0;padding:24px;background-color:#f4f7f8;font-family:Arial,sans-serif;color:#18323a;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <td align="center">
+            <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:600px;background-color:#ffffff;border-radius:8px;">
+                <tr>
+                    <td style="padding:28px 32px 12px;font-size:22px;font-weight:bold;">
+                        <a href="{{ app_url }}" style="color:#087f8c;text-decoration:none;">{{ app_name }}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:12px 32px 28px;font-size:16px;line-height:1.6;">
+                        {% block content %}{% endblock %}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:20px 32px;border-top:1px solid #e3eaec;color:#52666c;font-size:13px;line-height:1.5;">
+                        {% if template == 'contact_message' %}
+                            This message was submitted through the Skimr contact form.
+                        {% else %}
+                            You received this message to help protect or manage your Skimr account.
+                            <a href="{{ notification_settings_url }}" style="color:#087f8c;">Notification settings</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

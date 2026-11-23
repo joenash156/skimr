@@ -12,8 +12,7 @@
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
     <link rel="manifest" href="/assets/manifest.webmanifest">
-    <link rel="stylesheet" href="/assets/fonts.css">
-    <link rel="stylesheet" href="/assets/site-shell.css">
+    <link rel="stylesheet" href="/assets/site.css">
     {% block canonical %}
         {% if metadata is defined %}
             <link rel="canonical" href="{{ metadata.canonical }}">
@@ -56,7 +55,7 @@
 <body>
     <a class="skip-link" href="#main">{{ trans('public.skip_to_content') }}</a>
     {% include 'partials/header.html.twig' %}
-    <main id="main">
+    <main id="main" tabindex="-1">
         {% block content %}{% endblock %}
     </main>
     {% include 'partials/footer.html.twig' %}

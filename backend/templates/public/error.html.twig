@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
+{% import 'macros/icons.html.twig' as ui %}
 
 {% block title %}{{ trans('public.error.title') }}{% endblock %}
 {% block description %}{{ trans('public.error.description') }}{% endblock %}
 {% block content %}
-    <section aria-labelledby="error-title">
+    <section class="container error-page" aria-labelledby="error-title">
+        <p class="error-page__code" aria-hidden="true">{{ status }}</p>
         <h1 id="error-title">{{ trans('public.error.heading') }}</h1>
-        <p>{{ trans('public.error.message') }}</p>
-        <a href="/{{ locale }}/">{{ trans('public.error.home_link') }}</a>
+        <p class="lead">{{ trans('public.error.message') }}</p>
+        <a class="btn btn--primary" href="/{{ locale }}/">{{ ui.icon('arrow-right') }} {{ trans('public.error.home_link') }}</a>
     </section>
 {% endblock %}

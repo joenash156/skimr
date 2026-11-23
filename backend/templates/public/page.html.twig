@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    {% include 'pages/' ~ page_key ~ '.html.twig' %}
+    {# Each page template brings its own <h1>; .prose styles its headings and paragraphs. #}
+    <div class="container page page--{{ page_key|replace({'_': '-'}) }}">
+        {% include 'pages/' ~ page_key ~ '.html.twig' %}
+    </div>
 {% endblock %}

@@ -14,6 +14,8 @@ backend/.phpunit.result.cache
 backend/.php-cs-fixer.cache
 # React build output (spec 18) - never edited by hand
 backend/public/app/
+# Public site CSS, built from backend/src/Public/site.css (npm run build:public)
+backend/public/assets/site.css
 
 # --- Node / frontend ---
 node_modules/

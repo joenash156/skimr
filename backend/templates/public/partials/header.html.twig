@@ -1,27 +1,35 @@
-<header x-data="mobileMenu" x-on:keydown.escape.window="close">
-    <a class="site-logo" href="/{{ locale }}/" aria-label="{{ trans('public.home_link') }}">Skimr</a>
-    <nav aria-label="{{ trans('public.main_navigation') }}">
-        <a href="/{{ locale }}/#main">{{ trans('public.navigation.home') }}</a>
-        {% if page_urls is defined %}
-            {% for page in ['features', 'how_it_works', 'about'] %}
-                <a href="{{ page_urls[page] }}">{{ trans('public.navigation.' ~ page) }}</a>
-            {% endfor %}
-        {% endif %}
-        {% include 'partials/language-switcher.html.twig' %}
-        <div class="theme-toggle"
-             x-data="themeToggle">
-            <button type="button" x-on:click="toggle"
-                    aria-label="{{ trans('public.theme.toggle') }}">
-                {{ trans('public.theme.toggle') }}
+{% import 'macros/icons.html.twig' as ui %}
+<header class="site-header" x-data="mobileMenu" x-on:keydown.escape.window="close">
+    <div class="container site-header__inner">
+        <a class="brand" href="/{{ locale }}/" aria-label="{{ trans('public.home_link') }}">
+            <span class="brand__mark" aria-hidden="true"></span>
+            <span class="brand__name">Skimr</span>
+        </a>
+
+        <nav class="site-nav" aria-label="{{ trans('public.main_navigation') }}">
+            {% if page_urls is defined %}
+                {% for page in ['features', 'how_it_works', 'about', 'contact'] %}
+                    <a class="site-nav__link" href="{{ page_urls[page] }}"
+                       {% if page_key is defined and page_key == page %}aria-current="page"{% endif %}>
+                        {{ trans('public.navigation.' ~ page) }}
+                    </a>
+                {% endfor %}
+            {% endif %}
+        </nav>
+
+        <div class="site-header__actions">
+            {% include 'partials/language-switcher.html.twig' with {variant: 'compact'} %}
+            {% include 'partials/theme-toggle.html.twig' %}
+            <a class="btn btn--ghost btn--sm hide-mobile" href="/app/login">{{ trans('public.login') }}</a>
+            <a class="btn btn--primary btn--sm hide-mobile" href="/app/register">{{ trans('public.signup') }}</a>
+            {# The icon follows aria-expanded in CSS, so no extra Alpine expressions are needed. #}
+            <button class="icon-btn menu-toggle mobile-only" type="button" x-on:click="toggle"
+                    x-bind:aria-expanded="open" aria-expanded="false" aria-controls="mobile-menu"
+                    aria-label="{{ trans('public.menu') }}">
+                {{ ui.icon('menu', 'icon menu-toggle__open') }}
+                {{ ui.icon('close', 'icon menu-toggle__close') }}
             </button>
         </div>
-        <a href="/app/login">{{ trans('public.login') }}</a>
-        <a href="/app/register">{{ trans('public.signup') }}</a>
-    </nav>
-    <button class="mobile-menu-toggle" type="button" x-on:click="toggle"
-            x-bind:aria-expanded="open" aria-controls="mobile-menu"
-            aria-label="{{ trans('public.menu') }}">
-        {{ trans('public.menu') }}
-    </button>
+    </div>
     {% include 'partials/mobile-menu.html.twig' %}
 </header>

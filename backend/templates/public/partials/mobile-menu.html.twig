@@ -1,17 +1,19 @@
 <nav id="mobile-menu" class="mobile-menu" x-show="open" x-cloak
      aria-label="{{ trans('public.mobile_navigation') }}">
-    <a href="/{{ locale }}/#main">{{ trans('public.navigation.home') }}</a>
-    {% if page_urls is defined %}
-        {% for page in ['features', 'how_it_works', 'about'] %}
-            <a href="{{ page_urls[page] }}">{{ trans('public.navigation.' ~ page) }}</a>
-        {% endfor %}
-    {% endif %}
-    <a href="/app/login">{{ trans('public.login') }}</a>
-    <a href="/app/register">{{ trans('public.signup') }}</a>
-    {% include 'partials/language-switcher.html.twig' %}
-    <div class="theme-toggle" x-data="themeToggle">
-        <button type="button" x-on:click="toggle" aria-label="{{ trans('public.theme.toggle') }}">
-            {{ trans('public.theme.toggle') }}
-        </button>
+    <div class="container mobile-menu__inner">
+        <a class="mobile-menu__link" href="/{{ locale }}/">{{ trans('public.navigation.home') }}</a>
+        {% if page_urls is defined %}
+            {% for page in ['features', 'how_it_works', 'about', 'contact'] %}
+                <a class="mobile-menu__link" href="{{ page_urls[page] }}"
+                   {% if page_key is defined and page_key == page %}aria-current="page"{% endif %}>
+                    {{ trans('public.navigation.' ~ page) }}
+                </a>
+            {% endfor %}
+        {% endif %}
+        {% include 'partials/language-switcher.html.twig' with {variant: 'full'} %}
+        <div class="mobile-menu__actions">
+            <a class="btn btn--secondary" href="/app/login">{{ trans('public.login') }}</a>
+            <a class="btn btn--primary" href="/app/register">{{ trans('public.signup') }}</a>
+        </div>
     </div>
 </nav>

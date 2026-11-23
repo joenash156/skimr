@@ -1,41 +1,26 @@
+// Public site behaviour (Alpine.js CSP build). Loaded with `defer` before Alpine.
 document.addEventListener('alpine:init', function () {
+    // Light / dark switch. The inline script in <head> has already applied the saved
+    // choice before paint (spec 14.4); "system" follows the OS live until the user picks.
     Alpine.data('themeToggle', function () {
         return {
-            mode: 'system',
-
             init: function () {
-                try {
-                    var stored = localStorage.getItem('theme');
-                    this.mode = ['light', 'dark', 'system'].indexOf(stored) !== -1 ? stored : 'system';
-                } catch (error) {
-                    console.warn('Skimr could not read the saved theme preference.', error);
-                }
-
-                this.media = window.matchMedia('(prefers-color-scheme: dark)');
-                this.media.addEventListener('change', this.apply.bind(this));
-                this.apply();
-            },
-
-            get label() {
-                return document.documentElement.classList.contains('dark')
-                    ? this.$el.dataset.lightLabel
-                    : this.$el.dataset.darkLabel;
+                var media = window.matchMedia('(prefers-color-scheme: dark)');
+                media.addEventListener('change', function (event) {
+                    if (readTheme() === 'system') {
+                        document.documentElement.classList.toggle('dark', event.matches);
+                    }
+                });
             },
 
             toggle: function () {
-                this.mode = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-                try {
-                    localStorage.setItem('theme', this.mode);
-                } catch (error) {
-                    console.warn('Skimr could not save the theme preference.', error);
-                }
-                this.apply();
-            },
-
-            apply: function () {
-                var dark = this.mode === 'dark'
-                    || (this.mode === 'system' && this.media.matches);
+                var dark = !document.documentElement.classList.contains('dark');
                 document.documentElement.classList.toggle('dark', dark);
+                try {
+                    localStorage.setItem('theme', dark ? 'dark' : 'light');
+                } catch (error) {
+                    // Storage blocked (private mode): the choice lasts for this page only.
+                }
             }
         };
     });
@@ -53,4 +38,13 @@ document.addEventListener('alpine:init', function () {
             }
         };
     });
+
+    function readTheme() {
+        try {
+            var stored = localStorage.getItem('theme');
+            return stored === 'light' || stored === 'dark' ? stored : 'system';
+        } catch (error) {
+            return 'system';
+        }
+    }
 });

@@ -23,6 +23,14 @@
                         </li>
                     {% endfor %}
                 </ul>
+                {% set profile = site.forLocale(locale) %}
+                {% if profile.hasContact() or profile.socials is not empty %}
+                    <div class="contact__reach">
+                        <h2 class="contact__reach-title">{{ trans(p ~ 'reach_heading') }}</h2>
+                        {% include 'partials/contact-details.html.twig' %}
+                        {% include 'partials/socials.html.twig' %}
+                    </div>
+                {% endif %}
                 <div class="contact__note">
                     <p>{{ trans(p ~ 'reply_note') }}</p>
                     <ul class="link-list">

@@ -1,7 +1,7 @@
 {
   "public": {
     "meta": {
-      "title": "Skimr — research grounded in evidence",
+      "title": "Skimr | research grounded in evidence",
       "description": "Organize research and build literature reviews where every finding traces back to its source."
     },
     "skip_to_content": "Skip to content",
@@ -36,7 +36,7 @@
       "cookies": "Cookies"
     },
     "home": {
-      "title": "Skimr — evidence-led literature reviews",
+      "title": "Skimr | evidence-led literature reviews",
       "description": "Organize research and build literature reviews where every finding traces back to its source.",
       "heading": "Research, organized around evidence.",
       "intro": "Bring your sources together, see how findings relate, and build a literature review you can trace back to the original passages.",
@@ -405,7 +405,8 @@
         "reply_note": "We reply by email to the address you provide. Your message is used only to answer you.",
         "privacy_link": "Read our privacy notice",
         "faq_link": "Browse frequently asked questions",
-        "form_heading": "Send us a message"
+        "form_heading": "Send us a message",
+        "reach_heading": "Other ways to reach us"
       },
       "privacy": {
         "title": "Privacy policy | Skimr",
@@ -449,14 +450,21 @@
       }
     },
     "error": {
-      "title": "Page not found — Skimr",
+      "title": "Page not found | Skimr",
       "description": "The requested page could not be found.",
       "heading": "Page not found",
       "message": "The page may have moved or may no longer be available.",
       "home_link": "Return to the home page"
     },
     "footer": {
-      "copyright": "© {year} Skimr"
+      "copyright": "© {year} Skimr",
+      "product": "Product",
+      "legal": "Legal",
+      "contact": "Contact"
+    },
+    "socials": {
+      "label": "Skimr on social media",
+      "on": "Skimr on {network}"
     }
   }
 }

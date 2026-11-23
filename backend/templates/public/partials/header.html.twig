@@ -2,10 +2,16 @@
 {% set nav = {features: 'grid', how_it_works: 'workflow', about: 'info', contact: 'mail'} %}
 <header class="site-header" x-data="mobileMenu" x-on:keydown.escape.window="close">
     <div class="wrap site-header__inner">
-        {% include 'partials/brand.html.twig' %}
+        {% include 'partials/brand.html.twig' with {uid: 'h'} %}
 
         {% if page_urls is defined %}
             <nav class="site-nav" aria-label="{{ trans('public.main_navigation') }}">
+                {# The home page has no page_key; inner pages do. #}
+                <a class="site-nav__link anim-host" href="/{{ locale }}/"
+                   {% if page_key is not defined %}aria-current="page"{% endif %}>
+                    {{ ui.icon('home', 'icon icon--draw') }}
+                    <span>{{ trans('public.navigation.home') }}</span>
+                </a>
                 {% for page, icon in nav %}
                     <a class="site-nav__link anim-host" href="{{ page_urls[page] }}"
                        {% if page_key is defined and page_key == page %}aria-current="page"{% endif %}>

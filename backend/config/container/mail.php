@@ -6,6 +6,7 @@ use App\Mail\EmailBudget;
 use App\Mail\EmailBudgetRepository;
 use App\Mail\MailService;
 use App\Shared\Clock\Clock;
+use App\Shared\Mail\LogMailer;
 use App\Shared\Mail\Mailer;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -50,5 +51,22 @@ return [
         );
     },
 
-    Mailer::class => static fn (ContainerInterface $container): Mailer => $container->get(MailService::class),
+    // Real delivery through Resend when RESEND_API_KEY is set. Without a key, local and
+    // staging keep P1's LogMailer, so verify/reset links still land in var/mail.log for
+    // testing. Production always uses MailService, which logs loudly if the key is missing.
+    Mailer::class => static function (ContainerInterface $container): Mailer {
+        /** @var array{app: array{env: string}, mail: array{resend_api_key: ?string}, auth: array{mail_log: string}} $settings */
+        $settings = $container->get('settings');
+        $key = $settings['mail']['resend_api_key'];
+        if ((!is_string($key) || trim($key) === '') && $settings['app']['env'] !== 'production') {
+            return new LogMailer(
+                $settings['auth']['mail_log'],
+                $settings['app']['env'],
+                $container->get(Clock::class),
+                $container->get(LoggerInterface::class),
+            );
+        }
+
+        return $container->get(MailService::class);
+    },
 ];

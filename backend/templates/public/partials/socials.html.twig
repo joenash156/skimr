@@ -1,0 +1,15 @@
+{# Social links from the admin-managed site profile (App\Public\Site\SiteProfiles). Renders nothing if none are set. #}
+{% import 'macros/icons.html.twig' as ui %}
+{% set names = {linkedin: 'LinkedIn', x: 'X', github: 'GitHub', instagram: 'Instagram', facebook: 'Facebook', youtube: 'YouTube'} %}
+{% if profile.socials is not empty %}
+    <ul class="socials" aria-label="{{ trans('public.socials.label') }}">
+        {% for network, url in profile.socials %}
+            <li>
+                <a class="socials__link anim-host" href="{{ url }}" rel="noopener me" target="_blank"
+                   aria-label="{{ trans('public.socials.on', {network: names[network]}) }}" title="{{ names[network] }}">
+                    {{ ui.icon(network, 'icon icon--draw') }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

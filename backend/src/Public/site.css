@@ -392,40 +392,40 @@
     }
   }
 
-  /* The mark: a black (white in dark mode) tile with one teal "skim" line. */
-  .brand__mark {
-    position: relative;
-    width: 1.75rem;
-    height: 1.75rem;
+  /* The logo: the teal S mark (macros/brand.html.twig) + the "Skimr" wordmark in the
+     text colour, so the same markup is the light logo and the dark logo. */
+  .brand-mark {
+    width: 2rem;
+    height: 2rem;
     flex: none;
-    border-radius: 7px;
-    background: var(--inverse);
+    transition: transform 400ms var(--ease);
   }
 
-  .brand__mark::before,
-  .brand__mark::after {
+  .brand:hover .brand-mark {
+    transform: rotate(-6deg) scale(1.04);
+  }
+
+  .wordmark {
+    position: relative;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+  }
+
+  /* The dot on the i is the teal accent from the logo. */
+  .wordmark__i {
+    position: relative;
+  }
+
+  .wordmark__i::after {
     content: "";
     position: absolute;
-    left: 0.4375rem;
-    height: 2px;
-    border-radius: 1px;
-  }
-
-  .brand__mark::before {
-    top: 0.5625rem;
-    width: 0.875rem;
-    background: var(--inverse-fg);
-    opacity: 0.45;
-  }
-
-  .brand__mark::after {
-    top: 0.9375rem;
-    width: 0.625rem;
-    background: var(--primary);
-  }
-
-  .dark .brand__mark::after {
-    background: var(--primary-subtle);
+    top: 0.08em;
+    left: 50%;
+    width: 0.2em;
+    height: 0.2em;
+    border-radius: 50%;
+    background: #14b8a6;
+    transform: translateX(-50%);
   }
 
   .brand__text {
@@ -485,7 +485,14 @@
   }
 
   /* Narrower desktops (and long FR/ES labels): drop the nav icons, keep the labels. */
-  @media (max-width: 1439.98px) {
+  /* Very wide screens: the header spreads out so the icons fit beside the slogan. */
+  @media (min-width: 1536px) {
+    .site-header__inner {
+      max-width: 94rem;
+    }
+  }
+
+  @media (max-width: 1535.98px) {
     .site-nav__link .icon {
       display: none;
     }
@@ -2493,6 +2500,146 @@
 
   .faq__item[open] p {
     animation: rise 450ms var(--ease) both;
+  }
+}
+
+@layer components {
+  /* ================= Dot grid behind the home demo window ================= */
+  .hero__dotgrid {
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 60%;
+    background-image: radial-gradient(circle, var(--scrollbar-thumb) 1.2px, transparent 1.6px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 60%, #000 25%, transparent 75%);
+    pointer-events: none;
+  }
+
+  @media (min-width: 1024px) {
+    .hero__dotgrid {
+      top: 0;
+      left: auto;
+      width: 52%;
+      height: auto;
+      mask-image: radial-gradient(ellipse 60% 70% at 55% 50%, #000 30%, transparent 78%);
+    }
+  }
+
+  /* ================= Footer: brand + Product / Legal / Contact columns ================= */
+  .site-footer__inner {
+    gap: 3rem;
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer__inner {
+      grid-template-columns: 1fr 1.6fr;
+    }
+  }
+
+  .site-footer__nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .site-footer__nav {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .site-footer__heading {
+    margin-bottom: 1rem;
+    color: var(--text);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .site-footer__brand .socials {
+    margin-top: 1.5rem;
+  }
+
+  /* ================= Social links ================= */
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .socials__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-muted);
+    transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease), transform 250ms var(--ease);
+  }
+
+  .socials__link:hover {
+    border-color: var(--text);
+    color: var(--text);
+    transform: translateY(-2px);
+  }
+
+  .socials__link .icon {
+    width: 1.0625rem;
+    height: 1.0625rem;
+  }
+
+  /* ================= Contact details (email / phone / address) ================= */
+  .contact-details {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .contact-details__item {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    overflow-wrap: anywhere;
+    transition: color var(--duration) var(--ease);
+  }
+
+  a.contact-details__item:hover {
+    color: var(--text);
+  }
+
+  .contact-details__item .icon {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.125rem;
+    color: var(--text);
+  }
+
+  .contact__reach {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+  }
+
+  .contact__reach-title {
+    font-size: var(--text-base);
+    font-weight: 600;
+  }
+
+  .contact__reach .contact-details__item {
+    color: var(--text);
+    font-size: var(--text-base);
+  }
+
+  .contact__reach .socials__link {
+    background: var(--bg);
   }
 }
 

@@ -2,42 +2,42 @@
 
 {% block content %}
     {% if template == 'verify_email' %}
-        <h1 style="font-size:24px;line-height:1.3;">Confirma tu correo electrónico</h1>
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Confirma tu correo electrónico</h1>
         <p>Hola {{ first_name }},</p>
         <p>Confirma tu correo electrónico para activar tu cuenta de Skimr. Este enlace vence en {{ expires_hours }} horas.</p>
-        <p><a href="{{ link }}" style="display:inline-block;padding:12px 20px;background-color:#087f8c;color:#ffffff;text-decoration:none;border-radius:4px;">Confirmar correo</a></p>
+        <p><a href="{{ link }}" style="display:inline-block;padding:12px 24px;background-color:#0a0a0a;color:#ffffff;font-weight:600;text-decoration:none;border-radius:999px;">Confirmar correo</a></p>
     {% elseif template == 'reset_password' %}
-        <h1 style="font-size:24px;line-height:1.3;">Restablece tu contraseña</h1>
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Restablece tu contraseña</h1>
         <p>Hola {{ first_name }},</p>
         <p>Recibimos una solicitud para restablecer tu contraseña de Skimr. Este enlace vence en {{ expires_minutes }} minutos.</p>
-        <p><a href="{{ link }}" style="display:inline-block;padding:12px 20px;background-color:#087f8c;color:#ffffff;text-decoration:none;border-radius:4px;">Restablecer contraseña</a></p>
+        <p><a href="{{ link }}" style="display:inline-block;padding:12px 24px;background-color:#0a0a0a;color:#ffffff;font-weight:600;text-decoration:none;border-radius:999px;">Restablecer contraseña</a></p>
         <p>Si no hiciste esta solicitud, puedes ignorar este mensaje.</p>
     {% elseif template == 'new_sign_in' %}
-        <h1 style="font-size:24px;line-height:1.3;">Nuevo inicio de sesión en tu cuenta</h1>
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Nuevo inicio de sesión en tu cuenta</h1>
         <p>Hola {{ first_name }},</p>
-        <p>Un dispositivo nuevo inició sesión en tu cuenta de Skimr el {{ at }}.</p>
+        <p>Un dispositivo nuevo inició sesión en tu cuenta de Skimr el {{ at|date('Y-m-d H:i', 'UTC') }} UTC.</p>
         <p>Dirección IP: {{ ip }}<br>Dispositivo: {{ user_agent }}</p>
         <p>Si no fuiste tú, restablece tu contraseña y revisa la seguridad de tu cuenta.</p>
     {% elseif template == 'password_changed' %}
-        <h1 style="font-size:24px;line-height:1.3;">Se cambió tu contraseña</h1>
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Se cambió tu contraseña</h1>
         <p>Hola {{ first_name }},</p>
-        <p>Tu contraseña de Skimr se cambió el {{ at }}. Si no hiciste este cambio, protege tu cuenta de inmediato.</p>
+        <p>Tu contraseña de Skimr se cambió el {{ at|date('Y-m-d H:i', 'UTC') }} UTC. Si no hiciste este cambio, protege tu cuenta de inmediato.</p>
     {% elseif template == 'suspicious_activity' %}
-        <h1 style="font-size:24px;line-height:1.3;">Alerta de seguridad</h1>
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Alerta de seguridad</h1>
         <p>Hola {{ first_name }},</p>
-        <p>Detectamos actividad inusual en tu cuenta de Skimr el {{ at }} y cerramos todas tus sesiones. Inicia sesión y revisa la seguridad de tu cuenta.</p>
+        <p>Detectamos actividad inusual en tu cuenta de Skimr el {{ at|date('Y-m-d H:i', 'UTC') }} UTC y cerramos todas tus sesiones. Inicia sesión y revisa la seguridad de tu cuenta.</p>
     {% elseif template == 'email_change_requested' %}
-        <h1 style="font-size:24px;line-height:1.3;">Solicitud de cambio de correo electrónico</h1>
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Solicitud de cambio de correo electrónico</h1>
         <p>Hola {{ first_name }},</p>
-        <p>El {{ at }} se solicitó cambiar el correo electrónico de tu cuenta de Skimr por {{ new_email }}. El cambio solo se aplicará después de confirmar esa dirección.</p>
+        <p>El {{ at|date('Y-m-d H:i', 'UTC') }} UTC se solicitó cambiar el correo electrónico de tu cuenta de Skimr por {{ new_email }}. El cambio solo se aplicará después de confirmar esa dirección.</p>
         <p>Si no hiciste esta solicitud, protege tu cuenta de inmediato.</p>
     {% elseif template == 'email_changed' %}
-        <h1 style="font-size:24px;line-height:1.3;">Se cambió tu correo electrónico</h1>
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Se cambió tu correo electrónico</h1>
         <p>Hola {{ first_name }},</p>
-        <p>El correo electrónico de tu cuenta de Skimr se cambió por {{ new_email }} el {{ at }}. Si no hiciste este cambio, protege tu cuenta de inmediato.</p>
+        <p>El correo electrónico de tu cuenta de Skimr se cambió por {{ new_email }} el {{ at|date('Y-m-d H:i', 'UTC') }} UTC. Si no hiciste este cambio, protege tu cuenta de inmediato.</p>
     {% elseif template == 'contact_message' %}
-        <h1 style="font-size:24px;line-height:1.3;">Nuevo mensaje de contacto</h1>
-        <p><strong>De:</strong> {{ name }} ({{ email }})<br><strong>Recibido:</strong> {{ at }}</p>
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Nuevo mensaje de contacto</h1>
+        <p><strong>De:</strong> {{ name }} ({{ email }})<br><strong>Recibido:</strong> {{ at|date('Y-m-d H:i', 'UTC') }} UTC</p>
         <p>{{ message|e|nl2br }}</p>
     {% endif %}
 {% endblock %}

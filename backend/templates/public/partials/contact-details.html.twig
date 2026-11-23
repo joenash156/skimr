@@ -1,0 +1,15 @@
+{# Email / phone / address from the admin-managed site profile. Each line only if set. #}
+{% import 'macros/icons.html.twig' as ui %}
+{% if profile.hasContact() %}
+    <ul class="contact-details">
+        {% if profile.email %}
+            <li><a class="contact-details__item anim-host" href="mailto:{{ profile.email }}">{{ ui.icon('mail', 'icon icon--draw') }}<span>{{ profile.email }}</span></a></li>
+        {% endif %}
+        {% if profile.phone %}
+            <li><a class="contact-details__item anim-host" href="{{ profile.phoneHref() }}">{{ ui.icon('phone', 'icon icon--draw') }}<span>{{ profile.phone }}</span></a></li>
+        {% endif %}
+        {% if profile.address %}
+            <li><span class="contact-details__item">{{ ui.icon('map-pin') }}<span>{{ profile.address }}</span></span></li>
+        {% endif %}
+    </ul>
+{% endif %}

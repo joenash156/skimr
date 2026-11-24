@@ -1,0 +1,75 @@
+{
+  "users": {
+    "title": "Users",
+    "description": "Search and review user accounts.",
+    "search": {
+      "label": "Search users",
+      "placeholder": "Search by name or email"
+    },
+    "filters": {
+      "label": "Filters",
+      "status": "Status",
+      "role": "Role",
+      "allStatuses": "All statuses",
+      "allRoles": "All roles"
+    },
+    "sort": {
+      "label": "Sort by sign-up date",
+      "newestFirst": "Newest first",
+      "oldestFirst": "Oldest first"
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "status": "Status",
+      "verified": "Verified",
+      "projects": "Projects",
+      "sources": "Sources",
+      "lastLogin": "Last login",
+      "noLastLogin": "Never"
+    },
+    "status": {
+      "pending_verification": "Pending verification",
+      "active": "Active",
+      "invited": "Invited",
+      "suspended": "Suspended",
+      "deleted": "Deleted"
+    },
+    "role": {
+      "user": "User",
+      "admin": "Admin",
+      "super_admin": "Super admin"
+    },
+    "verification": {
+      "verified": "Verified",
+      "notVerified": "Not verified"
+    },
+    "pagination": {
+      "summary": "Showing {{start}}–{{end}} of {{total}} users",
+      "previous": "Previous page",
+      "next": "Next page"
+    },
+    "empty": "No users match these filters.",
+    "loadError": "Users could not be loaded. Try again.",
+    "detail": {
+      "title": "User details",
+      "profile": "Profile",
+      "usage": "Usage",
+      "activity": "Activity",
+      "institution": "Institution",
+      "discipline": "Discipline",
+      "phone": "Phone",
+      "signedUp": "Signed up",
+      "aiCallsThisMonth": "AI calls this month",
+      "notProvided": "Not provided",
+      "notFound": "This user could not be found."
+    },
+    "activity": {
+      "account_created": "Account created",
+      "email_verified": "Email verified",
+      "signed_in": "Signed in",
+      "suspended": "Account suspended",
+      "reactivated": "Account reactivated"
+    }
+  }
+}

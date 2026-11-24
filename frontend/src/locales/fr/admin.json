@@ -1,0 +1,75 @@
+{
+  "users": {
+    "title": "Utilisateurs",
+    "description": "Rechercher et consulter les comptes utilisateurs.",
+    "search": {
+      "label": "Rechercher des utilisateurs",
+      "placeholder": "Rechercher par nom ou adresse e-mail"
+    },
+    "filters": {
+      "label": "Filtres",
+      "status": "Statut",
+      "role": "Rôle",
+      "allStatuses": "Tous les statuts",
+      "allRoles": "Tous les rôles"
+    },
+    "sort": {
+      "label": "Trier par date d’inscription",
+      "newestFirst": "Les plus récents",
+      "oldestFirst": "Les plus anciens"
+    },
+    "table": {
+      "name": "Nom",
+      "email": "Adresse e-mail",
+      "status": "Statut",
+      "verified": "Vérifié",
+      "projects": "Projets",
+      "sources": "Sources",
+      "lastLogin": "Dernière connexion",
+      "noLastLogin": "Jamais"
+    },
+    "status": {
+      "pending_verification": "En attente de vérification",
+      "active": "Actif",
+      "invited": "Invité",
+      "suspended": "Suspendu",
+      "deleted": "Supprimé"
+    },
+    "role": {
+      "user": "Utilisateur",
+      "admin": "Administrateur",
+      "super_admin": "Super administrateur"
+    },
+    "verification": {
+      "verified": "Vérifié",
+      "notVerified": "Non vérifié"
+    },
+    "pagination": {
+      "summary": "Affichage de {{start}} à {{end}} sur {{total}} utilisateurs",
+      "previous": "Page précédente",
+      "next": "Page suivante"
+    },
+    "empty": "Aucun utilisateur ne correspond à ces filtres.",
+    "loadError": "Impossible de charger les utilisateurs. Veuillez réessayer.",
+    "detail": {
+      "title": "Détails de l’utilisateur",
+      "profile": "Profil",
+      "usage": "Utilisation",
+      "activity": "Activité",
+      "institution": "Établissement",
+      "discipline": "Discipline",
+      "phone": "Téléphone",
+      "signedUp": "Inscription",
+      "aiCallsThisMonth": "Appels à l’IA ce mois-ci",
+      "notProvided": "Non renseigné",
+      "notFound": "Impossible de trouver cet utilisateur."
+    },
+    "activity": {
+      "account_created": "Compte créé",
+      "email_verified": "Adresse e-mail vérifiée",
+      "signed_in": "Connexion",
+      "suspended": "Compte suspendu",
+      "reactivated": "Compte réactivé"
+    }
+  }
+}

@@ -27,12 +27,15 @@ export type AdminUserActivityType =
   | 'email_verified'
   | 'signed_in'
   | 'suspended'
-  | 'reactivated';
+  | 'reactivated'
+  | 'user_deleted'
+  | 'quota_reset'
+  | 'verification_resent';
 
 export type AdminUserActivity = {
   id: string;
   type: AdminUserActivityType;
-  actor: string;
+  actorRole: AdminUserRole;
   createdAt: string;
 };
 
@@ -55,6 +58,23 @@ export type AdminUsersQuery = {
   sortDirection?: 'asc' | 'desc';
 };
 
+export type AdminUserAction =
+  | 'suspend'
+  | 'reactivate'
+  | 'delete'
+  | 'reset_quota'
+  | 'resend_verification';
+
+export type AdminUserActionErrorCode =
+  | 'not_found'
+  | 'forbidden'
+  | 'reason_required'
+  | 'invalid_action';
+
+export type AdminUserActionResult =
+  | { ok: true; user: AdminUserDetail }
+  | { ok: false; code: AdminUserActionErrorCode };
+
 export type AdminUsersPage = {
   items: AdminUserSummary[];
   page: number;
@@ -65,6 +85,38 @@ export type AdminUsersPage = {
 export interface AdminUsersDataSource {
   listUsers(query: AdminUsersQuery): Promise<AdminUsersPage>;
   getUserDetail(id: string): Promise<AdminUserDetail | null>;
+  performUserAction(
+    id: string,
+    action: AdminUserAction,
+    actorRole: AdminUserRole,
+    reason: string,
+  ): Promise<AdminUserActionResult>;
+}
+
+export function getAvailableAdminUserActions(
+  actorRole: AdminUserRole,
+  user: AdminUserSummary,
+): AdminUserAction[] {
+  if (actorRole === 'user' || (actorRole === 'admin' && user.role !== 'user')) {
+    return [];
+  }
+
+  const actions: AdminUserAction[] = [];
+
+  if (user.status === 'active' || user.status === 'pending_verification') {
+    actions.push('suspend');
+  }
+  if (user.status === 'suspended') {
+    actions.push('reactivate');
+  }
+  if (user.status !== 'deleted') {
+    actions.push('delete', 'reset_quota');
+  }
+  if (user.status === 'pending_verification' && !user.emailVerified) {
+    actions.push('resend_verification');
+  }
+
+  return actions;
 }
 
 const mockUsers: AdminUserDetail[] = [
@@ -89,19 +141,19 @@ const mockUsers: AdminUserDetail[] = [
       {
         id: 'activity-ama-1',
         type: 'signed_in',
-        actor: 'Ama Mensah',
+        actorRole: 'user',
         createdAt: '2026-11-23T14:12:00+00:00',
       },
       {
         id: 'activity-ama-2',
         type: 'email_verified',
-        actor: 'Ama Mensah',
+        actorRole: 'user',
         createdAt: '2026-11-20T09:35:00+00:00',
       },
       {
         id: 'activity-ama-3',
         type: 'account_created',
-        actor: 'Ama Mensah',
+        actorRole: 'user',
         createdAt: '2026-11-20T09:30:00+00:00',
       },
     ],
@@ -127,7 +179,7 @@ const mockUsers: AdminUserDetail[] = [
       {
         id: 'activity-kwame-1',
         type: 'account_created',
-        actor: 'Kwame Owusu',
+        actorRole: 'user',
         createdAt: '2026-11-23T11:05:00+00:00',
       },
     ],
@@ -153,13 +205,13 @@ const mockUsers: AdminUserDetail[] = [
       {
         id: 'activity-esi-1',
         type: 'suspended',
-        actor: 'Admin Example',
+        actorRole: 'admin',
         createdAt: '2026-11-22T10:00:00+00:00',
       },
       {
         id: 'activity-esi-2',
         type: 'signed_in',
-        actor: 'Esi Boateng',
+        actorRole: 'user',
         createdAt: '2026-11-21T16:40:00+00:00',
       },
     ],
@@ -185,7 +237,7 @@ const mockUsers: AdminUserDetail[] = [
       {
         id: 'activity-kojo-1',
         type: 'account_created',
-        actor: 'Kojo Asare',
+        actorRole: 'user',
         createdAt: '2026-11-12T13:45:00+00:00',
       },
     ],
@@ -211,7 +263,7 @@ const mockUsers: AdminUserDetail[] = [
       {
         id: 'activity-admin-1',
         type: 'signed_in',
-        actor: 'Nana Example',
+        actorRole: 'admin',
         createdAt: '2026-11-24T07:40:00+00:00',
       },
     ],
@@ -237,7 +289,7 @@ const mockUsers: AdminUserDetail[] = [
       {
         id: 'activity-superadmin-1',
         type: 'signed_in',
-        actor: 'Yaw Example',
+        actorRole: 'super_admin',
         createdAt: '2026-11-24T06:55:00+00:00',
       },
     ],
@@ -269,7 +321,15 @@ const normalizePageValue = (value: number): number =>
   Number.isFinite(value) ? Math.max(1, Math.floor(value)) : 1;
 
 export class MockAdminUsersDataSource implements AdminUsersDataSource {
-  constructor(private readonly users: readonly AdminUserDetail[] = mockUsers) {}
+  private readonly users: AdminUserDetail[];
+  private nextActivityId = 1;
+
+  constructor(
+    users: readonly AdminUserDetail[] = mockUsers,
+    private readonly clock: () => Date = () => new Date(),
+  ) {
+    this.users = users.map(copyDetail);
+  }
 
   async listUsers(query: AdminUsersQuery): Promise<AdminUsersPage> {
     const page = normalizePageValue(query.page);
@@ -308,5 +368,57 @@ export class MockAdminUsersDataSource implements AdminUsersDataSource {
     const user = this.users.find((candidate) => candidate.id === id);
 
     return user === undefined ? null : copyDetail(user);
+  }
+
+  async performUserAction(
+    id: string,
+    action: AdminUserAction,
+    actorRole: AdminUserRole,
+    reason: string,
+  ): Promise<AdminUserActionResult> {
+    const user = this.users.find((candidate) => candidate.id === id);
+    if (user === undefined) {
+      return { ok: false, code: 'not_found' };
+    }
+
+    if (reason.trim() === '') {
+      return { ok: false, code: 'reason_required' };
+    }
+
+    if (actorRole === 'user' || (actorRole === 'admin' && user.role !== 'user')) {
+      return { ok: false, code: 'forbidden' };
+    }
+
+    if (!getAvailableAdminUserActions(actorRole, user).includes(action)) {
+      return { ok: false, code: 'invalid_action' };
+    }
+
+    const activityType: Record<AdminUserAction, AdminUserActivityType> = {
+      suspend: 'suspended',
+      reactivate: 'reactivated',
+      delete: 'user_deleted',
+      reset_quota: 'quota_reset',
+      resend_verification: 'verification_resent',
+    };
+
+    if (action === 'suspend') {
+      user.status = 'suspended';
+    } else if (action === 'reactivate') {
+      user.status = 'active';
+    } else if (action === 'delete') {
+      user.status = 'deleted';
+    } else if (action === 'reset_quota') {
+      user.usage.aiCallsThisMonth = 0;
+    }
+
+    user.activity.unshift({
+      id: `mock-activity-${this.nextActivityId}`,
+      type: activityType[action],
+      actorRole,
+      createdAt: this.clock().toISOString(),
+    });
+    this.nextActivityId += 1;
+
+    return { ok: true, user: copyDetail(user) };
   }
 }

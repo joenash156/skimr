@@ -64,12 +64,27 @@
       "notProvided": "Not provided",
       "notFound": "This user could not be found."
     },
+    "actions": {
+      "suspend": "Suspend account",
+      "reactivate": "Reactivate account",
+      "delete": "Delete account",
+      "resetQuota": "Reset quota",
+      "resendVerification": "Resend verification email",
+      "reasonLabel": "Reason",
+      "reasonRequired": "Enter a reason to continue.",
+      "forbidden": "You do not have permission to perform this action.",
+      "invalidAction": "This action is not available for the user's current status.",
+      "completed": "The action was completed."
+    },
     "activity": {
       "account_created": "Account created",
       "email_verified": "Email verified",
       "signed_in": "Signed in",
       "suspended": "Account suspended",
-      "reactivated": "Account reactivated"
+      "reactivated": "Account reactivated",
+      "user_deleted": "Account deleted",
+      "quota_reset": "Quota reset",
+      "verification_resent": "Verification email resent"
     }
   }
 }

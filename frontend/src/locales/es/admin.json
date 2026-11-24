@@ -64,12 +64,27 @@
       "notProvided": "No indicado",
       "notFound": "No se encontró este usuario."
     },
+    "actions": {
+      "suspend": "Suspender cuenta",
+      "reactivate": "Reactivar cuenta",
+      "delete": "Eliminar cuenta",
+      "resetQuota": "Restablecer cuota",
+      "resendVerification": "Reenviar correo de verificación",
+      "reasonLabel": "Motivo",
+      "reasonRequired": "Escribe un motivo para continuar.",
+      "forbidden": "No tienes permiso para realizar esta acción.",
+      "invalidAction": "Esta acción no está disponible para el estado actual del usuario.",
+      "completed": "La acción se completó."
+    },
     "activity": {
       "account_created": "Cuenta creada",
       "email_verified": "Correo electrónico verificado",
       "signed_in": "Inicio de sesión",
       "suspended": "Cuenta suspendida",
-      "reactivated": "Cuenta reactivada"
+      "reactivated": "Cuenta reactivada",
+      "user_deleted": "Cuenta eliminada",
+      "quota_reset": "Cuota restablecida",
+      "verification_resent": "Correo de verificación reenviado"
     }
   }
 }

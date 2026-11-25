@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from app import __version__
 from app.config import Settings, get_settings
 from app.routers import health
+from app.security import SignatureError, signature_error_handler
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -21,6 +22,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         openapi_url=None,
     )
     app.state.settings = settings
+    app.add_exception_handler(SignatureError, signature_error_handler)
+    # /health is the only open route. Every other router must use dependencies=SIGNED.
     app.include_router(health.router)
     return app
 

@@ -12,7 +12,7 @@ from app.config import load_settings
 from app.main import create_app
 from app.security import SIGNED, sign
 
-from .conftest import TEST_SECRET
+from .conftest import TEST_SECRET, signed_headers
 
 PATH = "/v1/_signed-echo"
 
@@ -29,17 +29,6 @@ def signed_client() -> TestClient:
 
     app.include_router(router)
     return TestClient(app)
-
-
-def signed_headers(
-    body: bytes, *, timestamp: int | None = None, secret: str = TEST_SECRET
-) -> dict[str, str]:
-    ts = str(int(time.time()) if timestamp is None else timestamp)
-    return {
-        "Content-Type": "application/json",
-        "X-Timestamp": ts,
-        "X-Signature": sign(secret, ts, body),
-    }
 
 
 def error_code(response_json: object) -> str:

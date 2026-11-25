@@ -13,7 +13,7 @@ from app.errors import ServiceError, service_error_handler
 from app.jobs.handlers import HANDLERS
 from app.jobs.runner import Handler, JobRunner
 from app.jobs.store import JobStore
-from app.routers import health, jobs
+from app.routers import embed, health, jobs
 from app.security import SignatureError, signature_error_handler
 
 
@@ -45,6 +45,7 @@ def create_app(
     # /health is the only open route. Every other router must use dependencies=SIGNED.
     app.include_router(health.router)
     app.include_router(jobs.router)
+    app.include_router(embed.router)
     return app
 
 

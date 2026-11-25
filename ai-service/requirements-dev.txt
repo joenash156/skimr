@@ -1,0 +1,5 @@
+# Dev and CI tools only. Never needed in the Docker image.
+ruff==0.17.6
+mypy==2.4.1
+pytest==9.2.0
+pip-audit==2.10.1

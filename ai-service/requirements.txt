@@ -1,0 +1,6 @@
+# Runtime packages, pinned with == (master spec section 8).
+# Dev tools live in requirements-dev.txt. Later batches add pymupdf, fastembed, etc.
+fastapi==0.165.0
+uvicorn==0.54.0
+pydantic==2.14.4
+httpx==0.28.1

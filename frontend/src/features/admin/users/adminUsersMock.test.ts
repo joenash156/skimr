@@ -1,8 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  getAvailableAdminUserActions,
-  MockAdminUsersDataSource,
-} from './adminUsersMock';
+import { getAvailableAdminUserActions, MockAdminUsersDataSource } from './adminUsersMock';
 
 describe('MockAdminUsersDataSource', () => {
   it('filters by search, status, and role before paginating', async () => {
@@ -75,7 +72,10 @@ describe('MockAdminUsersDataSource', () => {
     const source = new MockAdminUsersDataSource();
     const expectedActions = new Map([
       ['3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17', ['suspend', 'delete', 'reset_quota']],
-      ['8b22a613-dc71-4b85-93b1-42a76b91c5e0', ['suspend', 'delete', 'reset_quota', 'resend_verification']],
+      [
+        '8b22a613-dc71-4b85-93b1-42a76b91c5e0',
+        ['suspend', 'delete', 'reset_quota', 'resend_verification'],
+      ],
       ['a14c82f7-153d-4a90-b2d0-77e6639a1f53', ['reactivate', 'delete', 'reset_quota']],
       ['c991cf52-8e5e-441a-a7e9-e099326ac439', []],
       ['51cfc492-fd2f-4fa8-83b8-b592f47d3341', []],
@@ -122,9 +122,10 @@ describe('MockAdminUsersDataSource', () => {
       const source = new MockAdminUsersDataSource();
       const before = await source.getUserDetail(userId);
 
-      await expect(
-        source.performUserAction(userId, action, 'admin', '  '),
-      ).resolves.toEqual({ ok: false, code: 'reason_required' });
+      await expect(source.performUserAction(userId, action, 'admin', '  ')).resolves.toEqual({
+        ok: false,
+        code: 'reason_required',
+      });
       await expect(source.getUserDetail(userId)).resolves.toEqual(before);
     }
   });
@@ -133,7 +134,12 @@ describe('MockAdminUsersDataSource', () => {
     const source = new MockAdminUsersDataSource(undefined, () => new Date('2026-11-24T09:00:00Z'));
     const userId = '3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17';
 
-    const suspended = await source.performUserAction(userId, 'suspend', 'admin', 'Reviewed request');
+    const suspended = await source.performUserAction(
+      userId,
+      'suspend',
+      'admin',
+      'Reviewed request',
+    );
     expect(suspended.ok).toBe(true);
     if (suspended.ok) {
       expect(suspended.user.status).toBe('suspended');
@@ -145,14 +151,24 @@ describe('MockAdminUsersDataSource', () => {
       });
     }
 
-    const reactivated = await source.performUserAction(userId, 'reactivate', 'admin', 'Review complete');
+    const reactivated = await source.performUserAction(
+      userId,
+      'reactivate',
+      'admin',
+      'Review complete',
+    );
     expect(reactivated.ok).toBe(true);
     if (reactivated.ok) {
       expect(reactivated.user.status).toBe('active');
       expect(reactivated.user.activity[0].type).toBe('reactivated');
     }
 
-    const deleted = await source.performUserAction(userId, 'delete', 'admin', 'User requested removal');
+    const deleted = await source.performUserAction(
+      userId,
+      'delete',
+      'admin',
+      'User requested removal',
+    );
     expect(deleted).toMatchObject({ ok: true, user: { status: 'deleted' } });
     await expect(
       source.performUserAction(userId, 'reactivate', 'admin', 'Review complete'),
@@ -171,16 +187,23 @@ describe('MockAdminUsersDataSource', () => {
       source.performUserAction(activeUserId, 'resend_verification', 'admin', 'Retry requested'),
     ).resolves.toEqual({ ok: false, code: 'invalid_action' });
     await expect(
-      source.performUserAction(pendingUserId, 'resend_verification', 'admin', 'User requested retry'),
-    ).resolves.toEqual(expect.objectContaining({
-      ok: true,
-      user: expect.objectContaining({
-        status: 'pending_verification',
-        activity: expect.arrayContaining([
-          expect.objectContaining({ type: 'verification_resent' }),
-        ]),
+      source.performUserAction(
+        pendingUserId,
+        'resend_verification',
+        'admin',
+        'User requested retry',
+      ),
+    ).resolves.toEqual(
+      expect.objectContaining({
+        ok: true,
+        user: expect.objectContaining({
+          status: 'pending_verification',
+          activity: expect.arrayContaining([
+            expect.objectContaining({ type: 'verification_resent' }),
+          ]),
+        }),
       }),
-    }));
+    );
   });
 
   it('normalizes invalid bounds and caps page size at the API maximum', async () => {

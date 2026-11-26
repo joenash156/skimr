@@ -46,6 +46,7 @@
     },
     "pagination": {
       "summary": "Showing {{start}}–{{end}} of {{total}} users",
+      "pageSize": "Users per page",
       "previous": "Previous page",
       "next": "Next page"
     },

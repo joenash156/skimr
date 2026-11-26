@@ -110,9 +110,7 @@ export function toAdminUserDetailViewModel(
     phone: user.phone,
     institution: user.institution,
     discipline: user.discipline,
-    aiCallsThisMonth: new Intl.NumberFormat(localeTags[locale]).format(
-      user.usage.aiCallsThisMonth,
-    ),
+    aiCallsThisMonth: new Intl.NumberFormat(localeTags[locale]).format(user.usage.aiCallsThisMonth),
     activity: user.activity.map((activity) => toActivityViewModel(activity, locale)),
   };
 }

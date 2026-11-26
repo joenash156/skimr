@@ -1,0 +1,26 @@
+{
+  "app": {
+    "name": "Skimr"
+  },
+  "shell": {
+    "stub_title": "Panel",
+    "stub_body": "Las bases del panel ya están listas. Las pantallas llegarán en los próximos lotes.",
+    "signed_in_as": "Sesión iniciada como {{name}}",
+    "signed_out": "No has iniciado sesión.",
+    "loading": "Cargando…"
+  },
+  "theme": {
+    "legend": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  },
+  "errors": {
+    "network": "No pudimos conectar con Skimr. Comprueba tu conexión e inténtalo de nuevo.",
+    "unknown": "Algo salió mal. Inténtalo de nuevo.",
+    "reference": "Referencia: {{id}}"
+  },
+  "actions": {
+    "retry": "Reintentar"
+  }
+}

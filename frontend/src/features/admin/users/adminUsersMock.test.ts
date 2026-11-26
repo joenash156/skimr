@@ -36,7 +36,7 @@ describe('MockAdminUsersDataSource', () => {
 
     expect(user?.activity[0].type).toBe('suspended');
     if (user !== null) {
-      user.activity[0].actor = 'Changed locally';
+      user.activity[0].actorRole = 'user';
     }
 
     const unchanged = await source.getUserDetail('a14c82f7-153d-4a90-b2d0-77e6639a1f53');
@@ -54,8 +54,13 @@ describe('MockAdminUsersDataSource', () => {
     if (admin !== null && superAdmin !== null) {
       expect(getAvailableAdminUserActions('admin', admin)).toEqual([]);
       expect(getAvailableAdminUserActions('admin', superAdmin)).toEqual([]);
+      expect(getAvailableAdminUserActions('super_admin', admin)).toEqual([]);
+      expect(getAvailableAdminUserActions('super_admin', superAdmin)).toEqual([]);
       await expect(
         source.performUserAction(admin.id, 'suspend', 'admin', 'Reviewed request'),
+      ).resolves.toEqual({ ok: false, code: 'forbidden' });
+      await expect(
+        source.performUserAction(superAdmin.id, 'suspend', 'super_admin', ''),
       ).resolves.toEqual({ ok: false, code: 'forbidden' });
     }
   });
@@ -84,6 +89,7 @@ describe('MockAdminUsersDataSource', () => {
         type: 'suspended',
         actorRole: 'admin',
         createdAt: '2026-11-24T09:00:00.000Z',
+        reason: 'Reviewed request',
       });
     }
 

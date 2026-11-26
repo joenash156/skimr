@@ -37,6 +37,7 @@ export type AdminUserActivity = {
   type: AdminUserActivityType;
   actorRole: AdminUserRole;
   createdAt: string;
+  reason?: string;
 };
 
 export type AdminUserDetail = AdminUserSummary & {
@@ -97,7 +98,7 @@ export function getAvailableAdminUserActions(
   actorRole: AdminUserRole,
   user: AdminUserSummary,
 ): AdminUserAction[] {
-  if (actorRole === 'user' || (actorRole === 'admin' && user.role !== 'user')) {
+  if (actorRole === 'user' || user.role !== 'user') {
     return [];
   }
 
@@ -381,12 +382,12 @@ export class MockAdminUsersDataSource implements AdminUsersDataSource {
       return { ok: false, code: 'not_found' };
     }
 
-    if (reason.trim() === '') {
-      return { ok: false, code: 'reason_required' };
+    if (actorRole === 'user' || user.role !== 'user') {
+      return { ok: false, code: 'forbidden' };
     }
 
-    if (actorRole === 'user' || (actorRole === 'admin' && user.role !== 'user')) {
-      return { ok: false, code: 'forbidden' };
+    if (reason.trim() === '') {
+      return { ok: false, code: 'reason_required' };
     }
 
     if (!getAvailableAdminUserActions(actorRole, user).includes(action)) {
@@ -416,6 +417,7 @@ export class MockAdminUsersDataSource implements AdminUsersDataSource {
       type: activityType[action],
       actorRole,
       createdAt: this.clock().toISOString(),
+      reason: reason.trim(),
     });
     this.nextActivityId += 1;
 

@@ -59,7 +59,14 @@ def test_rejects_missing_weak_or_placeholder_secret(environ: dict[str, str]) -> 
         load_settings(environ=environ, env_file=None)
 
 
-@pytest.mark.parametrize("order", ["", " , ", "gemini,gemini", "openai"])
+def test_rejected_secret_is_not_shown_in_the_error() -> None:
+    short_real_secret = "Xq9-real-but-too-short"
+    with pytest.raises(ValidationError) as excinfo:
+        load_settings(environ={"AI_SERVICE_SECRET": short_real_secret}, env_file=None)
+    assert short_real_secret not in str(excinfo.value)
+
+
+@pytest.mark.parametrize("order",["", " , ", "gemini,gemini", "openai"])
 def test_rejects_bad_provider_order(order: str) -> None:
     with pytest.raises(ValidationError):
         load_settings(

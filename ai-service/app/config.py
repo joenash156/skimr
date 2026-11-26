@@ -26,7 +26,8 @@ ProviderName = Literal["gemini", "groq"]
 class Settings(BaseModel):
     """Validated service configuration. Field names map to UPPER_CASE env vars."""
 
-    model_config = ConfigDict(frozen=True, extra="ignore")
+    # hide_input_in_errors: a rejected (e.g. too short) real secret must not reach the logs.
+    model_config = ConfigDict(frozen=True, extra="ignore", hide_input_in_errors=True)
 
     ai_service_secret: SecretStr
     gemini_api_key: SecretStr = SecretStr("")

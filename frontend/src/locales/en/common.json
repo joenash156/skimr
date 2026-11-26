@@ -22,5 +22,23 @@
   },
   "actions": {
     "retry": "Try again"
+  },
+  "ui": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "show_password": "Show password",
+    "hide_password": "Hide password",
+    "notifications_region": "Notifications",
+    "password_strength": {
+      "too_short": "Too short",
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong",
+      "too_long": "Too long"
+    }
+  },
+  "validation": {
+    "required": "This field is required."
   }
 }

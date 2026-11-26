@@ -22,5 +22,23 @@
   },
   "actions": {
     "retry": "Reintentar"
+  },
+  "ui": {
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "show_password": "Mostrar contraseña",
+    "hide_password": "Ocultar contraseña",
+    "notifications_region": "Notificaciones",
+    "password_strength": {
+      "too_short": "Demasiado corta",
+      "weak": "Débil",
+      "fair": "Aceptable",
+      "good": "Buena",
+      "strong": "Fuerte",
+      "too_long": "Demasiado larga"
+    }
+  },
+  "validation": {
+    "required": "Este campo es obligatorio."
   }
 }

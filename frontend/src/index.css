@@ -56,6 +56,30 @@
 
   --default-transition-duration: var(--duration);
   --default-transition-timing-function: var(--ease);
+
+  /* Motion (spec 14.2): 150-200 ms ease-out, opacity and transform only.
+     Turned off for prefers-reduced-motion below. */
+  --animate-fade-in: fade-in var(--duration) var(--ease);
+  --animate-pop-in: pop-in var(--duration) var(--ease);
+  --animate-slide-in: slide-in var(--duration) var(--ease);
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
 }
 
 @layer base {

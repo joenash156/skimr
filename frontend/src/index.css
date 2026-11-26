@@ -1,0 +1,113 @@
+/*
+ * Dashboard stylesheet. Every colour, size and radius comes from
+ * shared/design-tokens.css (spec 14), the same file the public site uses.
+ * Black and white lead; teal (--primary) is the accent only (spec 14.1).
+ * Flat surfaces, 1 px borders: no gradients, glows or glassmorphism.
+ */
+@import 'tailwindcss';
+@import '../../shared/design-tokens.css';
+
+/* Dark mode is the `dark` class on <html>, set before paint (spec 14.4). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@font-face {
+  font-family: 'Inter';
+  src: url('./assets/fonts/inter-variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/*
+ * Token -> Tailwind utilities. `inline` keeps the var() references, so the
+ * classes follow the .dark switch with no extra dark: variants.
+ * --radius-* and --shadow-popover share their names with the tokens: Tailwind
+ * emits them inside @layer theme, and the token file's unlayered values win
+ * the cascade, so the utilities always get the real token values.
+ *   bg-bg, bg-surface, bg-surface-2, border-border, text-fg, text-muted,
+ *   text-subtle, bg-primary, text-primary, bg-primary-subtle, bg-inverse, ...
+ */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-fg: var(--text);
+  --color-muted: var(--text-muted);
+  --color-subtle: var(--text-subtle);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-inverse: var(--inverse);
+  --color-inverse-hover: var(--inverse-hover);
+  --color-inverse-fg: var(--inverse-fg);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  /* font-sans / font-mono: the tokens file sets --font-sans and --font-mono
+     unlayered, so it overrides Tailwind's defaults with no mapping here. */
+
+  --radius-control: var(--radius-control);
+  --radius-card: var(--radius-card);
+  --radius-dialog: var(--radius-dialog);
+  --shadow-popover: var(--shadow-popover);
+
+  --default-transition-duration: var(--duration);
+  --default-transition-timing-function: var(--ease);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-width: 320px;
+    min-height: 100dvh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: var(--leading-body);
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: var(--leading-heading);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  /* Spec 14.6: focus rings always visible, 2 px --primary with a 2 px offset. */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--primary-subtle);
+    color: var(--text);
+  }
+
+  * {
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "app": {
+    "name": "Skimr"
+  },
+  "shell": {
+    "stub_title": "Tableau de bord",
+    "stub_body": "Les bases du tableau de bord sont en place. Les écrans arrivent dans les prochains lots.",
+    "signed_in_as": "Connecté en tant que {{name}}",
+    "signed_out": "Vous n'êtes pas connecté.",
+    "loading": "Chargement…"
+  },
+  "theme": {
+    "legend": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "errors": {
+    "network": "Impossible de joindre Skimr. Vérifiez votre connexion et réessayez.",
+    "unknown": "Une erreur s'est produite. Veuillez réessayer.",
+    "reference": "Référence : {{id}}"
+  },
+  "actions": {
+    "retry": "Réessayer"
+  }
+}

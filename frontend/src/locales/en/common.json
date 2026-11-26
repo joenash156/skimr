@@ -1,0 +1,26 @@
+{
+  "app": {
+    "name": "Skimr"
+  },
+  "shell": {
+    "stub_title": "Dashboard",
+    "stub_body": "The dashboard foundations are in place. Screens arrive in the next batches.",
+    "signed_in_as": "Signed in as {{name}}",
+    "signed_out": "You're not signed in.",
+    "loading": "Loading…"
+  },
+  "theme": {
+    "legend": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "errors": {
+    "network": "We couldn't reach Skimr. Check your connection and try again.",
+    "unknown": "Something went wrong. Please try again.",
+    "reference": "Reference: {{id}}"
+  },
+  "actions": {
+    "retry": "Try again"
+  }
+}

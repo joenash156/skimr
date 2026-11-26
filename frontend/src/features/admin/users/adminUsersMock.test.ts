@@ -46,16 +46,22 @@ describe('MockAdminUsersDataSource', () => {
 
   it('hides user-management actions from admins for admin and super-admin rows', async () => {
     const source = new MockAdminUsersDataSource();
+    const regularUser = await source.getUserDetail('3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17');
     const admin = await source.getUserDetail('51cfc492-fd2f-4fa8-83b8-b592f47d3341');
     const superAdmin = await source.getUserDetail('92258a47-6496-49f6-b941-fcb3a3b2a026');
 
+    expect(regularUser).not.toBeNull();
     expect(admin).not.toBeNull();
     expect(superAdmin).not.toBeNull();
-    if (admin !== null && superAdmin !== null) {
+    if (regularUser !== null && admin !== null && superAdmin !== null) {
+      expect(getAvailableAdminUserActions('user', regularUser)).toEqual([]);
       expect(getAvailableAdminUserActions('admin', admin)).toEqual([]);
       expect(getAvailableAdminUserActions('admin', superAdmin)).toEqual([]);
       expect(getAvailableAdminUserActions('super_admin', admin)).toEqual([]);
       expect(getAvailableAdminUserActions('super_admin', superAdmin)).toEqual([]);
+      await expect(
+        source.performUserAction(regularUser.id, 'suspend', 'user', 'Attempted action'),
+      ).resolves.toEqual({ ok: false, code: 'forbidden' });
       await expect(
         source.performUserAction(admin.id, 'suspend', 'admin', 'Reviewed request'),
       ).resolves.toEqual({ ok: false, code: 'forbidden' });
@@ -63,6 +69,14 @@ describe('MockAdminUsersDataSource', () => {
         source.performUserAction(superAdmin.id, 'suspend', 'super_admin', ''),
       ).resolves.toEqual({ ok: false, code: 'forbidden' });
     }
+  });
+
+  it('returns not-found for action targets that do not exist', async () => {
+    const source = new MockAdminUsersDataSource();
+
+    await expect(
+      source.performUserAction('missing-user', 'suspend', 'admin', 'Reviewed request'),
+    ).resolves.toEqual({ ok: false, code: 'not_found' });
   });
 
   it('requires a reason and leaves the user unchanged when it is missing', async () => {

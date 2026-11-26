@@ -12,6 +12,7 @@ use App\Public\Seo\MetaBuilder;
 use App\Public\Seo\OgImageBuilder;
 use App\Public\Seo\RobotsController;
 use App\Public\Seo\SitemapController;
+use App\Public\Site\SiteProfiles;
 use App\Public\Twig\TransExtension;
 use App\Shared\Clock\Clock;
 use App\Shared\Http\JsonResponder;
@@ -53,6 +54,17 @@ return [
     ContactMessageRepository::class => autowire(),
 
     // Home-page carousel: admin-managed slides from settings, else the defaults.
+    // Contact details + social links (footer, contact page): admin-managed in settings.
+    SiteProfiles::class => static function (ContainerInterface $container): SiteProfiles {
+        $settings = $container->get('settings');
+
+        return new SiteProfiles(
+            $container->get(SettingsRepository::class),
+            $container->get(LoggerInterface::class),
+            $settings['mail']['reply_to'] ?? null,
+        );
+    },
+
     HeroSlides::class => static fn (ContainerInterface $container): HeroSlides => new HeroSlides(
         $container->get(SettingsRepository::class),
         $container->get(Translator::class . '.public'),
@@ -119,6 +131,8 @@ return [
         ]);
         $twig->addExtension(new TransExtension($container->get(Translator::class . '.public')));
         $twig->getEnvironment()->addGlobal('site_url', $settings['app']['url']);
+        // Templates call site.forLocale(locale); the settings row is read once, on first use.
+        $twig->getEnvironment()->addGlobal('site', $container->get(SiteProfiles::class));
         $siteKey = $settings['turnstile']['site_key'] ?? null;
         $secretKey = $settings['turnstile']['secret_key'] ?? null;
         $siteKey = is_string($siteKey) && trim($siteKey) !== ''

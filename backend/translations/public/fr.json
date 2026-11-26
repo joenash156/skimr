@@ -1,7 +1,7 @@
 {
   "public": {
     "meta": {
-      "title": "Skimr — la recherche fondée sur des preuves",
+      "title": "Skimr | la recherche fondée sur des preuves",
       "description": "Organisez vos recherches et rédigez des revues où chaque résultat renvoie à sa source."
     },
     "skip_to_content": "Aller au contenu",
@@ -36,7 +36,7 @@
       "cookies": "Cookies"
     },
     "home": {
-      "title": "Skimr — la recherche fondée sur des preuves",
+      "title": "Skimr | la recherche fondée sur des preuves",
       "description": "Organisez vos recherches et rédigez des revues où chaque résultat renvoie à sa source.",
       "heading": "Une recherche organisée autour des preuves.",
       "intro": "Rassemblez vos sources, mettez leurs résultats en relation et rédigez une revue de littérature dont chaque affirmation renvoie au passage d’origine.",
@@ -405,7 +405,8 @@
         "reply_note": "Nous répondons par e-mail à l'adresse indiquée. Votre message sert uniquement à vous répondre.",
         "privacy_link": "Lire notre politique de confidentialité",
         "faq_link": "Consulter les questions fréquentes",
-        "form_heading": "Envoyez-nous un message"
+        "form_heading": "Envoyez-nous un message",
+        "reach_heading": "Autres moyens de nous joindre"
       },
       "privacy": {
         "title": "Confidentialité | Skimr",
@@ -449,14 +450,21 @@
       }
     },
     "error": {
-      "title": "Page introuvable — Skimr",
+      "title": "Page introuvable | Skimr",
       "description": "La page demandée est introuvable.",
       "heading": "Page introuvable",
       "message": "Cette page a peut-être été déplacée ou n’est plus disponible.",
       "home_link": "Retour à l’accueil"
     },
     "footer": {
-      "copyright": "© {year} Skimr"
+      "copyright": "© {year} Skimr",
+      "product": "Produit",
+      "legal": "Mentions légales",
+      "contact": "Contact"
+    },
+    "socials": {
+      "label": "Skimr sur les réseaux sociaux",
+      "on": "Skimr sur {network}"
     }
   }
 }

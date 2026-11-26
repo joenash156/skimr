@@ -16,7 +16,7 @@ Si vous n’êtes pas à l’origine de cette demande, ignorez ce message.
 Nouvelle connexion à votre compte
 
 Bonjour {{ first_name }},
-Un nouvel appareil s’est connecté à votre compte Skimr le {{ at }}.
+Un nouvel appareil s’est connecté à votre compte Skimr le {{ at|date('Y-m-d H:i', 'UTC') }} UTC.
 Adresse IP : {{ ip }}
 Appareil : {{ user_agent }}
 Si vous n’êtes pas à l’origine de cette connexion, réinitialisez votre mot de passe et vérifiez la sécurité de votre compte.
@@ -24,28 +24,28 @@ Si vous n’êtes pas à l’origine de cette connexion, réinitialisez votre mo
 Votre mot de passe a été modifié
 
 Bonjour {{ first_name }},
-Votre mot de passe Skimr a été modifié le {{ at }}. Si vous n’êtes pas à l’origine de cette modification, sécurisez immédiatement votre compte.
+Votre mot de passe Skimr a été modifié le {{ at|date('Y-m-d H:i', 'UTC') }} UTC. Si vous n’êtes pas à l’origine de cette modification, sécurisez immédiatement votre compte.
 {% elseif template == 'suspicious_activity' %}
 Alerte de sécurité
 
 Bonjour {{ first_name }},
-Nous avons détecté une activité inhabituelle sur votre compte Skimr le {{ at }} et avons fermé toutes vos sessions. Connectez-vous et vérifiez la sécurité de votre compte.
+Nous avons détecté une activité inhabituelle sur votre compte Skimr le {{ at|date('Y-m-d H:i', 'UTC') }} UTC et avons fermé toutes vos sessions. Connectez-vous et vérifiez la sécurité de votre compte.
 {% elseif template == 'email_change_requested' %}
 Demande de changement d’adresse e-mail
 
 Bonjour {{ first_name }},
-Une demande effectuée le {{ at }} vise à remplacer l’adresse e-mail de votre compte Skimr par {{ new_email }}. Le changement ne sera appliqué qu’après confirmation de cette adresse.
+Une demande effectuée le {{ at|date('Y-m-d H:i', 'UTC') }} UTC vise à remplacer l’adresse e-mail de votre compte Skimr par {{ new_email }}. Le changement ne sera appliqué qu’après confirmation de cette adresse.
 Si vous n’êtes pas à l’origine de cette demande, sécurisez immédiatement votre compte.
 {% elseif template == 'email_changed' %}
 Votre adresse e-mail a été modifiée
 
 Bonjour {{ first_name }},
-L’adresse e-mail de votre compte Skimr a été remplacée par {{ new_email }} le {{ at }}. Si vous n’êtes pas à l’origine de ce changement, sécurisez immédiatement votre compte.
+L’adresse e-mail de votre compte Skimr a été remplacée par {{ new_email }} le {{ at|date('Y-m-d H:i', 'UTC') }} UTC. Si vous n’êtes pas à l’origine de ce changement, sécurisez immédiatement votre compte.
 {% elseif template == 'contact_message' %}
 Nouveau message de contact
 
 De : {{ name }} ({{ email }})
-Reçu le : {{ at }}
+Reçu le : {{ at|date('Y-m-d H:i', 'UTC') }} UTC
 
 {{ message }}
 {% endif %}
@@ -54,5 +54,5 @@ Reçu le : {{ at }}
 Ce message a été envoyé depuis le formulaire de contact de Skimr.
 {% else %}
 Vous recevez ce message pour protéger ou gérer votre compte Skimr.
-Paramètres des notifications : {{ notification_settings_url }}
+{% if optional %}Paramètres des notifications : {{ notification_settings_url }}{% endif %}
 {% endif %}

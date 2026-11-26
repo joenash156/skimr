@@ -16,7 +16,7 @@ If you did not request this, you can ignore this message.
 New sign-in to your account
 
 Hello {{ first_name }},
-A new device signed in to your Skimr account at {{ at }}.
+A new device signed in to your Skimr account at {{ at|date('Y-m-d H:i', 'UTC') }} UTC.
 IP address: {{ ip }}
 Device: {{ user_agent }}
 If this was not you, reset your password and review your account security.
@@ -24,28 +24,28 @@ If this was not you, reset your password and review your account security.
 Your password was changed
 
 Hello {{ first_name }},
-Your Skimr password was changed at {{ at }}. If you did not make this change, secure your account immediately.
+Your Skimr password was changed at {{ at|date('Y-m-d H:i', 'UTC') }} UTC. If you did not make this change, secure your account immediately.
 {% elseif template == 'suspicious_activity' %}
 Security alert
 
 Hello {{ first_name }},
-We detected unusual activity on your Skimr account at {{ at }} and signed you out everywhere. Please sign in and review your account security.
+We detected unusual activity on your Skimr account at {{ at|date('Y-m-d H:i', 'UTC') }} UTC and signed you out everywhere. Please sign in and review your account security.
 {% elseif template == 'email_change_requested' %}
 Email change requested
 
 Hello {{ first_name }},
-A request was made at {{ at }} to change the email address on your Skimr account to {{ new_email }}. The change will take effect only after that address is confirmed.
+A request was made at {{ at|date('Y-m-d H:i', 'UTC') }} UTC to change the email address on your Skimr account to {{ new_email }}. The change will take effect only after that address is confirmed.
 If you did not make this request, secure your account immediately.
 {% elseif template == 'email_changed' %}
 Your email address was changed
 
 Hello {{ first_name }},
-Your Skimr account email address was changed to {{ new_email }} at {{ at }}. If you did not make this change, secure your account immediately.
+Your Skimr account email address was changed to {{ new_email }} at {{ at|date('Y-m-d H:i', 'UTC') }} UTC. If you did not make this change, secure your account immediately.
 {% elseif template == 'contact_message' %}
 New contact message
 
 From: {{ name }} ({{ email }})
-Received: {{ at }}
+Received: {{ at|date('Y-m-d H:i', 'UTC') }} UTC
 Visitor language: {{ locale }}
 
 {{ message }}
@@ -55,5 +55,5 @@ Visitor language: {{ locale }}
 This message was submitted through the Skimr contact form.
 {% else %}
 You received this message to help protect or manage your Skimr account.
-Notification settings: {{ notification_settings_url }}
+{% if optional %}Notification settings: {{ notification_settings_url }}{% endif %}
 {% endif %}

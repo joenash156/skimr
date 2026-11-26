@@ -1,0 +1,22 @@
+{#
+ # The Skimr mark: a folded teal ribbon forming an S (top band, shaded middle band,
+ # bottom band). Same drawing as public/assets/brand/mark.svg and the favicon.
+ # `uid` keeps gradient ids unique when the mark appears more than once on a page.
+ #}
+{% macro mark(uid = '', class = 'brand-mark') %}
+<svg class="{{ class }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">
+    <defs>
+        <linearGradient id="sk-t{{ uid }}" gradientUnits="userSpaceOnUse" x1="13" y1="25" x2="58" y2="9"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#14b8a6"/></linearGradient>
+        <linearGradient id="sk-m{{ uid }}" gradientUnits="userSpaceOnUse" x1="17" y1="23" x2="47" y2="38"><stop offset="0" stop-color="#0f766e"/><stop offset="1" stop-color="#134e4a"/></linearGradient>
+        <linearGradient id="sk-b{{ uid }}" gradientUnits="userSpaceOnUse" x1="6" y1="56" x2="51" y2="40"><stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#2dd4bf"/></linearGradient>
+    </defs>
+    <path d="M18 23 L46 37" stroke="url(#sk-m{{ uid }})" stroke-width="11"/>
+    <path d="M18 23 L58 8.8" stroke="url(#sk-t{{ uid }})" stroke-width="11"/>
+    <circle cx="18" cy="23" r="5.5" fill="url(#sk-t{{ uid }})"/>
+    <path d="M46 37 L6 51.2" stroke="url(#sk-b{{ uid }})" stroke-width="11"/>
+    <circle cx="46" cy="37" r="5.5" fill="url(#sk-b{{ uid }})"/>
+</svg>
+{% endmacro %}
+
+{# "Skimr" with the teal dot on the i, as in the logo. Text, so it follows the theme. #}
+{% macro wordmark() %}<span class="wordmark">Sk<span class="wordmark__i">ı</span>mr</span>{% endmacro %}

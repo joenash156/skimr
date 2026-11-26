@@ -1,7 +1,9 @@
+{# Logo: the S mark + the "Skimr" wordmark + slogan. `uid` = unique per instance (header, footer). #}
+{% import 'macros/brand.html.twig' as brand %}
 <a class="brand" href="/{{ locale }}/" aria-label="{{ trans('public.home_link') }}">
-    <span class="brand__mark" aria-hidden="true"></span>
+    {{ brand.mark(uid|default('')) }}
     <span class="brand__text">
-        <span class="brand__name">Skimr</span>
+        <span class="brand__name">{{ brand.wordmark() }}</span>
         <span class="brand__slogan">{{ trans('public.slogan') }}</span>
     </span>
 </a>

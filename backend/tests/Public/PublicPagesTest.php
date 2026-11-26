@@ -11,9 +11,9 @@ final class PublicPagesTest extends AppTestCase
     public function testLocalizedPublicPagesHaveUniqueBoundedMetadataAndOneHeading(): void
     {
         $paths = [
-            '/en/' => 'Skimr — evidence-led literature reviews',
-            '/fr/' => 'Skimr — la recherche fondée sur des preuves',
-            '/es/' => 'Skimr — investigación basada en evidencias',
+            '/en/' => 'Skimr | evidence-led literature reviews',
+            '/fr/' => 'Skimr | la recherche fondée sur des preuves',
+            '/es/' => 'Skimr | investigación basada en evidencias',
             '/en/features' => 'Research features | Skimr',
             '/en/how-it-works' => 'How Skimr works | Evidence-led research',
             '/en/about' => 'About Skimr | Research, grounded in evidence',

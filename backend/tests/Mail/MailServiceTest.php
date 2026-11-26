@@ -40,7 +40,9 @@ final class MailServiceTest extends TestCase
                 self::assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $payload['html']);
                 self::assertStringContainsString('token=a=1&amp;b=2', $payload['html']);
                 self::assertStringContainsString('<script>alert(1)</script>', $payload['text']);
-                self::assertStringContainsString('https://example.test/app/settings/notifications', $payload['text']);
+                // Security emails can't be turned off, so they don't link to notification settings (spec 15.2).
+                self::assertStringNotContainsString('/app/settings/notifications', $payload['text']);
+                self::assertStringNotContainsString('/app/settings/notifications', $payload['html']);
 
                 return true;
             }))
@@ -109,6 +111,8 @@ final class MailServiceTest extends TestCase
                 self::assertStringContainsString('Visitor language: fr', $payload['text']);
                 self::assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $payload['html']);
                 self::assertStringContainsString('<script>alert(1)</script>', $payload['text']);
+                // Replying to the notification answers the visitor directly.
+                self::assertSame('visitor@example.com', $payload['reply_to']);
 
                 return true;
             }))

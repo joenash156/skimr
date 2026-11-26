@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from fastapi import Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 
@@ -22,4 +23,20 @@ async def service_error_handler(request: Request, exc: Exception) -> JSONRespons
     return JSONResponse(
         status_code=exc.status_code,
         content={"error": {"code": exc.code, "message": exc.message}},
+    )
+
+
+async def validation_error_handler(request: Request, exc: Exception) -> JSONResponse:
+    """422 in the same shape as other errors. Names the field; never echoes the input value."""
+    if not isinstance(exc, RequestValidationError):  # pragma: no cover
+        raise exc
+    errors = exc.errors()
+    message = "Invalid request body"
+    if errors:
+        first = errors[0]
+        where = ".".join(str(part) for part in first.get("loc", ())[1:])  # drop "body"
+        message = f"{where}: {first.get('msg', 'invalid')}" if where else str(first.get("msg"))
+    return JSONResponse(
+        status_code=422,
+        content={"error": {"code": "invalid_request", "message": message}},
     )

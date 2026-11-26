@@ -6,10 +6,11 @@ from collections.abc import AsyncIterator, Mapping
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 
 from app import __version__
 from app.config import Settings, get_settings
-from app.errors import ServiceError, service_error_handler
+from app.errors import ServiceError, service_error_handler, validation_error_handler
 from app.jobs.handlers import HANDLERS
 from app.jobs.runner import Handler, JobRunner
 from app.jobs.store import JobStore
@@ -42,6 +43,7 @@ def create_app(
     app.state.runner = JobRunner(JobStore(), HANDLERS if handlers is None else handlers)
     app.add_exception_handler(SignatureError, signature_error_handler)
     app.add_exception_handler(ServiceError, service_error_handler)
+    app.add_exception_handler(RequestValidationError, validation_error_handler)
     # /health is the only open route. Every other router must use dependencies=SIGNED.
     app.include_router(health.router)
     app.include_router(jobs.router)

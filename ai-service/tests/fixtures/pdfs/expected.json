@@ -1,0 +1,209 @@
+{
+  "_about": "Ground truth for PDF intake (B1 acceptance: >=9/10 titles, every DOI present found, >=80% of listed sections detected, the scanned PDF flagged needs_ocr). 'doi_in_pdf' is the work's own DOI as printed in the first 2 pages (null = not printed, so extraction must return null or the enriched DOI later); 'doi' is the true DOI for OpenAlex/Crossref enrichment (B2). 'sections' lists the headings a correct detector should find (kind, heading text, 1-based page_start). Titles compare after normalising whitespace and quotes. Licences and sources: README.md.",
+  "files": {
+    "01-en-survey-social-media-sme-performance.pdf": {
+      "language": "en",
+      "title": "Effects of entrepreneurial orientation on social media adoption and SME performance: The moderating role of innovation capabilities",
+      "doi_in_pdf": "10.1371/journal.pone.0247320",
+      "doi": "10.1371/journal.pone.0247320",
+      "year": 2021,
+      "author_family_names": ["Fan", "Qalati", "Khan", "Shah", "Ramzan", "Khan"],
+      "page_count": 24,
+      "needs_ocr": false,
+      "design": "survey",
+      "sections": [
+        {"kind": "abstract", "heading": "Abstract", "page_start": 1},
+        {"kind": "introduction", "heading": "1. Introduction", "page_start": 1},
+        {"kind": "literature_review", "heading": "2. Literature review", "page_start": 3},
+        {"kind": "methods", "heading": "3. Methodology", "page_start": 7},
+        {"kind": "results", "heading": "4. Results", "page_start": 8},
+        {"kind": "discussion", "heading": "5. Discussion", "page_start": 15},
+        {"kind": "references", "heading": "References", "page_start": 19}
+      ],
+      "notes": "Trap: the largest font on page 1 is the 'PLOS ONE' logo, not the title (title spans 3 lines). A broken copy of the DOI ('10.1371/journal' at a line break) also appears on page 1."
+    },
+    "02-en-survey-fintech-sme-financing.pdf": {
+      "language": "en",
+      "title": "Digital financial inclusion and SME performance: a structural equation modeling analysis of FinTech adoption impact in emerging markets",
+      "doi_in_pdf": "10.1186/s43093-026-01024-z",
+      "doi": "10.1186/s43093-026-01024-z",
+      "year": 2026,
+      "author_family_names": ["Bochner"],
+      "page_count": 22,
+      "needs_ocr": false,
+      "design": "survey",
+      "sections": [
+        {"kind": "abstract", "heading": "Abstract", "page_start": 1},
+        {"kind": "introduction", "heading": "Introduction", "page_start": 1},
+        {"kind": "literature_review", "heading": "Literature review and hypotheses development", "page_start": 4},
+        {"kind": "methods", "heading": "Research methodology", "page_start": 10},
+        {"kind": "results", "heading": "Empirical results", "page_start": 12},
+        {"kind": "discussion", "heading": "Discussion", "page_start": 16},
+        {"kind": "conclusion", "heading": "Conclusion", "page_start": 20}
+      ],
+      "notes": "Page 1 starts with a long CC licence paragraph before the title."
+    },
+    "03-en-qualitative-ecommerce-skills-smes.pdf": {
+      "language": "en",
+      "title": "Exploring SME owners’ motivation to learn and acquire new skills for the adoption of e-commerce",
+      "doi_in_pdf": null,
+      "doi": "10.4102/sajesbm.v17i1.900",
+      "year": 2025,
+      "author_family_names": ["Gallant", "Amadi-Echendu", "Esterhuyzen"],
+      "page_count": 12,
+      "needs_ocr": false,
+      "design": "qualitative",
+      "countries": ["ZA"],
+      "sections": [
+        {"kind": "introduction", "heading": "Introduction", "page_start": 1},
+        {"kind": "methods", "heading": "Research design and methodology", "page_start": 6},
+        {"kind": "results", "heading": "Findings", "page_start": 6},
+        {"kind": "discussion", "heading": "Discussion of findings", "page_start": 9},
+        {"kind": "conclusion", "heading": "Conclusion", "page_start": 9},
+        {"kind": "references", "heading": "References", "page_start": 10}
+      ],
+      "notes": "Its own DOI is not printed; the only DOIs in the text belong to cited works (e.g. 10.4102/sajems.v21i1.1962) and must not be taken as the work's DOI. Two-column layout; structured abstract without an 'Abstract' heading."
+    },
+    "04-en-qualitative-ai-integration-smes.pdf": {
+      "language": "en",
+      "title": "Navigating the AI landscape in SMEs: Overcoming internal challenges and external obstacles for effective integration",
+      "doi_in_pdf": "10.1371/journal.pone.0323249",
+      "doi": "10.1371/journal.pone.0323249",
+      "year": 2025,
+      "author_family_names": ["Mohd Rasdi", "Umar Baki"],
+      "page_count": 15,
+      "needs_ocr": false,
+      "design": "qualitative",
+      "sections": [
+        {"kind": "abstract", "heading": "Abstract", "page_start": 1},
+        {"kind": "introduction", "heading": "Introduction", "page_start": 1},
+        {"kind": "methods", "heading": "Methods", "page_start": 4},
+        {"kind": "results", "heading": "Findings and discussion", "page_start": 6},
+        {"kind": "conclusion", "heading": "Conclusion", "page_start": 10},
+        {"kind": "references", "heading": "References", "page_start": 12}
+      ]
+    },
+    "05-en-mixed-small-micro-enterprises-ethiopia.pdf": {
+      "language": "en",
+      "title": "Assessment of performance and challenges of small and micro enterprises: Fireweyni town, Ethiopia",
+      "doi_in_pdf": "10.1371/journal.pone.0320681",
+      "doi": "10.1371/journal.pone.0320681",
+      "year": 2025,
+      "author_family_names": ["Abraha", "Gebre"],
+      "page_count": 19,
+      "needs_ocr": false,
+      "design": "mixed_methods",
+      "countries": ["ET"],
+      "sections": [
+        {"kind": "abstract", "heading": "Abstract", "page_start": 1},
+        {"kind": "introduction", "heading": "Background of the study", "page_start": 1},
+        {"kind": "methods", "heading": "Research methodology", "page_start": 2},
+        {"kind": "results", "heading": "Results and discussions", "page_start": 6},
+        {"kind": "conclusion", "heading": "Conclusions", "page_start": 17},
+        {"kind": "references", "heading": "References", "page_start": 18}
+      ],
+      "notes": "Introduction is headed 'Background of the study'."
+    },
+    "06-fr-survey-identites-dirigeants-pme-tunisie.pdf": {
+      "language": "fr",
+      "title": "Identités managériales : le cas des dirigeants de PME tunisiens",
+      "doi_in_pdf": "10.34699/rido.2024.37",
+      "doi": "10.34699/rido.2024.37",
+      "year": 2024,
+      "author_family_names": ["Ben Hamadi", "Karjalainen"],
+      "page_count": 23,
+      "needs_ocr": false,
+      "design": "survey",
+      "sample_size": 116,
+      "countries": ["TN"],
+      "sections": [
+        {"kind": "introduction", "heading": "Introduction", "page_start": 3},
+        {"kind": "methods", "heading": "2. Cadre méthodologique", "page_start": 8},
+        {"kind": "results", "heading": "3. Résultats", "page_start": 10},
+        {"kind": "discussion", "heading": "4. Discussion", "page_start": 14},
+        {"kind": "conclusion", "heading": "Conclusion", "page_start": 17},
+        {"kind": "references", "heading": "Bibliographie", "page_start": 18}
+      ],
+      "notes": "Page 1 is a HAL cover sheet. The DOI is printed as '…rido.2024.37⟩' (strip the trailing ⟩). Every page repeats the header 'Revue Interdisciplinaire Droit et Organisations-RIDO n°7' and a '- 85 -' style page number: both must be removed as repeated headers/footers. Despite 'le cas' in the title, the method is a quantitative survey of 116 managers."
+    },
+    "07-fr-survey-nouvelles-technologies-pme-1987.pdf": {
+      "language": "fr",
+      "title": "Nouvelles technologies et PME industrielles : une enquête en Provence - Alpes - Côte d’Azur",
+      "doi_in_pdf": null,
+      "doi": null,
+      "year": 1987,
+      "author_family_names": ["Pillet"],
+      "venue": "Courrier des Statistiques",
+      "page_count": 4,
+      "needs_ocr": false,
+      "design": "survey",
+      "countries": ["FR"],
+      "sections": [
+        {"kind": "conclusion", "heading": "Quelques conclusions", "page_start": 4}
+      ],
+      "notes": "Page 1 is a HAL cover sheet; pages 2-4 are a 1987 magazine scan WITH an OCR text layer (about 4,500 characters per page), so it is not 'needs_ocr'. The OCR layer is noisy (fragments like 'lpes', 'ôte d''). No standard IMRaD sections: everything else is 'body'."
+    },
+    "08-es-mixed-transformacion-digital-mipymes.pdf": {
+      "language": "es",
+      "title": "Avances en la transformación digital de las MiPymes impulsadas por la pandemia COVID-19",
+      "doi_in_pdf": null,
+      "doi": "10.4067/S0718-27242024000100052",
+      "year": 2024,
+      "author_family_names": ["Martínez", "Romo", "Riascos"],
+      "page_count": 14,
+      "needs_ocr": false,
+      "design": "mixed_methods",
+      "countries": ["CO"],
+      "sections": [
+        {"kind": "abstract", "heading": "Resumen", "page_start": 1},
+        {"kind": "introduction", "heading": "Introduction", "page_start": 1},
+        {"kind": "literature_review", "heading": "Marco Teoríco", "page_start": 2},
+        {"kind": "methods", "heading": "Metodología", "page_start": 5},
+        {"kind": "results", "heading": "Análisis y Resultados", "page_start": 7},
+        {"kind": "discussion", "heading": "Discusión y Conclusión", "page_start": 12},
+        {"kind": "references", "heading": "Referencias", "page_start": 12}
+      ],
+      "notes": "Spanish text with an English 'Abstract' and 'Introduction' heading. 'Marco Teoríco' is misspelled in the original. Its own DOI is not printed; 10.18235/0003000 in the text is a cited work."
+    },
+    "09-es-survey-marketing-digital-mipymes.pdf": {
+      "language": "es",
+      "title": "Marketing digital y economía de empresa: un estudio de las Mipymes de la provincia de Tungurahua frente al fenómeno Covid-19",
+      "doi_in_pdf": "10.35290/re.v3n3.2022.714",
+      "doi": "10.35290/re.v3n3.2022.714",
+      "year": 2022,
+      "author_family_names": ["Ramos Rodriguez", "Guerrero Velástegui"],
+      "page_count": 22,
+      "needs_ocr": false,
+      "design": "survey",
+      "countries": ["EC"],
+      "sections": [
+        {"kind": "abstract", "heading": "RESUMEN", "page_start": 1},
+        {"kind": "introduction", "heading": "Introducción", "page_start": 3},
+        {"kind": "methods", "heading": "Metodología", "page_start": 9},
+        {"kind": "results", "heading": "Resultados", "page_start": 11},
+        {"kind": "discussion", "heading": "Discusión", "page_start": 15},
+        {"kind": "conclusion", "heading": "Conclusiones", "page_start": 17},
+        {"kind": "references", "heading": "Referencias", "page_start": 18}
+      ],
+      "notes": "Trap: the largest font on page 1 is the journal name 'ERUDITUS', not the title. An English translation of the title follows the Spanish one."
+    },
+    "10-en-scanned-sustainability-barriers-smes.pdf": {
+      "language": "en",
+      "title": "Barriers to adaptation of environmental sustainability in SMEs: A qualitative study",
+      "doi_in_pdf": null,
+      "doi": "10.1371/journal.pone.0298580",
+      "year": 2024,
+      "author_family_names": ["Durrani", "Raziq", "Mahmood", "Khan"],
+      "page_count": 4,
+      "needs_ocr": true,
+      "design": "qualitative",
+      "sections": null,
+      "ocr_must_contain": [
+        "Barriers to adaptation of environmental sustainability in SMEs",
+        "Globally, over 95% of businesses are SMEs",
+        "Environmental sustainability in SMEs refers to the practice of reducing the environmental impact of business operations"
+      ],
+      "notes": "Image-only PDF (no text layer): pages 1-4 of the source article rendered at 150 DPI greyscale JPEG. B1 must flag needs_ocr (0 characters per page). Title, DOI and text only become available after OCR (B5); 'ocr_must_contain' checks that B5 makes it searchable."
+    }
+  }
+}

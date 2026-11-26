@@ -3,6 +3,7 @@ import { MockAdminUsersDataSource } from './adminUsersMock';
 import {
   formatAdminUserDateTime,
   toAdminUserDetailViewModel,
+  toAdminUsersPaginationViewModel,
   toAdminUserRowViewModel,
 } from './adminUsersPresentation';
 
@@ -87,5 +88,56 @@ describe('admin user presentation model', () => {
   it('returns null for absent or invalid timestamps', () => {
     expect(formatAdminUserDateTime(null, 'en')).toBeNull();
     expect(formatAdminUserDateTime('not-a-date', 'es')).toBeNull();
+  });
+
+  it('calculates page ranges and navigation availability', () => {
+    const source = new MockAdminUsersDataSource();
+
+    return source.listUsers({ page: 1, perPage: 4 }).then((firstPage) => {
+      expect(toAdminUsersPaginationViewModel(firstPage)).toEqual({
+        page: 1,
+        perPage: 4,
+        totalPages: 2,
+        start: 1,
+        end: 4,
+        total: 6,
+        hasPrevious: false,
+        hasNext: true,
+      });
+    });
+  });
+
+  it('handles empty results and out-of-range pages without invalid ranges', () => {
+    const emptyResult = {
+      items: [],
+      page: 4,
+      perPage: 5,
+      total: 0,
+    };
+    const outOfRangeResult = {
+      ...emptyResult,
+      total: 12,
+    };
+
+    expect(toAdminUsersPaginationViewModel(emptyResult)).toEqual({
+      page: 4,
+      perPage: 5,
+      totalPages: 1,
+      start: 0,
+      end: 0,
+      total: 0,
+      hasPrevious: true,
+      hasNext: false,
+    });
+    expect(toAdminUsersPaginationViewModel(outOfRangeResult)).toEqual({
+      page: 4,
+      perPage: 5,
+      totalPages: 3,
+      start: 0,
+      end: 0,
+      total: 12,
+      hasPrevious: true,
+      hasNext: false,
+    });
   });
 });

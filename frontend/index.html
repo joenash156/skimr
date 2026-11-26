@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/svg+xml" href="/app/favicon.svg" />
+    <title>Skimr</title>
+    <!--
+      No-flash theme (spec 14.4). The ONLY inline script allowed by the CSP:
+      PHP replaces __CSP_NONCE__ with the request's nonce (brief 3a). Same
+      logic as the public site: localStorage.theme = light | dark | system.
+    -->
+    <script nonce="__CSP_NONCE__">
+      let t = null;
+      try {
+        t = localStorage.getItem('theme');
+      } catch {}
+      document.documentElement.classList.toggle(
+        'dark',
+        t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches),
+      );
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

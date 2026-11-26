@@ -182,4 +182,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: pnpm dlx @redocly/cli@1 lint docs/api/openapi.yaml
+      - run: pnpm api:lint

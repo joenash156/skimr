@@ -14,6 +14,9 @@ select = [
     "RUF",  # ruff-specific
 ]
 
+# Typographic quotes and no-break spaces really occur in PDF text; patterns match them on purpose.
+allowed-confusables = ["’", "‘", " "]
+
 [lint.per-file-ignores]
 # Tests use assert and fake secrets on purpose.
 "tests/**" = ["S101", "S105", "S106"]

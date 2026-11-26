@@ -71,6 +71,36 @@ describe('MockAdminUsersDataSource', () => {
     }
   });
 
+  it('offers only actions that match the viewer role and user status', async () => {
+    const source = new MockAdminUsersDataSource();
+    const expectedActions = new Map([
+      ['3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17', ['suspend', 'delete', 'reset_quota']],
+      ['8b22a613-dc71-4b85-93b1-42a76b91c5e0', ['suspend', 'delete', 'reset_quota', 'resend_verification']],
+      ['a14c82f7-153d-4a90-b2d0-77e6639a1f53', ['reactivate', 'delete', 'reset_quota']],
+      ['c991cf52-8e5e-441a-a7e9-e099326ac439', []],
+      ['51cfc492-fd2f-4fa8-83b8-b592f47d3341', []],
+      ['92258a47-6496-49f6-b941-fcb3a3b2a026', []],
+    ]);
+
+    for (const [userId, expected] of expectedActions) {
+      const user = await source.getUserDetail(userId);
+      expect(user).not.toBeNull();
+      if (user !== null) {
+        expect(getAvailableAdminUserActions('admin', user)).toEqual(expected);
+      }
+    }
+
+    const activeUser = await source.getUserDetail('3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17');
+    expect(activeUser).not.toBeNull();
+    if (activeUser !== null) {
+      expect(getAvailableAdminUserActions('super_admin', activeUser)).toEqual([
+        'suspend',
+        'delete',
+        'reset_quota',
+      ]);
+    }
+  });
+
   it('returns not-found for action targets that do not exist', async () => {
     const source = new MockAdminUsersDataSource();
 
@@ -79,16 +109,24 @@ describe('MockAdminUsersDataSource', () => {
     ).resolves.toEqual({ ok: false, code: 'not_found' });
   });
 
-  it('requires a reason and leaves the user unchanged when it is missing', async () => {
-    const source = new MockAdminUsersDataSource();
-    const userId = '3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17';
+  it('requires a reason for every allowed action and leaves data unchanged', async () => {
+    const cases = [
+      { userId: '3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17', action: 'suspend' },
+      { userId: '3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17', action: 'delete' },
+      { userId: '3f2c9a1e-7b5d-4e8a-9c1f-2a6b8d0e4f17', action: 'reset_quota' },
+      { userId: '8b22a613-dc71-4b85-93b1-42a76b91c5e0', action: 'resend_verification' },
+      { userId: 'a14c82f7-153d-4a90-b2d0-77e6639a1f53', action: 'reactivate' },
+    ] as const;
 
-    await expect(
-      source.performUserAction(userId, 'suspend', 'admin', '  '),
-    ).resolves.toEqual({ ok: false, code: 'reason_required' });
-    const unchanged = await source.getUserDetail(userId);
-    expect(unchanged?.status).toBe('active');
-    expect(unchanged?.activity).toHaveLength(3);
+    for (const { userId, action } of cases) {
+      const source = new MockAdminUsersDataSource();
+      const before = await source.getUserDetail(userId);
+
+      await expect(
+        source.performUserAction(userId, action, 'admin', '  '),
+      ).resolves.toEqual({ ok: false, code: 'reason_required' });
+      await expect(source.getUserDetail(userId)).resolves.toEqual(before);
+    }
   });
 
   it('applies allowed actions and records mock activity', async () => {

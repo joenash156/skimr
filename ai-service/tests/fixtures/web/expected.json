@@ -1,0 +1,83 @@
+{
+  "_about": "Saved web pages for intake/url.py (B4). All pages are original synthetic content written for Skimr tests; site names are fictional and URLs use example.org. 'must_contain' phrases must appear in the extracted main text; 'must_not_contain' phrases are boilerplate (menus, banners, footers, comments) that must be removed. Pages under 500 extracted characters are 'unreadable' (spec 6.2).",
+  "files": {
+    "article.html": {
+      "kind": "news article",
+      "status": "ready",
+      "error_code": null,
+      "metadata": {
+        "title": "Why Ghanaian SMEs are slow to adopt AI tools",
+        "authors": [{"given": "Efua", "family": "Asante"}],
+        "published_date": "2025-03-14",
+        "site_name": "Coastline Business Journal",
+        "language": "en",
+        "work_type": "web_page"
+      },
+      "must_contain": [
+        "Only 18% of respondents said their firm used any AI-based tool at least once a week",
+        "41% of owners chose cost",
+        "pricing in local currency"
+      ],
+      "must_not_contain": ["Accept all cookies", "Related stories", "All rights reserved", "Subscribe today"],
+      "min_chars": 2000
+    },
+    "report.html": {
+      "kind": "policy report",
+      "status": "ready",
+      "error_code": null,
+      "metadata": {
+        "title": "Digital Readiness of Small Firms in West Africa: 2024 Report",
+        "authors": [{"given": "Kofi", "family": "Boateng"}, {"given": "Aminata", "family": "Diallo"}],
+        "published_date": "2024-11-02",
+        "site_name": "Sahel Policy Lab",
+        "language": "en",
+        "work_type": "report"
+      },
+      "sections": ["Executive summary", "Methodology", "Key findings", "Recommendations"],
+      "has_methods": true,
+      "must_contain": [
+        "We combine a survey of 612 firms with 24 interviews",
+        "Only 14% of firms kept digital sales records",
+        "pilot trap"
+      ],
+      "must_not_contain": ["Sign up for our newsletter", "Follow us on social media"],
+      "min_chars": 2000
+    },
+    "blog.html": {
+      "kind": "personal blog post",
+      "status": "ready",
+      "error_code": null,
+      "metadata": {
+        "title": "What I learned putting a chatbot in my bakery",
+        "authors": [{"given": "Yaw", "family": "Mensah"}],
+        "published_date": "2024-08-21",
+        "site_name": "Kente Code Notes",
+        "language": "en",
+        "work_type": "web_page"
+      },
+      "must_contain": [
+        "the bot handled about a third of incoming messages on its own",
+        "We kept a human in the loop for anything above 300 cedis"
+      ],
+      "must_not_contain": ["Great post! Which chatbot did you use?", "Popular posts", "Buy me a coffee"],
+      "min_chars": 1500
+    },
+    "paywall.html": {
+      "kind": "paywalled article (teaser only)",
+      "status": "unreadable",
+      "error_code": "login_required",
+      "metadata": {
+        "title": "The hidden cost of digital tools for informal traders",
+        "site_name": "Harmattan Weekly"
+      },
+      "max_chars": 499
+    },
+    "js-only.html": {
+      "kind": "JavaScript-only single-page app",
+      "status": "unreadable",
+      "error_code": "js_required",
+      "metadata": {"title": "SME Insights Dashboard"},
+      "max_chars": 499
+    }
+  }
+}

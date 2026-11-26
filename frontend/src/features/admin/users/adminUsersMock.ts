@@ -1,11 +1,7 @@
 export type AdminUserRole = 'user' | 'admin' | 'super_admin';
 
 export type AdminUserStatus =
-  | 'pending_verification'
-  | 'active'
-  | 'invited'
-  | 'suspended'
-  | 'deleted';
+  'pending_verification' | 'active' | 'invited' | 'suspended' | 'deleted';
 
 export type AdminUserSummary = {
   id: string;
@@ -60,21 +56,13 @@ export type AdminUsersQuery = {
 };
 
 export type AdminUserAction =
-  | 'suspend'
-  | 'reactivate'
-  | 'delete'
-  | 'reset_quota'
-  | 'resend_verification';
+  'suspend' | 'reactivate' | 'delete' | 'reset_quota' | 'resend_verification';
 
 export type AdminUserActionErrorCode =
-  | 'not_found'
-  | 'forbidden'
-  | 'reason_required'
-  | 'invalid_action';
+  'not_found' | 'forbidden' | 'reason_required' | 'invalid_action';
 
 export type AdminUserActionResult =
-  | { ok: true; user: AdminUserDetail }
-  | { ok: false; code: AdminUserActionErrorCode };
+  { ok: true; user: AdminUserDetail } | { ok: false; code: AdminUserActionErrorCode };
 
 export type AdminUsersPage = {
   items: AdminUserSummary[];
@@ -346,12 +334,9 @@ export class MockAdminUsersDataSource implements AdminUsersDataSource {
           return true;
         }
 
-        return [
-          user.firstName,
-          user.otherNames ?? '',
-          user.lastName,
-          user.email,
-        ].some((value) => value.toLowerCase().includes(search));
+        return [user.firstName, user.otherNames ?? '', user.lastName, user.email].some((value) =>
+          value.toLowerCase().includes(search),
+        );
       })
       .sort((left, right) => direction * left.createdAt.localeCompare(right.createdAt));
 

@@ -37,7 +37,7 @@ venv/
 .coverage
 htmlcov/
 
-# --- OS / editors ---
+# --- OS / editors ----
 .DS_Store
 Thumbs.db
 desktop.ini

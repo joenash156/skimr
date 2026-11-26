@@ -51,6 +51,32 @@ export type AdminUsersPaginationViewModel = {
   hasNext: boolean;
 };
 
+export type AdminUsersListContentViewModel =
+  | { kind: 'loading' }
+  | {
+      kind: 'error';
+      message: string | null;
+      fallbackTranslationKey: 'users.loadError';
+    }
+  | {
+      kind: 'empty';
+      pagination: AdminUsersPaginationViewModel;
+      refreshError: string | null;
+    }
+  | {
+      kind: 'results';
+      rows: AdminUserRowViewModel[];
+      pagination: AdminUsersPaginationViewModel;
+      refreshError: string | null;
+    };
+
+export type AdminUsersListContentInput = {
+  isLoading: boolean;
+  errorMessage: string | null;
+  data: AdminUsersPage | null;
+  locale: AdminUsersLocale;
+};
+
 const localeTags: Record<AdminUsersLocale, string> = {
   en: 'en',
   fr: 'fr',
@@ -148,5 +174,35 @@ export function toAdminUsersPaginationViewModel(
     total,
     hasPrevious: page > 1,
     hasNext: page < totalPages,
+  };
+}
+
+export function toAdminUsersListContentViewModel(
+  input: AdminUsersListContentInput,
+): AdminUsersListContentViewModel {
+  const errorMessage = input.errorMessage?.trim() || null;
+
+  if (input.isLoading && input.data === null) {
+    return { kind: 'loading' };
+  }
+
+  if (input.data === null) {
+    return {
+      kind: 'error',
+      message: errorMessage,
+      fallbackTranslationKey: 'users.loadError',
+    };
+  }
+
+  const pagination = toAdminUsersPaginationViewModel(input.data);
+  if (input.data.items.length === 0) {
+    return { kind: 'empty', pagination, refreshError: errorMessage };
+  }
+
+  return {
+    kind: 'results',
+    rows: input.data.items.map((user) => toAdminUserRowViewModel(user, input.locale)),
+    pagination,
+    refreshError: errorMessage,
   };
 }

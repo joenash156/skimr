@@ -15,7 +15,7 @@ describe('MockAdminUsersDataSource', () => {
 
     expect(result.total).toBe(1);
     expect(result.items).toHaveLength(1);
-    expect(result.items[0].email).toBe('nana.admin@example.test');
+    expect(result.items[0]?.email).toBe('nana.admin@example.test');
   });
 
   it('sorts by sign-up date newest-first unless ascending is requested', async () => {
@@ -23,21 +23,25 @@ describe('MockAdminUsersDataSource', () => {
     const newest = await source.listUsers({ page: 1, perPage: 10 });
     const oldest = await source.listUsers({ page: 1, perPage: 10, sortDirection: 'asc' });
 
-    expect(newest.items[0].id).toBe('8b22a613-dc71-4b85-93b1-42a76b91c5e0');
-    expect(oldest.items[0].id).toBe('92258a47-6496-49f6-b941-fcb3a3b2a026');
+    expect(newest.items[0]?.id).toBe('8b22a613-dc71-4b85-93b1-42a76b91c5e0');
+    expect(oldest.items[0]?.id).toBe('92258a47-6496-49f6-b941-fcb3a3b2a026');
   });
 
   it('returns detail data without exposing mutable mock state', async () => {
     const source = new MockAdminUsersDataSource();
     const user = await source.getUserDetail('a14c82f7-153d-4a90-b2d0-77e6639a1f53');
 
-    expect(user?.activity[0].type).toBe('suspended');
+    expect(user?.activity[0]?.type).toBe('suspended');
     if (user !== null) {
-      user.activity[0].actorRole = 'user';
+      const firstActivity = user.activity[0];
+      if (firstActivity === undefined) {
+        throw new Error('Expected the user to have activity');
+      }
+      firstActivity.actorRole = 'user';
     }
 
     const unchanged = await source.getUserDetail('a14c82f7-153d-4a90-b2d0-77e6639a1f53');
-    expect(unchanged?.activity[0].actorRole).toBe('admin');
+    expect(unchanged?.activity[0]?.actorRole).toBe('admin');
     await expect(source.getUserDetail('missing-user')).resolves.toBeNull();
   });
 
@@ -65,6 +69,9 @@ describe('MockAdminUsersDataSource', () => {
       await expect(
         source.performUserAction(superAdmin.id, 'suspend', 'super_admin', ''),
       ).resolves.toEqual({ ok: false, code: 'forbidden' });
+      await expect(source.getUserDetail(regularUser.id)).resolves.toEqual(regularUser);
+      await expect(source.getUserDetail(admin.id)).resolves.toEqual(admin);
+      await expect(source.getUserDetail(superAdmin.id)).resolves.toEqual(superAdmin);
     }
   });
 
@@ -143,7 +150,11 @@ describe('MockAdminUsersDataSource', () => {
     expect(suspended.ok).toBe(true);
     if (suspended.ok) {
       expect(suspended.user.status).toBe('suspended');
-      expect(suspended.user.activity[0]).toMatchObject({
+      const firstActivity = suspended.user.activity[0];
+      if (firstActivity === undefined) {
+        throw new Error('Expected the suspended user to have activity');
+      }
+      expect(firstActivity).toMatchObject({
         type: 'suspended',
         actorRole: 'admin',
         createdAt: '2026-11-24T09:00:00.000Z',
@@ -160,7 +171,7 @@ describe('MockAdminUsersDataSource', () => {
     expect(reactivated.ok).toBe(true);
     if (reactivated.ok) {
       expect(reactivated.user.status).toBe('active');
-      expect(reactivated.user.activity[0].type).toBe('reactivated');
+      expect(reactivated.user.activity[0]?.type).toBe('reactivated');
     }
 
     const deleted = await source.performUserAction(

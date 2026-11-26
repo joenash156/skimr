@@ -3,6 +3,7 @@ import { MockAdminUsersDataSource } from './adminUsersMock';
 import {
   formatAdminUserDateTime,
   toAdminUserDetailViewModel,
+  toAdminUsersListContentViewModel,
   toAdminUsersPaginationViewModel,
   toAdminUserRowViewModel,
 } from './adminUsersPresentation';
@@ -138,6 +139,75 @@ describe('admin user presentation model', () => {
       total: 12,
       hasPrevious: true,
       hasNext: false,
+    });
+  });
+
+  it('models loading and initial error states with a translated fallback', () => {
+    expect(
+      toAdminUsersListContentViewModel({
+        isLoading: true,
+        errorMessage: null,
+        data: null,
+        locale: 'en',
+      }),
+    ).toEqual({ kind: 'loading' });
+
+    expect(
+      toAdminUsersListContentViewModel({
+        isLoading: false,
+        errorMessage: null,
+        data: null,
+        locale: 'en',
+      }),
+    ).toEqual({
+      kind: 'error',
+      message: null,
+      fallbackTranslationKey: 'users.loadError',
+    });
+
+    expect(
+      toAdminUsersListContentViewModel({
+        isLoading: false,
+        errorMessage: 'API unavailable',
+        data: null,
+        locale: 'en',
+      }),
+    ).toMatchObject({ kind: 'error', message: 'API unavailable' });
+  });
+
+  it('models empty results and preserves API errors while stale rows remain available', async () => {
+    const source = new MockAdminUsersDataSource();
+    const emptyPage = await source.listUsers({
+      page: 1,
+      perPage: 10,
+      search: 'no matching account',
+    });
+    expect(
+      toAdminUsersListContentViewModel({
+        isLoading: false,
+        errorMessage: null,
+        data: emptyPage,
+        locale: 'en',
+      }),
+    ).toMatchObject({
+      kind: 'empty',
+      pagination: { start: 0, end: 0, total: 0 },
+      refreshError: null,
+    });
+
+    const page = await source.listUsers({ page: 1, perPage: 2 });
+    expect(
+      toAdminUsersListContentViewModel({
+        isLoading: true,
+        errorMessage: 'Refresh failed',
+        data: page,
+        locale: 'es',
+      }),
+    ).toMatchObject({
+      kind: 'results',
+      rows: [{ displayName: 'Kwame Kojo Owusu' }, { displayName: 'Ama Mensah' }],
+      pagination: { start: 1, end: 2, total: 6 },
+      refreshError: 'Refresh failed',
     });
   });
 });

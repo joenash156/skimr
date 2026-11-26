@@ -3,10 +3,7 @@
     "name": "Skimr"
   },
   "shell": {
-    "stub_title": "Dashboard",
-    "stub_body": "The dashboard foundations are in place. Screens arrive in the next batches.",
     "signed_in_as": "Signed in as {{name}}",
-    "signed_out": "You're not signed in.",
     "loading": "Loading…"
   },
   "theme": {
@@ -36,9 +33,53 @@
       "good": "Good",
       "strong": "Strong",
       "too_long": "Too long"
-    }
+    },
+    "phone_country": "Country code"
   },
   "validation": {
-    "required": "This field is required."
+    "required": "This field is required.",
+    "too_long": "This is too long.",
+    "email": "Enter a valid email address.",
+    "phone": "Enter a valid phone number.",
+    "password_too_short": "Use at least 10 characters.",
+    "password_too_long": "Use at most 72 characters.",
+    "password_letter_number": "Use at least one letter and one number.",
+    "password_mismatch": "The passwords don't match.",
+    "accept_terms": "Please accept the Terms and Privacy policy to continue."
+  },
+  "nav": {
+    "overview": "Overview",
+    "projects": "Projects",
+    "find_sources": "Find sources",
+    "shared": "Shared with me",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "admin": "Admin"
+  },
+  "session": {
+    "log_out": "Log out",
+    "sign_out": "Sign out",
+    "load_failed_title": "We couldn't load your account",
+    "load_failed": "Check your connection and try again. If it keeps happening, sign out and back in."
+  },
+  "not_found": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or has moved.",
+    "home": "Go to the dashboard"
+  },
+  "coming_soon": {
+    "title": "Coming soon",
+    "body": "This part of Skimr is being built and will appear here shortly."
+  },
+  "language": {
+    "label": "Language",
+    "names": {
+      "en": "English",
+      "fr": "Français",
+      "es": "Español"
+    }
+  },
+  "auth_layout": {
+    "home": "Skimr home page"
   }
 }

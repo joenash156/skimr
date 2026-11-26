@@ -3,10 +3,7 @@
     "name": "Skimr"
   },
   "shell": {
-    "stub_title": "Tableau de bord",
-    "stub_body": "Les bases du tableau de bord sont en place. Les écrans arrivent dans les prochains lots.",
     "signed_in_as": "Connecté en tant que {{name}}",
-    "signed_out": "Vous n'êtes pas connecté.",
     "loading": "Chargement…"
   },
   "theme": {
@@ -36,9 +33,53 @@
       "good": "Bon",
       "strong": "Fort",
       "too_long": "Trop long"
-    }
+    },
+    "phone_country": "Indicatif du pays"
   },
   "validation": {
-    "required": "Ce champ est obligatoire."
+    "required": "Ce champ est obligatoire.",
+    "too_long": "Ce texte est trop long.",
+    "email": "Saisissez une adresse e-mail valide.",
+    "phone": "Saisissez un numéro de téléphone valide.",
+    "password_too_short": "Utilisez au moins 10 caractères.",
+    "password_too_long": "Utilisez au maximum 72 caractères.",
+    "password_letter_number": "Utilisez au moins une lettre et un chiffre.",
+    "password_mismatch": "Les mots de passe ne correspondent pas.",
+    "accept_terms": "Veuillez accepter les Conditions et la Politique de confidentialité pour continuer."
+  },
+  "nav": {
+    "overview": "Vue d'ensemble",
+    "projects": "Projets",
+    "find_sources": "Trouver des sources",
+    "shared": "Partagés avec moi",
+    "notifications": "Notifications",
+    "settings": "Paramètres",
+    "admin": "Administration"
+  },
+  "session": {
+    "log_out": "Se déconnecter",
+    "sign_out": "Se déconnecter",
+    "load_failed_title": "Impossible de charger votre compte",
+    "load_failed": "Vérifiez votre connexion et réessayez. Si le problème persiste, déconnectez-vous puis reconnectez-vous."
+  },
+  "not_found": {
+    "title": "Page introuvable",
+    "body": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "home": "Aller au tableau de bord"
+  },
+  "coming_soon": {
+    "title": "Bientôt disponible",
+    "body": "Cette partie de Skimr est en cours de construction et apparaîtra ici prochainement."
+  },
+  "language": {
+    "label": "Langue",
+    "names": {
+      "en": "English",
+      "fr": "Français",
+      "es": "Español"
+    }
+  },
+  "auth_layout": {
+    "home": "Page d'accueil de Skimr"
   }
 }

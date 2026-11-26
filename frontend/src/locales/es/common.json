@@ -3,10 +3,7 @@
     "name": "Skimr"
   },
   "shell": {
-    "stub_title": "Panel",
-    "stub_body": "Las bases del panel ya están listas. Las pantallas llegarán en los próximos lotes.",
     "signed_in_as": "Sesión iniciada como {{name}}",
-    "signed_out": "No has iniciado sesión.",
     "loading": "Cargando…"
   },
   "theme": {
@@ -36,9 +33,53 @@
       "good": "Buena",
       "strong": "Fuerte",
       "too_long": "Demasiado larga"
-    }
+    },
+    "phone_country": "Prefijo del país"
   },
   "validation": {
-    "required": "Este campo es obligatorio."
+    "required": "Este campo es obligatorio.",
+    "too_long": "Es demasiado largo.",
+    "email": "Introduce un correo electrónico válido.",
+    "phone": "Introduce un número de teléfono válido.",
+    "password_too_short": "Usa al menos 10 caracteres.",
+    "password_too_long": "Usa como máximo 72 caracteres.",
+    "password_letter_number": "Usa al menos una letra y un número.",
+    "password_mismatch": "Las contraseñas no coinciden.",
+    "accept_terms": "Acepta los Términos y la Política de privacidad para continuar."
+  },
+  "nav": {
+    "overview": "Resumen",
+    "projects": "Proyectos",
+    "find_sources": "Buscar fuentes",
+    "shared": "Compartido conmigo",
+    "notifications": "Notificaciones",
+    "settings": "Configuración",
+    "admin": "Administración"
+  },
+  "session": {
+    "log_out": "Cerrar sesión",
+    "sign_out": "Cerrar sesión",
+    "load_failed_title": "No pudimos cargar tu cuenta",
+    "load_failed": "Comprueba tu conexión e inténtalo de nuevo. Si sigue ocurriendo, cierra sesión y vuelve a entrar."
+  },
+  "not_found": {
+    "title": "Página no encontrada",
+    "body": "La página que buscas no existe o se ha movido.",
+    "home": "Ir al panel"
+  },
+  "coming_soon": {
+    "title": "Próximamente",
+    "body": "Esta parte de Skimr está en construcción y aparecerá aquí pronto."
+  },
+  "language": {
+    "label": "Idioma",
+    "names": {
+      "en": "English",
+      "fr": "Français",
+      "es": "Español"
+    }
+  },
+  "auth_layout": {
+    "home": "Página de inicio de Skimr"
   }
 }

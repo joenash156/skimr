@@ -83,17 +83,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [queryClient],
   );
 
+  const clearSession = useCallback((): void => {
+    setSessionEndedReason(null);
+    tokenStore.clear();
+    queryClient.clear();
+  }, [queryClient]);
+
   const signOut = useCallback(async (): Promise<void> => {
     try {
       await api.post('/auth/logout');
     } catch {
       // Even if the API call fails, this tab must forget the session.
     } finally {
-      setSessionEndedReason(null);
-      tokenStore.clear();
-      queryClient.clear();
+      clearSession();
     }
-  }, [queryClient]);
+  }, [clearSession]);
 
   const { refetch } = meQuery;
   const retry = useCallback(() => {
@@ -101,8 +105,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refetch]);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ status, user, sessionEndedReason, signIn, signOut, retry }),
-    [status, user, sessionEndedReason, signIn, signOut, retry],
+    () => ({ status, user, sessionEndedReason, signIn, signOut, clearSession, retry }),
+    [status, user, sessionEndedReason, signIn, signOut, clearSession, retry],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

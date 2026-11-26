@@ -22,6 +22,11 @@ export interface AuthContextValue {
   signIn(session: Session): Promise<Me>;
   /** POST /auth/logout, then forget everything about this user. */
   signOut(): Promise<void>;
+  /**
+   * Forget the session locally, without calling the API: for when the server
+   * has already ended every session (password reset or change, account deletion).
+   */
+  clearSession(): void;
   /** Retry loading /me after an `error` status. */
   retry(): void;
 }

@@ -21,6 +21,9 @@ final class MailService implements Mailer
         'suspicious_activity',
         'email_change_requested',
         'email_changed',
+        'admin_invite',
+        'account_suspended',
+        'account_reactivated',
         'contact_message',
     ];
 

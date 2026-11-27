@@ -35,6 +35,19 @@
         <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Votre adresse e-mail a été modifiée</h1>
         <p>Bonjour {{ first_name }},</p>
         <p>L’adresse e-mail de votre compte Skimr a été remplacée par {{ new_email }} le {{ at|date('Y-m-d H:i', 'UTC') }} UTC. Si vous n’êtes pas à l’origine de ce changement, sécurisez immédiatement votre compte.</p>
+    {% elseif template == 'admin_invite' %}
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Vous avez été invité à administrer Skimr</h1>
+        <p>Bonjour {{ first_name }},</p>
+        <p>Vous avez été invité à rejoindre Skimr comme administrateur. Cette invitation expire dans {{ expires_hours }} heures.</p>
+        <p><a href="{{ link }}" style="display:inline-block;padding:12px 24px;background-color:#0a0a0a;color:#ffffff;font-weight:600;text-decoration:none;border-radius:999px;">Accepter l’invitation</a></p>
+    {% elseif template == 'account_suspended' %}
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Votre compte a été suspendu</h1>
+        <p>Bonjour {{ first_name }},</p>
+        <p>Votre compte Skimr a été suspendu le {{ at|date('Y-m-d H:i', 'UTC') }} UTC. Motif : {{ reason }}</p>
+    {% elseif template == 'account_reactivated' %}
+        <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Votre compte a été réactivé</h1>
+        <p>Bonjour {{ first_name }},</p>
+        <p>Votre compte Skimr a été réactivé le {{ at|date('Y-m-d H:i', 'UTC') }} UTC. Vous pouvez à nouveau vous connecter.</p>
     {% elseif template == 'contact_message' %}
         <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:650;letter-spacing:-0.02em;">Nouveau message de contact</h1>
         <p><strong>De :</strong> {{ name }} ({{ email }})<br><strong>Reçu le :</strong> {{ at|date('Y-m-d H:i', 'UTC') }} UTC</p>

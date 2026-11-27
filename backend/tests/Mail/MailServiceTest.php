@@ -66,6 +66,9 @@ final class MailServiceTest extends TestCase
             'suspicious_activity',
             'email_change_requested',
             'email_changed',
+            'admin_invite',
+            'account_suspended',
+            'account_reactivated',
             'contact_message',
         ];
         $budget = $this->createMock(EmailBudget::class);
@@ -86,6 +89,7 @@ final class MailServiceTest extends TestCase
             'ip' => '203.0.113.10',
             'user_agent' => 'Test browser',
             'new_email' => 'new@example.com',
+            'reason' => 'Policy violation',
             'name' => 'Visitor',
             'email' => 'visitor@example.com',
             'message' => "Hello\nSkimr",

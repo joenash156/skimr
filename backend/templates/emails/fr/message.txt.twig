@@ -41,6 +41,22 @@ Votre adresse e-mail a été modifiée
 
 Bonjour {{ first_name }},
 L’adresse e-mail de votre compte Skimr a été remplacée par {{ new_email }} le {{ at|date('Y-m-d H:i', 'UTC') }} UTC. Si vous n’êtes pas à l’origine de ce changement, sécurisez immédiatement votre compte.
+{% elseif template == 'admin_invite' %}
+Vous avez été invité à administrer Skimr
+
+Bonjour {{ first_name }},
+Vous avez été invité à rejoindre Skimr comme administrateur. Cette invitation expire dans {{ expires_hours }} heures.
+{{ link }}
+{% elseif template == 'account_suspended' %}
+Votre compte a été suspendu
+
+Bonjour {{ first_name }},
+Votre compte Skimr a été suspendu le {{ at|date('Y-m-d H:i', 'UTC') }} UTC. Motif : {{ reason }}
+{% elseif template == 'account_reactivated' %}
+Votre compte a été réactivé
+
+Bonjour {{ first_name }},
+Votre compte Skimr a été réactivé le {{ at|date('Y-m-d H:i', 'UTC') }} UTC. Vous pouvez à nouveau vous connecter.
 {% elseif template == 'contact_message' %}
 Nouveau message de contact
 

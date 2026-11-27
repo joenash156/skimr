@@ -90,11 +90,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [queryClient],
   );
 
-  const clearSession = useCallback((): void => {
-    setSessionEndedReason(null);
-    tokenStore.clear();
-    queryClient.clear();
-  }, [queryClient]);
+  const clearSession = useCallback(
+    (reason?: string): void => {
+      setSessionEndedReason(reason ?? null);
+      tokenStore.clear();
+      queryClient.clear();
+    },
+    [queryClient],
+  );
 
   const signOut = useCallback(async (): Promise<void> => {
     try {

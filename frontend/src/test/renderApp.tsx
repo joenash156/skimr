@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { StrictMode, Suspense } from 'react';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { createQueryClient } from '@/app/providers';
+import { Toaster } from '@/components/ui/Toast';
 import { routes } from '@/app/router';
 import { AuthProvider } from '@/lib/auth/AuthProvider';
 
@@ -17,6 +18,7 @@ export function renderApp(path: string) {
         <AuthProvider>
           <Suspense fallback={null}>
             <RouterProvider router={router} />
+            <Toaster />
           </Suspense>
         </AuthProvider>
       </QueryClientProvider>

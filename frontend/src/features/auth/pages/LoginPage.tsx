@@ -87,6 +87,12 @@ export function LoginPage() {
       }
     >
       <div className="flex flex-col gap-5">
+        {sessionEndedReason === 'PASSWORD_CHANGED' && (
+          <Alert tone="success">{t('login.notice_password_changed')}</Alert>
+        )}
+        {sessionEndedReason === 'ACCOUNT_DELETED' && (
+          <Alert tone="success">{t('login.notice_account_deleted')}</Alert>
+        )}
         {sessionEndedReason === 'REFRESH_REUSED' && (
           <Alert tone="warning" title={t('login.signed_out_security_title')}>
             {t('login.signed_out_security')}

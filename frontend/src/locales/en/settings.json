@@ -1,0 +1,102 @@
+{
+  "title": "Settings",
+  "description": "Manage your profile, security, preferences and data.",
+  "sections_label": "Settings sections",
+  "sections": {
+    "profile": "Profile",
+    "security": "Security",
+    "preferences": "Preferences",
+    "notifications": "Notifications",
+    "data": "Data"
+  },
+  "actions": {
+    "save": "Save changes",
+    "discard": "Discard changes",
+    "cancel": "Cancel"
+  },
+  "fields": {
+    "first_name": "First name",
+    "last_name": "Last name",
+    "other_names": "Other names",
+    "phone": "Phone",
+    "alt_phone": "Other phone",
+    "institution": "Institution",
+    "discipline": "Discipline",
+    "optional": "Optional"
+  },
+  "profile": {
+    "title": "Profile",
+    "description": "How you appear to people you share projects with.",
+    "saved": "Profile saved"
+  },
+  "security": {
+    "password_title": "Password",
+    "password_description": "Changing your password signs you out on every device, including this one.",
+    "current_password": "Current password",
+    "new_password": "New password",
+    "confirm_password": "Confirm new password",
+    "password_hint": "At least 10 characters, with a letter and a number.",
+    "change_password": "Change password",
+    "google_only_password": "You sign in with Google, so your account has no password yet. Set one first through \"Forgot password\".",
+    "email_title": "Email address",
+    "email_description": "We'll send a link to the new address. Your email changes only after you open it.",
+    "current_email": "Current email:",
+    "new_email": "New email address",
+    "confirm_with_password": "Your password",
+    "send_link": "Send verification link",
+    "google_only_email": "To change your email, set a password first through \"Forgot password\".",
+    "set_password": "Set a password",
+    "google_title": "Connected Google account",
+    "google_description": "Sign in with Google instead of a password.",
+    "google_name": "Google",
+    "google_connected": "Connected",
+    "google_not_connected": "Not connected",
+    "google_how": "To connect Google, log out, then choose \"Continue with Google\" with the same email address."
+  },
+  "preferences": {
+    "title": "Preferences",
+    "description": "Changes are saved as soon as you make them.",
+    "language": "Language",
+    "citation_style": "Citation style",
+    "citation_hint": "Used for exports and in-text citations.",
+    "saved": "Preference saved"
+  },
+  "citation": {
+    "apa7": "APA (7th edition)",
+    "mla9": "MLA (9th edition)",
+    "harvard": "Harvard"
+  },
+  "notifications": {
+    "title": "Email notifications",
+    "description": "Choose which emails we send you. Changes are saved straight away.",
+    "security_note": "Security emails (new sign-ins, password and email changes) are always sent and can't be turned off.",
+    "types": {
+      "processing_done": {
+        "label": "Sources ready",
+        "description": "When your uploaded sources have finished processing."
+      },
+      "report_ready": {
+        "label": "Reports ready",
+        "description": "When a synthesis or gap report you started is ready."
+      },
+      "project_invite": {
+        "label": "Project invitations",
+        "description": "When someone invites you to a project."
+      },
+      "weekly_digest": {
+        "label": "Weekly digest",
+        "description": "A short summary of activity in your projects."
+      }
+    }
+  },
+  "data": {
+    "delete_title": "Delete account",
+    "delete_description": "Your account and projects are deleted after 30 days. Until then you can contact us to restore it.",
+    "delete_button": "Delete my account",
+    "delete_dialog_title": "Delete your account?",
+    "delete_dialog_body": "You'll be signed out on every device. After 30 days your account and all its projects are permanently deleted.",
+    "delete_password": "Enter your password to confirm",
+    "delete_confirm": "Delete account",
+    "google_only": "To delete your account, set a password first through \"Forgot password\", then come back here."
+  }
+}

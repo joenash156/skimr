@@ -1,0 +1,102 @@
+{
+  "title": "Configuración",
+  "description": "Gestiona tu perfil, seguridad, preferencias y datos.",
+  "sections_label": "Secciones de configuración",
+  "sections": {
+    "profile": "Perfil",
+    "security": "Seguridad",
+    "preferences": "Preferencias",
+    "notifications": "Notificaciones",
+    "data": "Datos"
+  },
+  "actions": {
+    "save": "Guardar cambios",
+    "discard": "Descartar cambios",
+    "cancel": "Cancelar"
+  },
+  "fields": {
+    "first_name": "Nombre",
+    "last_name": "Apellidos",
+    "other_names": "Otros nombres",
+    "phone": "Teléfono",
+    "alt_phone": "Otro teléfono",
+    "institution": "Institución",
+    "discipline": "Disciplina",
+    "optional": "Opcional"
+  },
+  "profile": {
+    "title": "Perfil",
+    "description": "Lo que ven las personas con las que compartes proyectos.",
+    "saved": "Perfil guardado"
+  },
+  "security": {
+    "password_title": "Contraseña",
+    "password_description": "Cambiar la contraseña cierra tu sesión en todos los dispositivos, incluido este.",
+    "current_password": "Contraseña actual",
+    "new_password": "Nueva contraseña",
+    "confirm_password": "Confirmar nueva contraseña",
+    "password_hint": "Al menos 10 caracteres, con una letra y un número.",
+    "change_password": "Cambiar contraseña",
+    "google_only_password": "Inicias sesión con Google, así que tu cuenta aún no tiene contraseña. Crea una primero en «¿Olvidaste tu contraseña?».",
+    "email_title": "Correo electrónico",
+    "email_description": "Enviaremos un enlace a la nueva dirección. Tu correo solo cambia cuando lo abras.",
+    "current_email": "Correo actual:",
+    "new_email": "Nuevo correo electrónico",
+    "confirm_with_password": "Tu contraseña",
+    "send_link": "Enviar enlace de verificación",
+    "google_only_email": "Para cambiar tu correo, crea primero una contraseña en «¿Olvidaste tu contraseña?».",
+    "set_password": "Crear una contraseña",
+    "google_title": "Cuenta de Google conectada",
+    "google_description": "Inicia sesión con Google en lugar de con una contraseña.",
+    "google_name": "Google",
+    "google_connected": "Conectada",
+    "google_not_connected": "No conectada",
+    "google_how": "Para conectar Google, cierra sesión y elige «Continuar con Google» con el mismo correo electrónico."
+  },
+  "preferences": {
+    "title": "Preferencias",
+    "description": "Los cambios se guardan al momento.",
+    "language": "Idioma",
+    "citation_style": "Estilo de citas",
+    "citation_hint": "Se usa en las exportaciones y en las citas dentro del texto.",
+    "saved": "Preferencia guardada"
+  },
+  "citation": {
+    "apa7": "APA (7.ª edición)",
+    "mla9": "MLA (9.ª edición)",
+    "harvard": "Harvard"
+  },
+  "notifications": {
+    "title": "Notificaciones por correo",
+    "description": "Elige qué correos te enviamos. Los cambios se guardan al momento.",
+    "security_note": "Los correos de seguridad (nuevos inicios de sesión, cambios de contraseña o de correo) se envían siempre y no se pueden desactivar.",
+    "types": {
+      "processing_done": {
+        "label": "Fuentes listas",
+        "description": "Cuando tus fuentes terminan de procesarse."
+      },
+      "report_ready": {
+        "label": "Informes listos",
+        "description": "Cuando una síntesis o un informe de vacíos que iniciaste está listo."
+      },
+      "project_invite": {
+        "label": "Invitaciones a proyectos",
+        "description": "Cuando alguien te invita a un proyecto."
+      },
+      "weekly_digest": {
+        "label": "Resumen semanal",
+        "description": "Un breve resumen de la actividad de tus proyectos."
+      }
+    }
+  },
+  "data": {
+    "delete_title": "Eliminar cuenta",
+    "delete_description": "Tu cuenta y tus proyectos se eliminan a los 30 días. Hasta entonces puedes contactarnos para recuperarla.",
+    "delete_button": "Eliminar mi cuenta",
+    "delete_dialog_title": "¿Eliminar tu cuenta?",
+    "delete_dialog_body": "Se cerrará tu sesión en todos los dispositivos. A los 30 días, tu cuenta y todos sus proyectos se eliminarán definitivamente.",
+    "delete_password": "Introduce tu contraseña para confirmar",
+    "delete_confirm": "Eliminar cuenta",
+    "google_only": "Para eliminar tu cuenta, crea primero una contraseña en «¿Olvidaste tu contraseña?» y vuelve aquí."
+  }
+}

@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import { createBrowserRouter, RouterProvider, type RouteObject } from 'react-router';
+import { createBrowserRouter, Navigate, RouterProvider, type RouteObject } from 'react-router';
 import { AppShell } from './layout/AppShell';
 import { ComingSoonPage } from './routes/ComingSoonPage';
 import { GuestOnly } from './routes/GuestOnly';
@@ -26,11 +26,12 @@ export const routes: RouteObject[] = [
         path: 'register',
         ...page(() => import('@/features/auth/pages/RegisterPage'), 'RegisterPage'),
       },
-      {
-        path: 'forgot-password',
-        ...page(() => import('@/features/auth/pages/ForgotPasswordPage'), 'ForgotPasswordPage'),
-      },
     ],
+  },
+  // Also used signed in: Google-only accounts set their first password here (brief 3a).
+  {
+    path: 'forgot-password',
+    ...page(() => import('@/features/auth/pages/ForgotPasswordPage'), 'ForgotPasswordPage'),
   },
   {
     path: 'verify-email',
@@ -62,7 +63,46 @@ export const routes: RouteObject[] = [
           { path: 'find-sources', element: <ComingSoonPage titleKey="nav.find_sources" /> },
           { path: 'shared', element: <ComingSoonPage titleKey="nav.shared" /> },
           { path: 'notifications', element: <ComingSoonPage titleKey="nav.notifications" /> },
-          { path: 'settings/*', element: <ComingSoonPage titleKey="nav.settings" /> },
+          {
+            path: 'settings',
+            ...page(() => import('@/features/settings/SettingsLayout'), 'SettingsLayout'),
+            children: [
+              { index: true, element: <Navigate to="profile" replace /> },
+              {
+                path: 'profile',
+                ...page(
+                  () => import('@/features/settings/sections/ProfileSettings'),
+                  'ProfileSettings',
+                ),
+              },
+              {
+                path: 'security',
+                ...page(
+                  () => import('@/features/settings/sections/SecuritySettings'),
+                  'SecuritySettings',
+                ),
+              },
+              {
+                path: 'preferences',
+                ...page(
+                  () => import('@/features/settings/sections/PreferencesSettings'),
+                  'PreferencesSettings',
+                ),
+              },
+              {
+                path: 'notifications',
+                ...page(
+                  () => import('@/features/settings/sections/NotificationSettings'),
+                  'NotificationSettings',
+                ),
+              },
+              {
+                path: 'data',
+                ...page(() => import('@/features/settings/sections/DataSettings'), 'DataSettings'),
+              },
+              { path: '*', element: <NotFoundPage /> },
+            ],
+          },
           {
             // Admin console (P5, src/features/admin). P5 plugs their routes in here.
             path: 'admin/*',

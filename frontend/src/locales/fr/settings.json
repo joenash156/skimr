@@ -1,0 +1,102 @@
+{
+  "title": "Paramètres",
+  "description": "Gérez votre profil, votre sécurité, vos préférences et vos données.",
+  "sections_label": "Sections des paramètres",
+  "sections": {
+    "profile": "Profil",
+    "security": "Sécurité",
+    "preferences": "Préférences",
+    "notifications": "Notifications",
+    "data": "Données"
+  },
+  "actions": {
+    "save": "Enregistrer",
+    "discard": "Annuler les modifications",
+    "cancel": "Annuler"
+  },
+  "fields": {
+    "first_name": "Prénom",
+    "last_name": "Nom",
+    "other_names": "Autres prénoms",
+    "phone": "Téléphone",
+    "alt_phone": "Autre téléphone",
+    "institution": "Établissement",
+    "discipline": "Discipline",
+    "optional": "Facultatif"
+  },
+  "profile": {
+    "title": "Profil",
+    "description": "Ce que voient les personnes avec qui vous partagez des projets.",
+    "saved": "Profil enregistré"
+  },
+  "security": {
+    "password_title": "Mot de passe",
+    "password_description": "Changer votre mot de passe vous déconnecte de tous vos appareils, y compris celui-ci.",
+    "current_password": "Mot de passe actuel",
+    "new_password": "Nouveau mot de passe",
+    "confirm_password": "Confirmer le nouveau mot de passe",
+    "password_hint": "Au moins 10 caractères, avec une lettre et un chiffre.",
+    "change_password": "Changer le mot de passe",
+    "google_only_password": "Vous vous connectez avec Google, votre compte n'a donc pas encore de mot de passe. Définissez-en un via « Mot de passe oublié ».",
+    "email_title": "Adresse e-mail",
+    "email_description": "Nous enverrons un lien à la nouvelle adresse. Votre e-mail ne change qu'une fois le lien ouvert.",
+    "current_email": "E-mail actuel :",
+    "new_email": "Nouvelle adresse e-mail",
+    "confirm_with_password": "Votre mot de passe",
+    "send_link": "Envoyer le lien de vérification",
+    "google_only_email": "Pour changer d'e-mail, définissez d'abord un mot de passe via « Mot de passe oublié ».",
+    "set_password": "Définir un mot de passe",
+    "google_title": "Compte Google connecté",
+    "google_description": "Connectez-vous avec Google au lieu d'un mot de passe.",
+    "google_name": "Google",
+    "google_connected": "Connecté",
+    "google_not_connected": "Non connecté",
+    "google_how": "Pour connecter Google, déconnectez-vous, puis choisissez « Continuer avec Google » avec la même adresse e-mail."
+  },
+  "preferences": {
+    "title": "Préférences",
+    "description": "Les modifications sont enregistrées immédiatement.",
+    "language": "Langue",
+    "citation_style": "Style de citation",
+    "citation_hint": "Utilisé pour les exports et les citations dans le texte.",
+    "saved": "Préférence enregistrée"
+  },
+  "citation": {
+    "apa7": "APA (7e édition)",
+    "mla9": "MLA (9e édition)",
+    "harvard": "Harvard"
+  },
+  "notifications": {
+    "title": "Notifications par e-mail",
+    "description": "Choisissez les e-mails que nous vous envoyons. Les modifications sont enregistrées immédiatement.",
+    "security_note": "Les e-mails de sécurité (nouvelles connexions, changements de mot de passe ou d'e-mail) sont toujours envoyés et ne peuvent pas être désactivés.",
+    "types": {
+      "processing_done": {
+        "label": "Sources prêtes",
+        "description": "Quand le traitement de vos sources est terminé."
+      },
+      "report_ready": {
+        "label": "Rapports prêts",
+        "description": "Quand une synthèse ou un rapport de lacunes que vous avez lancé est prêt."
+      },
+      "project_invite": {
+        "label": "Invitations aux projets",
+        "description": "Quand quelqu'un vous invite à un projet."
+      },
+      "weekly_digest": {
+        "label": "Récapitulatif hebdomadaire",
+        "description": "Un bref résumé de l'activité de vos projets."
+      }
+    }
+  },
+  "data": {
+    "delete_title": "Supprimer le compte",
+    "delete_description": "Votre compte et vos projets sont supprimés au bout de 30 jours. D'ici là, vous pouvez nous contacter pour le restaurer.",
+    "delete_button": "Supprimer mon compte",
+    "delete_dialog_title": "Supprimer votre compte ?",
+    "delete_dialog_body": "Vous serez déconnecté de tous vos appareils. Au bout de 30 jours, votre compte et tous ses projets seront définitivement supprimés.",
+    "delete_password": "Saisissez votre mot de passe pour confirmer",
+    "delete_confirm": "Supprimer le compte",
+    "google_only": "Pour supprimer votre compte, définissez d'abord un mot de passe via « Mot de passe oublié », puis revenez ici."
+  }
+}

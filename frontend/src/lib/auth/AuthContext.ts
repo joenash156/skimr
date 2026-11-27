@@ -25,8 +25,10 @@ export interface AuthContextValue {
   /**
    * Forget the session locally, without calling the API: for when the server
    * has already ended every session (password reset or change, account deletion).
+   * `reason` (e.g. PASSWORD_CHANGED) becomes `sessionEndedReason`, so the login
+   * screen can say what happened.
    */
-  clearSession(): void;
+  clearSession(reason?: string): void;
   /** Retry loading /me after an `error` status. */
   retry(): void;
 }

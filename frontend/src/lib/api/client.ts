@@ -1,6 +1,6 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { tokenStore } from '../auth/tokenStore';
-import { normalizeError, type ApiError } from './errors';
+import { normalizeError, UNKNOWN_ERROR, type ApiError } from './errors';
 import type { components } from './schema';
 
 export type Session = components['schemas']['SessionResponse']['data'];
@@ -133,8 +133,14 @@ function isAuthEndpoint(url: string | undefined): boolean {
 api.interceptors.response.use(undefined, async (error: AxiosError) => {
   const config = error.config;
   const status = error.response?.status;
+  const apiError = normalizeError(error);
+  // Only an expired or revoked token (401 UNAUTHENTICATED, contract) is worth a
+  // refresh. A wrong current password is 401 INVALID_CREDENTIALS on /me/password,
+  // /me/email and DELETE /me: that must reach the form, not end the session.
+  const tokenProblem =
+    status === 401 && (apiError.code === 'UNAUTHENTICATED' || apiError.code === UNKNOWN_ERROR);
 
-  if (status === 401 && config && !config._retried && !isAuthEndpoint(config.url)) {
+  if (tokenProblem && config && !config._retried && !isAuthEndpoint(config.url)) {
     config._retried = true;
     let session: Session;
     try {
@@ -148,8 +154,7 @@ api.interceptors.response.use(undefined, async (error: AxiosError) => {
     return api.request(config);
   }
 
-  const apiError = normalizeError(error);
-  if (status === 401 && config?._retried) {
+  if (tokenProblem && config?._retried) {
     // Refreshed, retried, and still 401 (e.g. suspended): the session is over.
     tokenStore.clear();
     emitApiEvent({ type: 'session-expired', code: apiError.code });

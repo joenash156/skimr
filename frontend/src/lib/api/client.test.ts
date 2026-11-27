@@ -163,3 +163,28 @@ describe('api client: requests', () => {
     expect(events).toEqual([{ type: 'email-not-verified' }]);
   });
 });
+
+describe('api client: 401s that are not about the token', () => {
+  it('lets a wrong current password (401 INVALID_CREDENTIALS) reach the form', async () => {
+    tokenStore.set('good-token');
+    const events: ApiEvent[] = [];
+    const off = onApiEvent((e) => events.push(e));
+    let refreshCalls = 0;
+    mockApi((config) => {
+      if (config.url === '/auth/refresh') {
+        refreshCalls += 1;
+        return respond(config, 200, session('new'));
+      }
+      return respond(config, 401, apiError('INVALID_CREDENTIALS', 'Wrong password.'));
+    });
+
+    await expect(api.post('/me/password', {})).rejects.toMatchObject({
+      code: 'INVALID_CREDENTIALS',
+      message: 'Wrong password.',
+    });
+    off();
+    expect(refreshCalls).toBe(0);
+    expect(tokenStore.get()).toBe('good-token');
+    expect(events).toEqual([]);
+  });
+});

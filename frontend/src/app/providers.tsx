@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Suspense, useState, type ReactNode } from 'react';
+import { Toaster } from '@/components/ui/Toast';
 import { ApiError } from '@/lib/api/errors';
 import { AuthProvider } from '@/lib/auth/AuthProvider';
 
@@ -24,7 +25,10 @@ export function Providers({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         {/* Translations load lazily (spec 13); render nothing until `common` is ready. */}
-        <Suspense fallback={null}>{children}</Suspense>
+        <Suspense fallback={null}>
+          {children}
+          <Toaster />
+        </Suspense>
       </AuthProvider>
     </QueryClientProvider>
   );

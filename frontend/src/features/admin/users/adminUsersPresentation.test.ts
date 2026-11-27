@@ -83,7 +83,7 @@ describe('admin user presentation model', () => {
         },
       ],
     });
-    expect(model.activity[0].createdAt).not.toBeNull();
+    expect(model.activity[0]?.createdAt).not.toBeNull();
   });
 
   it('returns null for absent or invalid timestamps', () => {

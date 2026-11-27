@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { api, onApiEvent, refreshSession, type Session } from '../api/client';
 import i18n, { isSupportedLanguage } from '../i18n';
+import { getStoredTheme, isTheme, setTheme } from '../theme';
 import { AuthContext, type AuthContextValue, type AuthStatus } from './AuthContext';
 import { fetchMe, ME_QUERY_KEY, type Me } from './me';
 import { tokenStore } from './tokenStore';
@@ -66,6 +67,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [userLocale]);
 
+  // The account's theme (users.theme, spec 14.4) follows the user to a new device.
+  const userTheme = user?.theme;
+  useEffect(() => {
+    if (isTheme(userTheme) && userTheme !== getStoredTheme()) setTheme(userTheme);
+  }, [userTheme]);
+
   let status: AuthStatus;
   if (!bootstrapped) status = 'loading';
   else if (token === null) status = 'unauthenticated';
@@ -83,17 +90,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [queryClient],
   );
 
+  const clearSession = useCallback((): void => {
+    setSessionEndedReason(null);
+    tokenStore.clear();
+    queryClient.clear();
+  }, [queryClient]);
+
   const signOut = useCallback(async (): Promise<void> => {
     try {
       await api.post('/auth/logout');
     } catch {
       // Even if the API call fails, this tab must forget the session.
     } finally {
-      setSessionEndedReason(null);
-      tokenStore.clear();
-      queryClient.clear();
+      clearSession();
     }
-  }, [queryClient]);
+  }, [clearSession]);
 
   const { refetch } = meQuery;
   const retry = useCallback(() => {
@@ -101,8 +112,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refetch]);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ status, user, sessionEndedReason, signIn, signOut, retry }),
-    [status, user, sessionEndedReason, signIn, signOut, retry],
+    () => ({ status, user, sessionEndedReason, signIn, signOut, clearSession, retry }),
+    [status, user, sessionEndedReason, signIn, signOut, clearSession, retry],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

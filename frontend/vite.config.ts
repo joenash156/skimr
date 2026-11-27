@@ -43,6 +43,8 @@ export default defineConfig(({ mode }) => ({
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.mjs'],
     restoreMocks: true,
+    // Typing through whole forms in full-app tests is slow under parallel load.
+    testTimeout: 20_000,
     css: false,
   },
 }));

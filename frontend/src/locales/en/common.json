@@ -106,5 +106,27 @@
     "user": "Researcher",
     "admin": "Admin",
     "super_admin": "Super admin"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "showing": "Showing {{from}}–{{to}} of {{total}}",
+    "previous": "Previous page",
+    "next": "Next page",
+    "page": "Page {{page}}"
+  },
+  "dropzone": {
+    "rejected": {
+      "type": "{{name}}: this file type isn't supported.",
+      "size": "{{name}} is larger than {{max}}.",
+      "empty": "{{name}} is empty."
+    }
+  },
+  "source_kind": {
+    "journal": "Journal paper",
+    "book": "Book / chapter",
+    "report": "Report",
+    "web": "Web page (not peer-reviewed)",
+    "pasted": "Pasted text",
+    "abstract_only": "Abstract only"
   }
 }

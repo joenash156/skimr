@@ -106,5 +106,27 @@
     "user": "Chercheur",
     "admin": "Admin",
     "super_admin": "Super admin"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "showing": "{{from}}–{{to}} sur {{total}}",
+    "previous": "Page précédente",
+    "next": "Page suivante",
+    "page": "Page {{page}}"
+  },
+  "dropzone": {
+    "rejected": {
+      "type": "{{name}} : ce type de fichier n'est pas pris en charge.",
+      "size": "{{name}} dépasse {{max}}.",
+      "empty": "{{name}} est vide."
+    }
+  },
+  "source_kind": {
+    "journal": "Article de revue",
+    "book": "Livre / chapitre",
+    "report": "Rapport",
+    "web": "Page web (non évaluée par les pairs)",
+    "pasted": "Texte collé",
+    "abstract_only": "Résumé seulement"
   }
 }

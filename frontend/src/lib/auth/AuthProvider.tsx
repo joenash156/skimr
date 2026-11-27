@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { api, onApiEvent, refreshSession, type Session } from '../api/client';
 import i18n, { isSupportedLanguage } from '../i18n';
+import { getStoredTheme, isTheme, setTheme } from '../theme';
 import { AuthContext, type AuthContextValue, type AuthStatus } from './AuthContext';
 import { fetchMe, ME_QUERY_KEY, type Me } from './me';
 import { tokenStore } from './tokenStore';
@@ -65,6 +66,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       void i18n.changeLanguage(userLocale);
     }
   }, [userLocale]);
+
+  // The account's theme (users.theme, spec 14.4) follows the user to a new device.
+  const userTheme = user?.theme;
+  useEffect(() => {
+    if (isTheme(userTheme) && userTheme !== getStoredTheme()) setTheme(userTheme);
+  }, [userTheme]);
 
   let status: AuthStatus;
   if (!bootstrapped) status = 'loading';

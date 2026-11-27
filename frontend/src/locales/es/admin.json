@@ -1,0 +1,91 @@
+{
+  "users": {
+    "title": "Usuarios",
+    "description": "Busca y consulta cuentas de usuario.",
+    "search": {
+      "label": "Buscar usuarios",
+      "placeholder": "Buscar por nombre o correo electrónico"
+    },
+    "filters": {
+      "label": "Filtros",
+      "status": "Estado",
+      "role": "Rol",
+      "allStatuses": "Todos los estados",
+      "allRoles": "Todos los roles"
+    },
+    "sort": {
+      "label": "Ordenar por fecha de registro",
+      "newestFirst": "Más recientes primero",
+      "oldestFirst": "Más antiguos primero"
+    },
+    "table": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "status": "Estado",
+      "verified": "Verificado",
+      "projects": "Proyectos",
+      "sources": "Fuentes",
+      "lastLogin": "Último acceso",
+      "noLastLogin": "Nunca"
+    },
+    "status": {
+      "pending_verification": "Pendiente de verificación",
+      "active": "Activo",
+      "invited": "Invitado",
+      "suspended": "Suspendido",
+      "deleted": "Eliminado"
+    },
+    "role": {
+      "user": "Usuario",
+      "admin": "Administrador",
+      "super_admin": "Superadministrador"
+    },
+    "verification": {
+      "verified": "Verificado",
+      "notVerified": "No verificado"
+    },
+    "pagination": {
+      "summary": "Mostrando {{start}}–{{end}} de {{total}} usuarios",
+      "pageSize": "Usuarios por página",
+      "previous": "Página anterior",
+      "next": "Página siguiente"
+    },
+    "empty": "Ningún usuario coincide con estos filtros.",
+    "loadError": "No se pudieron cargar los usuarios. Inténtalo de nuevo.",
+    "detail": {
+      "title": "Detalles del usuario",
+      "profile": "Perfil",
+      "usage": "Uso",
+      "activity": "Actividad",
+      "institution": "Institución",
+      "discipline": "Disciplina",
+      "phone": "Teléfono",
+      "signedUp": "Registro",
+      "aiCallsThisMonth": "Llamadas de IA este mes",
+      "notProvided": "No indicado",
+      "notFound": "No se encontró este usuario."
+    },
+    "actions": {
+      "suspend": "Suspender cuenta",
+      "reactivate": "Reactivar cuenta",
+      "delete": "Eliminar cuenta",
+      "resetQuota": "Restablecer cuota",
+      "resendVerification": "Reenviar correo de verificación",
+      "reasonLabel": "Motivo",
+      "reasonRequired": "Escribe un motivo para continuar.",
+      "forbidden": "No tienes permiso para realizar esta acción.",
+      "invalidAction": "Esta acción no está disponible para el estado actual del usuario.",
+      "completed": "La acción se completó."
+    },
+    "activity": {
+      "account_created": "Cuenta creada",
+      "email_verified": "Correo electrónico verificado",
+      "signed_in": "Inicio de sesión",
+      "suspended": "Cuenta suspendida",
+      "reactivated": "Cuenta reactivada",
+      "user_deleted": "Cuenta eliminada",
+      "quota_reset": "Cuota restablecida",
+      "verification_resent": "Correo de verificación reenviado"
+    }
+  }
+}

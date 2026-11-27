@@ -54,7 +54,19 @@
     "shared": "Compartido conmigo",
     "notifications": "Notificaciones",
     "settings": "Configuración",
-    "admin": "Administración"
+    "admin": "Administración",
+    "groups": {
+      "research": "Investigación",
+      "account": "Cuenta",
+      "admin": "Administración"
+    },
+    "main_label": "Principal",
+    "open_menu": "Abrir menú",
+    "close_menu": "Cerrar menú",
+    "collapse": "Contraer la barra lateral",
+    "expand": "Expandir la barra lateral",
+    "collapse_short": "Contraer",
+    "skip": "Saltar al contenido"
   },
   "session": {
     "log_out": "Cerrar sesión",
@@ -81,5 +93,18 @@
   },
   "auth_layout": {
     "home": "Página de inicio de Skimr"
+  },
+  "search": {
+    "label": "Buscar",
+    "placeholder": "Buscar proyectos…"
+  },
+  "account": {
+    "menu_label": "Menú de la cuenta",
+    "view_site": "Ver el sitio público"
+  },
+  "roles": {
+    "user": "Investigador",
+    "admin": "Admin",
+    "super_admin": "Superadmin"
   }
 }

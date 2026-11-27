@@ -5,6 +5,8 @@ export interface LogoProps {
   /** Show only the mark (e.g. the collapsed sidebar). */
   markOnly?: boolean;
   className?: string;
+  /** Extra classes for the "Skimr" word, e.g. to fade it in the collapsed rail. */
+  wordmarkClassName?: string | undefined;
 }
 
 /**
@@ -13,7 +15,7 @@ export interface LogoProps {
  * The wordmark uses the text colour, so the same markup works in both themes.
  * Decorative: the surrounding link or heading carries the accessible name.
  */
-export function Logo({ markOnly = false, className }: LogoProps) {
+export function Logo({ markOnly = false, className, wordmarkClassName }: LogoProps) {
   const uid = useId().replace(/:/g, '');
   return (
     <span className={cn('inline-flex items-center gap-2', className)} aria-hidden="true">
@@ -60,7 +62,7 @@ export function Logo({ markOnly = false, className }: LogoProps) {
         <circle cx="46" cy="37" r="5.5" fill={`url(#sk-b${uid})`} />
       </svg>
       {!markOnly && (
-        <span className="text-lg font-bold tracking-[-0.035em] text-fg">
+        <span className={cn('text-lg font-bold tracking-[-0.035em] text-fg', wordmarkClassName)}>
           Sk
           <span className="relative">
             {'ı'}

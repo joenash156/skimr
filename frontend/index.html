@@ -9,19 +9,23 @@
     <link rel="icon" type="image/svg+xml" href="/app/favicon.svg" />
     <title>Skimr</title>
     <!--
-      No-flash theme (spec 14.4). The ONLY inline script allowed by the CSP:
-      PHP replaces __CSP_NONCE__ with the request's nonce (brief 3a). Same
-      logic as the public site: localStorage.theme = light | dark | system.
+      No-flash theme and sidebar (spec 14.3, 14.4). The ONLY inline script
+      allowed by the CSP: PHP replaces __CSP_NONCE__ with the request's nonce
+      (brief 3a). Theme uses the public site's rule: localStorage.theme =
+      light | dark | system. localStorage.sidebar = collapsed | expanded.
     -->
     <script nonce="__CSP_NONCE__">
       let t = null;
+      let s = null;
       try {
         t = localStorage.getItem('theme');
+        s = localStorage.getItem('sidebar');
       } catch {}
       document.documentElement.classList.toggle(
         'dark',
         t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches),
       );
+      document.documentElement.dataset.sidebar = s === 'collapsed' ? 'collapsed' : 'expanded';
     </script>
   </head>
   <body>

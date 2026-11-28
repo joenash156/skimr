@@ -37,7 +37,7 @@ venv/
 .coverage
 htmlcov/
 
-# --- OS / editors ----
+# --- OS / editors ---
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -51,3 +51,11 @@ desktop.ini
 .claude/settings.local.json
 # Personal notes and starter prompts, e.g. P4-agent-start.local.md
 *.local.md
+
+# --- Personal documents that don't belong in the repo (fixtures live in tests/) ---
+/*.pptx
+/*.ppt
+/*.docx
+/*.doc
+/*.xlsx
+/*.pdf

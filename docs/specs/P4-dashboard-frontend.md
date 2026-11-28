@@ -120,6 +120,18 @@ frontend/src/
 
 ---
 
+
+### Auth modal, theme switch and language menu (P1 polish, November 2026)
+
+Spec 5.2 now says auth is **one modal**. P1 reworked your B1 screens to match; please build on this rather than going back to full pages:
+
+- **Views, not pages:** `src/features/auth/views/` has `LoginView`, `RegisterView` and `ForgotPasswordView` (your form logic, unchanged). They talk to the outside world only through `useAuthFlow()` (`features/auth/flow/authFlow.ts`): `go(view)`, `href(view)`, `done(me)`, `params`, `close()`. Links between views use `ViewLink`, not router links. Don't call `useNavigate` inside a view: the views also run on the public site, where there is no router.
+- **The shell:** `features/auth/modal/AuthModal.tsx` (Radix Dialog: blurred backdrop, Log in | Sign up switch, close button). After a success, call `useAuthModal().showDone({ title })` to change the header ("Check your email").
+- **Two hosts:** `pages/AuthScreen.tsx` serves `/app/login`, `/app/register` and `/app/forgot-password` (URL-driven, closing goes to the public site). `src/island/` is a second Vite entry, `assets/auth-island.js` (under 1 kB). PHP adds it to every public page, and it loads the modal when someone hovers over or clicks a link with `data-auth="login|register"`.
+- **Shared CSS:** the token mapping and motion now live in `src/styles/theme.css` and `src/styles/motion.css`, used by both `index.css` and `island/island.css` (no preflight on the public site).
+- **Theme switch and language menu** now match the public site exactly: a pill radio group with animated sun/moon/monitor icons (`components/icons/ThemeIcons.tsx`), and a Radix radio menu with flags (`components/icons/Flag.tsx`). `LanguageSwitcher variant="list"` is the phone version.
+- **Full page loads** go through `goTo()` in `lib/browser.ts`, so tests can mock it.
+
 ## B0 — Foundations (week 1)
 
 1. **Vite + React 19 + TypeScript (strict):**

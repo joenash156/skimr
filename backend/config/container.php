@@ -79,6 +79,7 @@ return static function (array $settings, array $overrides = []): ContainerInterf
         SpaController::class => static fn (ContainerInterface $c): SpaController => new SpaController(
             $settings['paths']['spa_index'],
             $c->get(JsonResponder::class),
+            (string) ($settings['turnstile']['site_key'] ?? ''),
         ),
 
     ]);

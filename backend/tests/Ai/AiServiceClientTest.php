@@ -143,6 +143,31 @@ final class AiServiceClientTest extends TestCase
         }
     }
 
+    public function testServiceErrorCodesAreKeptButNeverTheMessageOrUnsafeCodes(): void
+    {
+        $client = $this->client([
+            self::jsonResponse(422, ['error' => ['code' => 'unknown_job_type', 'message' => 'Unknown job type: x']]),
+            self::jsonResponse(401, ['error' => ['code' => 'Bad Code <script>', 'message' => 'secret detail']]),
+        ]);
+
+        try {
+            $client->submitJob('x', []);
+            self::fail('A 422 must be surfaced.');
+        } catch (AiServiceException $exception) {
+            self::assertSame(422, $exception->httpStatus);
+            self::assertSame('unknown_job_type', $exception->errorCode);
+            self::assertStringNotContainsString('Unknown job type', $exception->getMessage());
+        }
+
+        try {
+            $client->health();
+            self::fail('A 401 must be surfaced.');
+        } catch (AiServiceException $exception) {
+            self::assertNull($exception->errorCode);
+            self::assertStringNotContainsString('secret detail', $exception->getMessage());
+        }
+    }
+
     public function testClientFailsExplicitlyWhenTheSharedSecretIsMissing(): void
     {
         $client = $this->client([self::jsonResponse(200, ['status' => 'ok'])], secret: null);

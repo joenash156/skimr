@@ -1,6 +1,6 @@
 {% import 'macros/icons.html.twig' as ui %}
 {% set nav = {features: 'grid', how_it_works: 'workflow', about: 'info', contact: 'mail'} %}
-<header class="site-header" x-data="mobileMenu" x-on:keydown.escape.window="close">
+<header class="site-header" x-data="mobileMenu" x-on:keydown.escape.window="close" x-on:auth-open.window="close">
     <div class="wrap site-header__inner">
         {% include 'partials/brand.html.twig' with {uid: 'h'} %}
 
@@ -28,8 +28,8 @@
                 {% include 'partials/theme-switch.html.twig' with {variant: 'compact', uid: 'h'} %}
             </div>
             <span class="site-header__divider desktop-only" aria-hidden="true"></span>
-            <a class="btn btn--ghost btn--sm btn--pill desktop-only" href="/app/login">{{ trans('public.login') }}</a>
-            <a class="btn btn--primary btn--sm btn--pill anim-host hide-xs" href="/app/register">
+            <a class="btn btn--ghost btn--sm btn--pill desktop-only" href="/app/login" data-auth="login">{{ trans('public.login') }}</a>
+            <a class="btn btn--primary btn--sm btn--pill anim-host hide-xs" href="/app/register" data-auth="register">
                 {{ trans('public.get_started') }} {{ ui.icon('arrow-right', 'icon btn__arrow') }}
             </a>
             {# The icon follows aria-expanded in CSS, so no extra Alpine expressions are needed. #}

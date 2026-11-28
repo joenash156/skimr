@@ -148,7 +148,8 @@ describe('Topbar (spec 5.3, brief B1 task 5)', () => {
     const calls = signedIn();
     const { user } = renderApp('/');
     await screen.findByRole('heading', { name: 'Overview' });
-    await user.selectOptions(first(screen.getAllByRole('combobox', { name: 'Language' })), 'fr');
+    await user.click(first(screen.getAllByRole('button', { name: 'Language: English' })));
+    await user.click(await screen.findByRole('menuitemradio', { name: 'Français' }));
     expect(await screen.findByRole('heading', { name: "Vue d'ensemble" })).toBeInTheDocument();
     await waitFor(() =>
       expect(calls).toContainEqual({ method: 'patch', url: '/me', body: { locale: 'fr' } }),

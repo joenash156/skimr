@@ -1,0 +1,16 @@
+/*
+ * Styles for the auth modal on the public site. The public pages already have
+ * Tailwind's preflight and the shared tokens (backend/src/Public/site.css), so
+ * this sheet adds only the theme variables and utility classes the modal uses,
+ * in the same cascade layers: no base styles that could restyle the page.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import '../../../shared/design-tokens.css';
+@import '../styles/theme.css';
+@import '../styles/motion.css';
+
+/* Only scan what the modal renders, so the sheet stays small. */
+@source not '../app';
+@source not '../features/admin';

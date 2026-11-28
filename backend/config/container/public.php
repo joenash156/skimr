@@ -13,6 +13,7 @@ use App\Public\Seo\OgImageBuilder;
 use App\Public\Seo\RobotsController;
 use App\Public\Seo\SitemapController;
 use App\Public\Site\SiteProfiles;
+use App\Public\Twig\AssetExtension;
 use App\Public\Twig\TransExtension;
 use App\Shared\Clock\Clock;
 use App\Shared\Http\JsonResponder;
@@ -130,6 +131,7 @@ return [
             'strict_variables' => true,
         ]);
         $twig->addExtension(new TransExtension($container->get(Translator::class . '.public')));
+        $twig->addExtension(new AssetExtension($settings['paths']['root'] . '/public'));
         $twig->getEnvironment()->addGlobal('site_url', $settings['app']['url']);
         // Templates call site.forLocale(locale); the settings row is read once, on first use.
         $twig->getEnvironment()->addGlobal('site', $container->get(SiteProfiles::class));

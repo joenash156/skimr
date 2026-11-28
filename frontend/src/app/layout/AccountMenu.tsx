@@ -53,8 +53,10 @@ export function AccountMenu() {
           <div className="flex flex-col gap-3 border-t border-border pt-3 md:hidden">
             <ThemeSwitcher showLegend fullWidth />
             <div className="sm:hidden">
-              <p className="mb-2 text-xs font-medium text-muted">{t('language.label')}</p>
-              <LanguageSwitcher className="[&_select]:w-full" />
+              <p className="mb-2 text-xs font-semibold tracking-[0.06em] text-subtle uppercase">
+                {t('language.label')}
+              </p>
+              <LanguageSwitcher variant="list" />
             </div>
           </div>
 

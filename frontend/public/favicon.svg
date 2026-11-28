@@ -1,4 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="8" fill="#050505"/>
-  <path d="M47 18H27a10 10 0 0 0 0 20h10a4 4 0 0 1 0 8H17v-8h20a4 4 0 0 0 0-8H27a10 10 0 0 1 0-20h20z" fill="#2dd4bf"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="skimr-top" gradientUnits="userSpaceOnUse" x1="13" y1="25" x2="58" y2="9">
+      <stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+    <linearGradient id="skimr-mid" gradientUnits="userSpaceOnUse" x1="17" y1="23" x2="47" y2="38">
+      <stop offset="0" stop-color="#0f766e"/><stop offset="1" stop-color="#134e4a"/>
+    </linearGradient>
+    <linearGradient id="skimr-bot" gradientUnits="userSpaceOnUse" x1="6" y1="56" x2="51" y2="40">
+      <stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+  </defs>
+  <!-- Middle band, in the shade of the two folds -->
+  <path d="M18 23 L46 37" stroke="url(#skimr-mid)" stroke-width="11"/>
+  <!-- Top band: rounded fold on the left, sharp tip at the top right -->
+  <path d="M18 23 L58 8.8" stroke="url(#skimr-top)" stroke-width="11"/>
+  <circle cx="18" cy="23" r="5.5" fill="url(#skimr-top)"/>
+  <!-- Bottom band: rounded fold on the right, sharp tip at the bottom left -->
+  <path d="M46 37 L6 51.2" stroke="url(#skimr-bot)" stroke-width="11"/>
+  <circle cx="46" cy="37" r="5.5" fill="url(#skimr-bot)"/>
 </svg>

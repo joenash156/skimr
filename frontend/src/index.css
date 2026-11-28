@@ -7,80 +7,10 @@
 @import 'tailwindcss';
 @import '../../shared/design-tokens.css';
 
-/* Dark mode is the `dark` class on <html>, set before paint (spec 14.4). */
-@custom-variant dark (&:where(.dark, .dark *));
-
-@font-face {
-  font-family: 'Inter';
-  src: url('./assets/fonts/inter-variable.woff2') format('woff2');
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-}
-
-/*
- * Token -> Tailwind utilities. `inline` keeps the var() references, so the
- * classes follow the .dark switch with no extra dark: variants.
- * --radius-* and --shadow-popover share their names with the tokens: Tailwind
- * emits them inside @layer theme, and the token file's unlayered values win
- * the cascade, so the utilities always get the real token values.
- *   bg-bg, bg-surface, bg-surface-2, border-border, text-fg, text-muted,
- *   text-subtle, bg-primary, text-primary, bg-primary-subtle, bg-inverse, ...
- */
-@theme inline {
-  --color-bg: var(--bg);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-border: var(--border);
-  --color-fg: var(--text);
-  --color-muted: var(--text-muted);
-  --color-subtle: var(--text-subtle);
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-  --color-primary-fg: var(--primary-fg);
-  --color-primary-subtle: var(--primary-subtle);
-  --color-inverse: var(--inverse);
-  --color-inverse-hover: var(--inverse-hover);
-  --color-inverse-fg: var(--inverse-fg);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-danger: var(--danger);
-
-  /* font-sans / font-mono: the tokens file sets --font-sans and --font-mono
-     unlayered, so it overrides Tailwind's defaults with no mapping here. */
-
-  --radius-control: var(--radius-control);
-  --radius-card: var(--radius-card);
-  --radius-dialog: var(--radius-dialog);
-  --shadow-popover: var(--shadow-popover);
-
-  --default-transition-duration: var(--duration);
-  --default-transition-timing-function: var(--ease);
-
-  /* Motion (spec 14.2): 150-200 ms ease-out, opacity and transform only.
-     Turned off for prefers-reduced-motion below. */
-  --animate-fade-in: fade-in var(--duration) var(--ease);
-  --animate-pop-in: pop-in var(--duration) var(--ease);
-  --animate-slide-in: slide-in var(--duration) var(--ease);
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-  }
-  @keyframes pop-in {
-    from {
-      opacity: 0;
-      transform: scale(0.97);
-    }
-  }
-  @keyframes slide-in {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-  }
-}
+/* Tokens -> Tailwind utilities, the dark variant, Inter and motion: shared with
+   the auth modal on the public site (src/island/island.css). */
+@import './styles/theme.css';
+@import './styles/motion.css';
 
 @layer base {
   html {

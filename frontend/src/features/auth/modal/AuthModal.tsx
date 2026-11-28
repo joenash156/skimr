@@ -1,8 +1,8 @@
 import * as RadixDialog from '@radix-ui/react-dialog';
 import { ArrowLeft, X } from 'lucide-react';
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Logo } from '@/components/brand/Logo';
+import { Trans, useTranslation } from 'react-i18next';
+import { Logo, Wordmark } from '@/components/brand/Logo';
 import { cn } from '@/lib/cn';
 import { useAuthFlow, type AuthView } from '../flow/authFlow';
 import { ViewLink } from '../flow/ViewLink';
@@ -10,7 +10,9 @@ import { AuthShowcase } from './AuthShowcase';
 
 /** What the top of the card shows. */
 export interface AuthHeader {
-  title: string;
+  title: ReactNode;
+  /** The handwritten welcome style (Playwrite CU): the Log in and Sign up greetings only. */
+  script?: boolean;
   description?: ReactNode;
   /** Log in / Sign up switch under the title. */
   tabs?: boolean;
@@ -62,8 +64,25 @@ export function AuthModal({ open, header, footer, backdrop = 'dim', children }: 
   );
 
   const defaults: Record<AuthView, AuthHeader> = {
-    login: { title: t('login.title'), description: t('login.description'), tabs: true },
-    register: { title: t('register.title'), description: t('register.description'), tabs: true },
+    login: {
+      title: t('login.title'),
+      description: t('login.description'),
+      tabs: true,
+      script: true,
+    },
+    register: {
+      // "Welcome to" handwritten, "Skimr" in the logo's wordmark style.
+      title: (
+        <Trans
+          t={t}
+          i18nKey="register.title"
+          components={{ brand: <Wordmark className="font-sans text-[1.1em]" /> }}
+        />
+      ),
+      description: t('register.description'),
+      tabs: true,
+      script: true,
+    },
     forgot: {
       title: t('forgot.title'),
       description: t('forgot.description'),
@@ -107,9 +126,6 @@ export function AuthModal({ open, header, footer, backdrop = 'dim', children }: 
             <AuthModalContext.Provider value={controls}>
               <div className="flex min-h-0 flex-col">
                 <div className="shrink-0 overflow-hidden px-6 pt-7 [scrollbar-gutter:stable] sm:px-10 sm:pt-9">
-                  {/* The logo lives in the showcase on wide screens. */}
-                  <Logo markOnly className="mb-5 lg:hidden" />
-
                   {current.back && (
                     <ViewLink
                       view={current.back.view}
@@ -120,15 +136,31 @@ export function AuthModal({ open, header, footer, backdrop = 'dim', children }: 
                     </ViewLink>
                   )}
 
-                  {/* Playwrite's tall loops need the extra line height. */}
-                  <RadixDialog.Title className="pe-8 font-script text-[1.625rem] leading-[1.65] font-normal text-fg sm:text-[1.875rem]">
-                    {current.title}
-                  </RadixDialog.Title>
-                  {current.description && (
-                    <RadixDialog.Description className="mt-1 text-sm leading-relaxed text-pretty text-muted">
-                      {current.description}
-                    </RadixDialog.Description>
-                  )}
+                  <div className="flex flex-col items-center px-8 text-center">
+                    {/* The logo lives in the showcase on wide screens. */}
+                    <Logo markOnly className="mb-4 lg:hidden" />
+                    <RadixDialog.Title
+                      className={cn(
+                        'text-balance text-fg',
+                        current.script
+                          ? // Playwrite's tall loops need the extra line height.
+                            'font-script text-[1.625rem] leading-[1.65] font-normal sm:text-[1.875rem]'
+                          : 'text-xl font-semibold tracking-[-0.02em]',
+                      )}
+                    >
+                      {current.title}
+                    </RadixDialog.Title>
+                    {current.description && (
+                      <RadixDialog.Description
+                        className={cn(
+                          'max-w-88 text-sm leading-relaxed text-pretty text-muted',
+                          current.script ? 'mt-1' : 'mt-1.5',
+                        )}
+                      >
+                        {current.description}
+                      </RadixDialog.Description>
+                    )}
+                  </div>
 
                   {current.tabs && <ViewTabs />}
                 </div>

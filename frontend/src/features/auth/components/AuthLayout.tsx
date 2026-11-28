@@ -44,9 +44,7 @@ export function AuthLayout({ title, description, children, footer }: AuthLayoutP
               <span className="flex size-12 items-center justify-center rounded-2xl border border-border bg-surface">
                 <Logo markOnly />
               </span>
-              <h1 className="mt-4 font-script text-[1.625rem] leading-[1.65] font-normal">
-                {title}
-              </h1>
+              <h1 className="mt-4 text-xl font-semibold tracking-[-0.02em]">{title}</h1>
               {description && <p className="mt-1.5 max-w-88 text-sm text-muted">{description}</p>}
             </div>
             <div className="mt-6">{children}</div>

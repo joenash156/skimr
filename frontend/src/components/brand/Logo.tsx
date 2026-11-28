@@ -61,16 +61,35 @@ export function Logo({ markOnly = false, className, wordmarkClassName }: LogoPro
         <path d="M46 37 L6 51.2" stroke={`url(#sk-b${uid})`} strokeWidth="11" />
         <circle cx="46" cy="37" r="5.5" fill={`url(#sk-b${uid})`} />
       </svg>
-      {!markOnly && (
-        <span className={cn('text-lg font-bold tracking-[-0.035em] text-fg', wordmarkClassName)}>
-          Sk
-          <span className="relative">
-            {'ı'}
-            <span className="absolute top-[0.08em] left-1/2 size-[0.2em] -translate-x-1/2 rounded-full bg-[#14b8a6]" />
-          </span>
-          mr
-        </span>
-      )}
+      {!markOnly && <WordmarkText className={wordmarkClassName} />}
+    </span>
+  );
+}
+
+function WordmarkText({ className }: { className?: string | undefined }) {
+  return (
+    <span className={cn('text-lg font-bold tracking-[-0.035em] text-fg', className)}>
+      Sk
+      <span className="relative">
+        {'ı'}
+        <span className="absolute top-[0.08em] left-1/2 size-[0.2em] -translate-x-1/2 rounded-full bg-[#14b8a6]" />
+      </span>
+      mr
+    </span>
+  );
+}
+
+/**
+ * The "Skimr" wordmark on its own, for use inside text (e.g. "Welcome to Skimr").
+ * Screen readers get the plain word; the styled one (dotless ı) is hidden.
+ */
+export function Wordmark({ className }: { className?: string }) {
+  return (
+    <span className="whitespace-nowrap">
+      <span aria-hidden="true">
+        <WordmarkText className={className} />
+      </span>
+      <span className="sr-only">Skimr</span>
     </span>
   );
 }

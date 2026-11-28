@@ -995,7 +995,7 @@ Every text and background pair must reach WCAG 2.2 AA contrast: 4.5:1 for normal
 
 ### 14.2 Type, spacing and shape
 
-- **Fonts:** Inter (variable, self-hosted) for all interface text. JetBrains Mono for code and DOIs. Playwrite CU (self-hosted, `font-script`) only for the welcome headings of the auth screens (P1, November 2026); never for body text, buttons or labels. Optionally Source Serif 4 for reading long syntheses.
+- **Fonts:** Inter (variable, self-hosted) for all interface text. JetBrains Mono for code and DOIs. Playwrite CU (self-hosted, `font-script`) only for the "Welcome back" and "Welcome to" greetings of the auth modal (P1, November 2026; "Skimr" in them keeps the wordmark style); never for body text, buttons or labels. Optionally Source Serif 4 for reading long syntheses.
 - **Type scale:** 12, 14, 16, 18, 20, 24, 30, 36 and 48 px. Body text is 16 px on public pages and 14 px in dense dashboard tables. Line height is 1.5 for body text and 1.2 for headings.
 - **Spacing:** a 4 px grid.
 - **Corner radius:** 6 px for inputs and buttons, 8 px for cards, 12 px for dialogs.

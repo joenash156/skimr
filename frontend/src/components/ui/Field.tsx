@@ -6,6 +6,9 @@ export function controlClass(invalid: boolean, extra?: string): string {
   return cn(
     'w-full rounded-control border bg-bg px-3 text-base text-fg sm:text-sm',
     'placeholder:text-subtle transition-colors',
+    // Text fields: a 1 px ring drawn on the border, not the global 2 px offset
+    // outline (spec 14.6 rings stay on buttons and links).
+    'focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-primary focus-visible:border-primary',
     'disabled:cursor-not-allowed disabled:bg-surface-2 disabled:text-muted',
     invalid ? 'border-danger' : 'border-border hover:border-muted',
     extra,

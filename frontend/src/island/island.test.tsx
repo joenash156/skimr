@@ -22,11 +22,11 @@ describe('auth modal on the public site (src/island)', () => {
     const user = userEvent.setup();
 
     act(() => openAuthModal('register'));
-    expect(await screen.findByRole('dialog', { name: 'Create your account' })).toBeInTheDocument();
+    expect(await screen.findByRole('dialog', { name: 'Welcome to Skimr' })).toBeInTheDocument();
 
     const tabs = within(screen.getByRole('navigation', { name: 'Log in or sign up' }));
     await user.click(tabs.getByRole('link', { name: 'Log in' }));
-    const dialog = await screen.findByRole('dialog', { name: 'Log in to Skimr' });
+    const dialog = await screen.findByRole('dialog', { name: 'Welcome back' });
     expect(goTo).not.toHaveBeenCalled();
 
     await user.type(within(dialog).getByLabelText(/^Email/), 'ama@example.com');

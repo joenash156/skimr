@@ -26,13 +26,13 @@ describe('auth modal on the /app routes (spec 5.2 note)', () => {
   it('is a dialog with Log in | Sign up that switches in place and keeps ?next', async () => {
     const { user, router } = renderApp(`/login?next=${encodeURIComponent('/projects')}`);
 
-    const dialog = await screen.findByRole('dialog', { name: 'Log in to Skimr' });
+    const dialog = await screen.findByRole('dialog', { name: 'Welcome back' });
     expect(within(dialog).getByLabelText(/^Email/)).toBeInTheDocument();
     expect(tabs().getByRole('link', { name: 'Log in' })).toHaveAttribute('aria-current', 'page');
 
     await user.click(tabs().getByRole('link', { name: 'Sign up' }));
 
-    expect(await screen.findByRole('dialog', { name: 'Create your account' })).toBeInTheDocument();
+    expect(await screen.findByRole('dialog', { name: 'Welcome to Skimr' })).toBeInTheDocument();
     expect(router.state.location.pathname).toBe('/register');
     expect(router.state.location.search).toBe('?next=%2Fprojects');
     expect(tabs().getByRole('link', { name: 'Sign up' })).toHaveAttribute('aria-current', 'page');
@@ -46,7 +46,7 @@ describe('auth modal on the /app routes (spec 5.2 note)', () => {
     expect(await screen.findByRole('dialog', { name: 'Reset your password' })).toBeInTheDocument();
     expect(router.state.location.pathname).toBe('/forgot-password');
     await user.click(screen.getByRole('link', { name: 'Back to log in' }));
-    expect(await screen.findByRole('dialog', { name: 'Log in to Skimr' })).toBeInTheDocument();
+    expect(await screen.findByRole('dialog', { name: 'Welcome back' })).toBeInTheDocument();
   });
 
   it('goes back to the public site when closed', async () => {

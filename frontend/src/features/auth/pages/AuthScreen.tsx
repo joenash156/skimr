@@ -4,7 +4,6 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { LanguageSwitcher } from '@/app/layout/LanguageSwitcher';
 import { ThemeSwitcher } from '@/app/layout/ThemeSwitcher';
 import { goTo } from '@/lib/browser';
-import { Logo } from '@/components/brand/Logo';
 import { isSupportedLanguage } from '@/lib/i18n';
 import { AuthBackdrop } from '../components/AuthBackdrop';
 import { GoogleLinkForm } from '../components/GoogleLinkForm';
@@ -52,10 +51,6 @@ export function AuthScreen({ view }: { view: AuthView }) {
   return (
     <AuthFlowContext.Provider value={flow}>
       <AuthBackdrop />
-      {/* Decorative: the open modal makes everything outside it inert. */}
-      <div aria-hidden="true" className="fixed inset-x-0 top-0 flex h-16 items-center px-4 sm:px-6">
-        <Logo />
-      </div>
       <AuthModal
         open
         backdrop="clear"

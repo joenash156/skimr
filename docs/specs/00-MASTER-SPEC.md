@@ -188,7 +188,7 @@ All pages exist in `/en/`, `/fr/` and `/es/`.
 
 ### 5.2 Authentication (F02, F03)
 
-**Log in, sign up and forgot password are one modal, not separate pages** (P1 design decision, November 2026). On the public site, "Log in" and "Get started" open it over the page (a dimmed, blurred backdrop) with a Log in | Sign up switch and "Continue with Google". `/app/login`, `/app/register` and `/app/forgot-password` still exist and show the same modal on its own page, because redirects (`?next=`), Google's return trip and links opened without JavaScript land there. Emailed-link screens (verify email, reset password, accept invite) stay pages, in the same card style.
+**Log in, sign up and forgot password are one modal, not separate pages** (P1 design decision, November 2026). On the public site, "Log in" and "Get started" open it over the page (a dimmed, blurred backdrop) with a Log in | Sign up switch and "Continue with Google". On wide screens the modal is split: the form on the left under a "Welcome" heading, and on the right the logo, a short pitch and a sample synthesis over the public hero's dot grid. It has a fixed height; only the form area scrolls. `/app/login`, `/app/register` and `/app/forgot-password` still exist and show the same modal on its own page, because redirects (`?next=`), Google's return trip and links opened without JavaScript land there. Emailed-link screens (verify email, reset password, accept invite) stay pages, in the same card style.
 
 **Sign-up fields:**
 
@@ -995,7 +995,7 @@ Every text and background pair must reach WCAG 2.2 AA contrast: 4.5:1 for normal
 
 ### 14.2 Type, spacing and shape
 
-- **Fonts:** Inter (variable, self-hosted) for all interface text. JetBrains Mono for code and DOIs. Optionally Source Serif 4 for reading long syntheses.
+- **Fonts:** Inter (variable, self-hosted) for all interface text. JetBrains Mono for code and DOIs. Playwrite CU (self-hosted, `font-script`) only for the welcome headings of the auth screens (P1, November 2026); never for body text, buttons or labels. Optionally Source Serif 4 for reading long syntheses.
 - **Type scale:** 12, 14, 16, 18, 20, 24, 30, 36 and 48 px. Body text is 16 px on public pages and 14 px in dense dashboard tables. Line height is 1.5 for body text and 1.2 for headings.
 - **Spacing:** a 4 px grid.
 - **Corner radius:** 6 px for inputs and buttons, 8 px for cards, 12 px for dialogs.

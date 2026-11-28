@@ -14,6 +14,16 @@
   font-display: swap;
 }
 
+/* Playwrite CU (OFL, assets/fonts/OFL-playwrite.txt): only the auth welcome
+   headings use it, so browsers fetch it only when the auth modal opens. */
+@font-face {
+  font-family: 'Playwrite CU';
+  src: url('../assets/fonts/playwrite-cu-variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 400;
+  font-display: swap;
+}
+
 /*
  * Token -> Tailwind utilities. `inline` keeps the var() references, so the
  * classes follow the .dark switch with no extra dark: variants.
@@ -41,6 +51,9 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
+
+  /* font-script: the auth welcome headings only (spec 14.3 note). */
+  --font-script: 'Playwrite CU', var(--font-sans);
 
   /* font-sans / font-mono: the tokens file sets --font-sans and --font-mono
      unlayered, so it overrides Tailwind's defaults with no mapping here. */

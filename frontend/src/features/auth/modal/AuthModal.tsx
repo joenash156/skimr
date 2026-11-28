@@ -6,6 +6,7 @@ import { Logo } from '@/components/brand/Logo';
 import { cn } from '@/lib/cn';
 import { useAuthFlow, type AuthView } from '../flow/authFlow';
 import { ViewLink } from '../flow/ViewLink';
+import { AuthShowcase } from './AuthShowcase';
 
 /** What the top of the card shows. */
 export interface AuthHeader {
@@ -43,9 +44,12 @@ export interface AuthModalProps {
 }
 
 /**
- * The auth modal (spec 5.2 note, 14.5): a centred card over a dimmed, blurred
- * backdrop. Radix traps focus, closes on Esc or a click outside, locks the page
- * scroll and returns focus. Long forms scroll inside the backdrop on phones.
+ * The auth modal (spec 5.2 note, 14.5) over a dimmed, blurred backdrop. On wide
+ * screens it is split: the form on the left, a short pitch with a sample
+ * synthesis on the right (AuthShowcase). The modal has a fixed height and never
+ * scrolls as a whole: the welcome heading, the Log in | Sign up switch and the
+ * footer stay put, and only the form area scrolls. Radix traps focus, closes on
+ * Esc or a click outside, locks the page scroll and returns focus.
  * The backdrop blur is the one exception to spec 14's "no blur" rule (P1, 2026-11).
  */
 export function AuthModal({ open, header, footer, backdrop = 'dim', children }: AuthModalProps) {
@@ -74,7 +78,7 @@ export function AuthModal({ open, header, footer, backdrop = 'dim', children }: 
       <RadixDialog.Portal>
         <RadixDialog.Overlay
           className={cn(
-            'fixed inset-0 z-70 grid place-items-center overflow-y-auto p-4 sm:p-6',
+            'fixed inset-0 z-70 grid place-items-center p-3 sm:p-6',
             backdrop === 'dim' &&
               'bg-black/40 backdrop-blur-md data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in dark:bg-black/60',
           )}
@@ -90,59 +94,70 @@ export function AuthModal({ open, header, footer, backdrop = 'dim', children }: 
                 }
               : {})}
             className={cn(
-              'relative w-full max-w-106 rounded-[1.25rem] border border-border bg-bg text-fg outline-none',
+              // A fixed height, so switching Log in / Sign up never resizes the modal;
+              // only the form area scrolls (the welcome, tabs and footer stay put).
+              'relative grid grid-rows-[minmax(0,1fr)] h-[min(46rem,calc(100dvh-1.5rem))] w-full max-w-[29rem] overflow-hidden rounded-[1.25rem] border border-border bg-bg text-fg outline-none sm:h-[min(46rem,calc(100dvh-3rem))]',
+              'lg:max-w-[62rem] lg:grid-cols-[minmax(0,1fr)_minmax(0,0.94fr)]',
               backdrop === 'dim'
-                ? 'shadow-[0_24px_64px_-16px_rgb(0_0_0/0.35)]'
-                : 'shadow-[0_24px_64px_-16px_rgb(0_0_0/0.18)]',
+                ? 'shadow-[0_32px_80px_-20px_rgb(0_0_0/0.45)]'
+                : 'shadow-[0_32px_80px_-24px_rgb(0_0_0/0.22)]',
               'data-[state=closed]:animate-pop-out data-[state=open]:animate-modal-in',
             )}
           >
             <AuthModalContext.Provider value={controls}>
-              <div className="px-6 pt-7 pb-6 sm:px-8 sm:pt-8">
-                {current.back && (
-                  <ViewLink
-                    view={current.back.view}
-                    className="anim-host mb-4 inline-flex items-center gap-1.5 text-sm text-muted no-underline hover:text-fg hover:no-underline"
-                  >
-                    <ArrowLeft aria-hidden="true" className="size-4" />
-                    {current.back.label}
-                  </ViewLink>
-                )}
+              <div className="flex min-h-0 flex-col">
+                <div className="shrink-0 overflow-hidden px-6 pt-7 [scrollbar-gutter:stable] sm:px-10 sm:pt-9">
+                  {/* The logo lives in the showcase on wide screens. */}
+                  <Logo markOnly className="mb-5 lg:hidden" />
 
-                <div className="flex flex-col items-center text-center">
-                  <span className="flex size-12 items-center justify-center rounded-2xl border border-border bg-surface">
-                    <Logo markOnly />
-                  </span>
-                  <RadixDialog.Title className="mt-4 text-xl font-semibold tracking-[-0.02em]">
+                  {current.back && (
+                    <ViewLink
+                      view={current.back.view}
+                      className="anim-host mb-4 inline-flex items-center gap-1.5 text-sm text-muted no-underline hover:text-fg hover:no-underline"
+                    >
+                      <ArrowLeft aria-hidden="true" className="size-4" />
+                      {current.back.label}
+                    </ViewLink>
+                  )}
+
+                  {/* Playwrite's tall loops need the extra line height. */}
+                  <RadixDialog.Title className="pe-8 font-script text-[1.625rem] leading-[1.65] font-normal text-fg sm:text-[1.875rem]">
                     {current.title}
                   </RadixDialog.Title>
                   {current.description && (
-                    <RadixDialog.Description className="mt-1.5 max-w-88 text-sm text-muted">
+                    <RadixDialog.Description className="mt-1 text-sm leading-relaxed text-pretty text-muted">
                       {current.description}
                     </RadixDialog.Description>
                   )}
+
+                  {current.tabs && <ViewTabs />}
                 </div>
 
-                {current.tabs && <ViewTabs />}
-
-                {/* Keyed by view: switching views replays the entrance. Not by the done
-                    header, or the view would remount and lose its success state. */}
-                <div key={flow.view} className="mt-6 animate-slide-in">
-                  {children}
+                {/* The header, this scroller and the footer all reserve the scrollbar gutter, so
+                    their edges line up whether or not the form overflows.
+                    Keyed by view: switching views replays the entrance and starts at the
+                    top. Not by the done header, or the view would lose its success state. */}
+                <div
+                  key={flow.view}
+                  className="min-h-0 flex-1 overflow-y-auto overscroll-contain [scrollbar-gutter:stable] [scrollbar-width:thin] px-6 pt-6 pb-8 [mask-image:linear-gradient(to_bottom,transparent,#000_1.25rem)] sm:px-10"
+                >
+                  <div className="animate-slide-in">{children}</div>
                 </div>
 
                 {footer && (
-                  <div className="mt-6 flex items-center justify-between gap-3 border-t border-border pt-4">
+                  <div className="flex shrink-0 items-center justify-between gap-3 overflow-hidden border-t border-border px-6 py-3 [scrollbar-gutter:stable] sm:px-10">
                     {footer}
                   </div>
                 )}
               </div>
+
+              <AuthShowcase />
             </AuthModalContext.Provider>
 
             {/* Last in the DOM, so focus starts on the form, not on "Close". */}
             <RadixDialog.Close
               aria-label={t('common:ui.close')}
-              className="absolute inset-e-3 top-3 flex size-9 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-fg pointer-coarse:size-11"
+              className="absolute inset-e-3 top-3 flex size-9 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-fg pointer-coarse:size-11 lg:border lg:border-border lg:bg-bg/80 lg:hover:bg-bg"
             >
               <X aria-hidden="true" className="size-4" />
             </RadixDialog.Close>
@@ -168,7 +183,7 @@ function ViewTabs() {
   return (
     <nav
       aria-label={t('modal.tabs_label')}
-      className="relative mt-6 grid grid-cols-2 rounded-full bg-surface-2 p-1"
+      className="relative mt-5 grid grid-cols-2 rounded-full bg-surface-2 p-1"
     >
       <span
         aria-hidden="true"

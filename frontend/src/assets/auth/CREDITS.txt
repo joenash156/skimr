@@ -1,0 +1,2 @@
+sources.webp: a crop of backend/public/assets/hero/slide-3.jpg.
+Photo by Patrick Tomasso, https://unsplash.com/photos/Oaqk7qqNh_c (Unsplash License, https://unsplash.com/license).

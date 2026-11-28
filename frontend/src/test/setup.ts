@@ -3,8 +3,10 @@ import { cleanup, configure } from '@testing-library/react';
 import { afterEach } from 'vitest';
 
 // Full-app tests (real routes, lazy pages, StrictMode) can take a few seconds
-// on a busy machine or CI runner; give findBy*/waitFor room before failing.
-configure({ asyncUtilTimeout: 5000 });
+// on a busy machine or CI runner. The first test in a file also pays for the
+// cold import of the lazy route, which took over 5 s under a full parallel run.
+// Passing tests don't wait longer; only real failures report later.
+configure({ asyncUtilTimeout: 15_000 });
 
 // jsdom lacks a few browser APIs that Radix primitives call.
 class ResizeObserverStub {

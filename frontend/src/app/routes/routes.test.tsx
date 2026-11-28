@@ -26,7 +26,7 @@ describe('routing guards (brief B1 task 3)', () => {
   it('sends signed-out visitors to /login and remembers where they were going', async () => {
     signedOut();
     const { router } = renderApp('/projects?sort=title');
-    await screen.findByRole('heading', { name: 'Log in to Skimr' });
+    await screen.findByRole('heading', { name: 'Welcome back' });
     expect(router.state.location.pathname).toBe('/login');
     expect(router.state.location.search).toBe(
       `?next=${encodeURIComponent('/projects?sort=title')}`,

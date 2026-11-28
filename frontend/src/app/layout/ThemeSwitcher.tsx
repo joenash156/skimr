@@ -1,24 +1,26 @@
-import { Monitor, Moon, Sun } from 'lucide-react';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MonitorIcon, MoonIcon, SunIcon } from '@/components/icons/ThemeIcons';
 import { useThemePreference } from '@/lib/auth/useThemePreference';
 import { cn } from '@/lib/cn';
 import { THEMES } from '@/lib/theme';
 
-const ICONS = { light: Sun, dark: Moon, system: Monitor } as const;
+const ICONS = { light: SunIcon, dark: MoonIcon, system: MonitorIcon } as const;
 
 export interface ThemeSwitcherProps {
   /** Show "Theme" above the control (the account menu does, like the sample). */
   showLegend?: boolean;
-  /** Stretch the three options across the full width (menus). */
+  /** Icon + label options across the full width (menus), like the public phone menu. */
   fullWidth?: boolean;
   className?: string;
 }
 
 /**
- * Light / dark / system as a radio group (spec 14.4; brief B1 task 5): arrow
- * keys move between options. Saves to localStorage and, when signed in,
- * to the account with PATCH /me. Every instance stays in sync.
+ * Light / dark / system (spec 14.4; brief B1 task 5), the same pill switch as
+ * the public site (backend/templates/public/partials/theme-switch.html.twig):
+ * a radio group, so arrow keys move between options and screen readers hear
+ * "Theme, Dark, selected, 2 of 3". Icons redraw on hover and when chosen.
+ * Saves to localStorage and, when signed in, to the account (PATCH /me).
  */
 export function ThemeSwitcher({
   showLegend = false,
@@ -30,14 +32,20 @@ export function ThemeSwitcher({
   const name = useId();
 
   return (
-    <fieldset className={cn('flex flex-col gap-2', className)}>
-      <legend className={cn(showLegend ? 'mb-2 text-xs font-medium text-muted' : 'sr-only')}>
+    <fieldset className={cn('m-0 min-w-0 border-0 p-0', className)}>
+      <legend
+        className={cn(
+          showLegend
+            ? 'mb-2 text-xs font-semibold tracking-[0.06em] text-subtle uppercase'
+            : 'sr-only',
+        )}
+      >
         {t('theme.legend')}
       </legend>
       <div
         className={cn(
-          'flex items-center gap-0.5 rounded-control border border-border bg-surface p-0.5',
-          fullWidth && 'w-full',
+          'grid grid-cols-3 gap-0.5 border border-border bg-surface p-[3px]',
+          fullWidth ? 'w-full rounded-card' : 'w-max rounded-full',
         )}
       >
         {THEMES.map((theme) => {
@@ -47,13 +55,15 @@ export function ThemeSwitcher({
             <label
               key={theme}
               title={t(`theme.${theme}`)}
+              data-checked={selected ? '' : undefined}
               className={cn(
-                'relative flex h-10 cursor-pointer items-center justify-center gap-2 rounded-[5px] text-sm transition-colors pointer-coarse:h-11',
-                'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary',
-                fullWidth ? 'flex-1 px-2' : 'w-10 pointer-coarse:w-11',
-                selected
-                  ? 'bg-inverse text-inverse-fg'
-                  : 'text-muted hover:bg-surface-2 hover:text-fg',
+                'anim-host flex cursor-pointer items-center justify-center text-muted transition-[color,background-color,box-shadow] hover:text-fg',
+                'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-1 has-[:focus-visible]:outline-primary',
+                fullWidth
+                  ? 'flex-col gap-1 rounded-control py-2.5 text-xs font-[550]'
+                  : 'size-[1.875rem] rounded-full pointer-coarse:size-9',
+                selected &&
+                  'bg-bg text-fg shadow-[0_0_0_1px_var(--border),0_1px_2px_rgb(0_0_0/0.06)]',
               )}
             >
               <input
@@ -64,7 +74,7 @@ export function ThemeSwitcher({
                 onChange={() => choose(theme)}
                 className="sr-only"
               />
-              <Icon aria-hidden="true" className="size-4 shrink-0" />
+              <Icon className={fullWidth ? 'size-[1.125rem]' : 'size-[0.9375rem]'} />
               <span className={fullWidth ? 'truncate' : 'sr-only'}>{t(`theme.${theme}`)}</span>
             </label>
           );

@@ -37,7 +37,7 @@
                 </div>
                 <p class="hero__lead">{{ trans('public.home.intro') }}</p>
                 <div class="actions">
-                    <a class="btn btn--primary btn--lg btn--pill anim-host" href="/app/register">
+                    <a class="btn btn--primary btn--lg btn--pill anim-host" href="/app/register" data-auth="register">
                         {{ trans('public.home.primary_cta') }} {{ ui.icon('arrow-right', 'icon btn__arrow') }}
                     </a>
                     <a class="btn btn--secondary btn--lg btn--pill" href="{{ page_urls.how_it_works }}">
@@ -201,7 +201,7 @@
                     <h2 id="home-cta-title" class="cta__title">{{ trans('public.home.cta.heading') }}</h2>
                     <p>{{ trans('public.home.cta.description') }}</p>
                 </div>
-                <a class="btn btn--light btn--lg anim-host" href="/app/register">
+                <a class="btn btn--light btn--lg anim-host" href="/app/register" data-auth="register">
                     {{ trans('public.home.primary_cta') }} {{ ui.icon('arrow-right', 'icon btn__arrow') }}
                 </a>
             </div>

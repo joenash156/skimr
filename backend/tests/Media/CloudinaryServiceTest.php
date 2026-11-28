@@ -162,15 +162,19 @@ final class CloudinaryServiceTest extends TestCase
         $service = $this->service([
             new Response(200, ['Content-Type' => 'application/json'], '{"result":"ok"}'),
             new Response(200, ['Content-Type' => 'application/json'], '{"result":"not found"}'),
+            new Response(200, ['Content-Type' => 'application/json'], '{"result":"error"}'),
         ]);
 
         $service->delete('sources/user/source/p1');
         self::assertStringContainsString('/image/destroy', (string) $this->http->requests[0]->getUri());
         self::assertStringContainsString('authenticated', (string) $this->http->requests[0]->getBody());
 
+        // Already gone (a retried purge, a source deleted twice): the goal is met.
+        $service->delete('sources/user/source/file');
+
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Cloudinary did not confirm asset deletion.');
-        $service->delete('sources/user/source/file');
+        $service->delete('sources/user/source/snapshot');
     }
 
     public function testRejectsInvalidUploadPathsFilesAndResourceTypes(): void

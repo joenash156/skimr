@@ -177,6 +177,7 @@ final class CloudinaryService
         ];
     }
 
+    /** Deletes an asset; succeeds if it was already gone. */
     public function delete(string $publicId): void
     {
         $publicId = $this->assetPublicId($publicId);
@@ -188,7 +189,9 @@ final class CloudinaryService
             'type' => $deliveryType,
             'invalidate' => true,
         ]);
-        if (($response['result'] ?? null) !== 'ok') {
+        // "not found" means the asset is already gone (a retried purge, a double delete):
+        // deleting is idempotent, so only a real failure is an error.
+        if (!in_array($response['result'] ?? null, ['ok', 'not found'], true)) {
             throw new RuntimeException('Cloudinary did not confirm asset deletion.');
         }
     }

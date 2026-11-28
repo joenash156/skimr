@@ -30,6 +30,9 @@ return [
         return new AiServiceClient(
             new Client([
                 'base_uri' => rtrim($settings['ai_service']['url'], '/') . '/',
+                // Fail fast when the service is down; a sleeping free instance still
+                // answers the TCP handshake, so 5 s is plenty for the connect step.
+                'connect_timeout' => 5,
                 'timeout' => 20,
                 'handler' => $stack,
             ]),

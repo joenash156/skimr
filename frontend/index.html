@@ -6,7 +6,10 @@
     <meta name="robots" content="noindex" />
     <!-- Public Turnstile site key; PHP may replace the placeholder (see src/lib/turnstile.ts). -->
     <meta name="turnstile-site-key" content="__TURNSTILE_SITE_KEY__" />
-    <link rel="icon" type="image/svg+xml" href="/app/favicon.svg" />
+    <!-- The same S mark as the public site (backend/public/assets/favicon.svg).
+         Bump ?v= whenever the icon changes: browsers cache favicons for a long time. -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/app/favicon.svg?v=2" />
     <title>Skimr</title>
     <!--
       No-flash theme and sidebar (spec 14.3, 14.4). The ONLY inline script

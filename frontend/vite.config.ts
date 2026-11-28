@@ -37,6 +37,19 @@ export default defineConfig(({ mode }) => ({
     outDir: '../backend/public/app',
     emptyOutDir: true,
     sourcemap: false,
+    rolldownOptions: {
+      input: {
+        // The dashboard.
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        // The public site's auth modal loader (src/island). A fixed name, so PHP
+        // can link it; PHP adds ?v=<file time> to bust caches after a build.
+        'auth-island': fileURLToPath(new URL('./src/island/auth-island.ts', import.meta.url)),
+      },
+      output: {
+        entryFileNames: (chunk) =>
+          chunk.name === 'auth-island' ? 'assets/auth-island.js' : 'assets/[name]-[hash].js',
+      },
+    },
   },
   test: {
     environment: 'jsdom',

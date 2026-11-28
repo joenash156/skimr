@@ -188,6 +188,8 @@ All pages exist in `/en/`, `/fr/` and `/es/`.
 
 ### 5.2 Authentication (F02, F03)
 
+**Log in, sign up and forgot password are one modal, not separate pages** (P1 design decision, November 2026). On the public site, "Log in" and "Get started" open it over the page (a dimmed, blurred backdrop) with a Log in | Sign up switch and "Continue with Google". `/app/login`, `/app/register` and `/app/forgot-password` still exist and show the same modal on its own page, because redirects (`?next=`), Google's return trip and links opened without JavaScript land there. Emailed-link screens (verify email, reset password, accept invite) stay pages, in the same card style.
+
 **Sign-up fields:**
 
 - first name and last name (required)
@@ -958,7 +960,7 @@ The look is quiet and professional: deep black, white and teal, with flat surfac
 **Banned:**
 
 - gradients, except on the public home hero: the photo wash that fades into the page colour and one soft accent glow (approved by P1)
-- glassmorphism
+- glassmorphism (one exception: the blurred backdrop behind the auth modal, 5.2)
 - glows
 - emoji in the UI
 - stock illustrations of robots or brains

@@ -9,10 +9,12 @@
     <meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
     <script nonce="{{ csp_nonce }}">let t=null;try{t=localStorage.getItem('theme');}catch{}document.documentElement.classList.toggle('dark',t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches));</script>
     <link rel="preload" href="/assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-    <link rel="manifest" href="/assets/manifest.webmanifest">
-    <link rel="stylesheet" href="/assets/site.css">
+    {# asset() adds ?v=<file time>, so a new deploy never shows a cached old icon or stylesheet. #}
+    <link rel="icon" href="{{ asset('/favicon.ico') }}" sizes="32x32">
+    <link rel="icon" href="{{ asset('/assets/favicon.svg') }}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ asset('/assets/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ asset('/assets/manifest.webmanifest') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/site.css') }}">
     {% block canonical %}
         {% if metadata is defined %}
             <link rel="canonical" href="{{ metadata.canonical }}">
@@ -59,7 +61,13 @@
         {% block content %}{% endblock %}
     </main>
     {% include 'partials/footer.html.twig' %}
-    <script src="/assets/site.js" defer></script>
-    <script src="/assets/alpine-csp.min.js" defer></script>
+    <script src="{{ asset('/assets/site.js') }}" defer></script>
+    <script src="{{ asset('/assets/alpine-csp.min.js') }}" defer></script>
+    {# The auth modal (frontend/src/island): "Log in" and "Get started" open it in place.
+       Only once the dashboard is built; until then those links open /app/login and /app/register. #}
+    {% if asset_exists('/app/assets/auth-island.js') %}
+        {% if turnstile_site_key %}<meta name="turnstile-site-key" content="{{ turnstile_site_key }}">{% endif %}
+        <script type="module" src="{{ asset('/app/assets/auth-island.js') }}"></script>
+    {% endif %}
 </body>
 </html>

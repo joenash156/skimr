@@ -201,21 +201,37 @@ final class AiServiceClient
     private function decodeResponse(ResponseInterface $response, string $method, string $path, int $expectedStatus): array
     {
         $status = $response->getStatusCode();
+        $rawResponse = (string) $response->getBody();
         if ($status !== $expectedStatus) {
-            throw new AiServiceException($status, $method, $path);
+            throw new AiServiceException($status, $method, $path, self::errorCode($rawResponse));
         }
 
-        $rawResponse = (string) $response->getBody();
         try {
             $decoded = json_decode($rawResponse, false, 64, JSON_THROW_ON_ERROR);
-            $responseData = json_decode($rawResponse, true, 64, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
             throw new UnexpectedValueException('AI service returned invalid JSON.', 0, $exception);
         }
-        if (!is_object($decoded) || !is_array($responseData)) {
+        // Decoding to objects first tells `{}` (an object) apart from `[]` (a list).
+        if (!$decoded instanceof \stdClass) {
             throw new UnexpectedValueException('AI service response must be a JSON object.');
         }
 
-        return $responseData;
+        /** @var array<string, mixed> $data */
+        $data = json_decode($rawResponse, true, 64, JSON_THROW_ON_ERROR);
+
+        return $data;
+    }
+
+    /** The service's `{"error": {"code": "..."}}`, if the body has a well-formed one. */
+    private static function errorCode(string $rawResponse): ?string
+    {
+        try {
+            $body = json_decode($rawResponse, true, 8, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return null;
+        }
+        $code = is_array($body) && is_array($body['error'] ?? null) ? ($body['error']['code'] ?? null) : null;
+
+        return is_string($code) && preg_match('/^[a-z][a-z_]{0,39}$/', $code) === 1 ? $code : null;
     }
 }

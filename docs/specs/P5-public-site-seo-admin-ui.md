@@ -112,6 +112,9 @@ P1's B0 is in place. Build on it; don't recreate or edit these files (they're P1
 
 ---
 
+- **Auth modal links (November 2026):** any public link to `/app/login` or `/app/register` must carry `data-auth="login"` or `data-auth="register"`. Then `auth-island.js`, added by `base.html.twig` once the dashboard is built, opens the auth modal in place. Without the attribute, the link just opens the page. `?auth=register` on any public URL opens the modal on load (handy for emails and ads). The phone menu closes itself on the `auth-open` window event.
+- **Asset URLs:** use `{{ asset('/assets/...') }}` for every file in `public/`. It appends `?v=<file time>`, so browsers never keep a stale stylesheet or favicon after a deploy. `asset_exists()` tells you whether a built file is there.
+
 ## B0 — Foundations (week 1)
 
 1. **`templates/public/base.html.twig`:**

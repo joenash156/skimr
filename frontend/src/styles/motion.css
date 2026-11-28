@@ -1,0 +1,65 @@
+/*
+ * Animated icons, the same as the public site (backend/src/Public/site.css,
+ * "Animated icons"): when the surrounding .anim-host is hovered or focused, or
+ * a theme option is chosen, the strokes redraw themselves and some icons add a
+ * small move. Every shape has pathLength="1" (src/components/icons), so one
+ * keyframe fits all. prefers-reduced-motion turns it off.
+ */
+@layer components {
+  @keyframes icon-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .anim-host:hover .icon--draw :is(path, circle, rect),
+  .anim-host:focus-visible .icon--draw :is(path, circle, rect),
+  .anim-host[data-checked] .icon--draw :is(path, circle, rect) {
+    stroke-dasharray: 1;
+    animation: icon-draw 650ms var(--ease) both;
+  }
+
+  .icon--sun .icon__rays,
+  .icon--moon,
+  .icon--monitor,
+  .icon-nudge {
+    transition: transform 400ms var(--ease);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .anim-host:hover .icon--sun .icon__rays,
+  .anim-host[data-checked] .icon--sun .icon__rays {
+    transform: rotate(90deg);
+  }
+
+  .anim-host:hover .icon--moon,
+  .anim-host[data-checked] .icon--moon {
+    transform: rotate(-18deg);
+  }
+
+  .anim-host:hover .icon--monitor {
+    transform: translateY(-1px);
+  }
+
+  .anim-host:hover .icon-nudge,
+  .anim-host:focus-visible .icon-nudge {
+    transform: translateX(3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anim-host .icon--draw :is(path, circle, rect) {
+      animation: none !important;
+    }
+    .icon--sun .icon__rays,
+    .icon--moon,
+    .icon--monitor,
+    .icon-nudge {
+      transition: none;
+      transform: none !important;
+    }
+  }
+}
